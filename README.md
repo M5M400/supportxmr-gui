@@ -18,7 +18,7 @@ Page Load Performance Specs (Single Worker):
   <td align="center">48 / 4,702 KB</td>
 </tr>
 <tr>
-  <td align="center">82.7B KB </td>
+  <td align="center">82.7 KB</td>
   <td align="center">jQuery</td>
   <td align="center">261 KB</td>
 </tr>
