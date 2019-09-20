@@ -1,4 +1,4 @@
-supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It was originally designed for supportxmr.com by Thunderosa. It is fully self contained within 6 files + jQuery. When minified, disk size is 159KB with no external dependencies.
+supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It is fully self contained within 6 files + jQuery. When minified, disk size is 159KB with no external dependencies.
 
 Page Load Performance Specs (Single Worker):
 <table>
