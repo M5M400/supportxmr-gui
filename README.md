@@ -1,1 +1,1 @@
-supportxmr-gui is a lightweight, low resource pool UI <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It was originally designed for supportcmr.com by Thunderosa.
+supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It was originally designed for supportxmr.com by Thunderosa.
