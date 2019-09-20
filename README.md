@@ -32,10 +32,15 @@ Page Load Performance Specs (Single Worker):
   <td align="center">Resources Total</td>
   <td align="center">6,041 KB</td>
 </tr>
-  <tr>
+<tr>
   <td align="center">1.5 Sec</td>
   <td align="center">Page Load (w/o CDN)</td>
   <td align="center">6 Sec</td>
+</tr>
+ <tr>
+  <td align="center">--</td>
+  <td align="center">Page Load (w/ CDN)</td>
+  <td align="center">--</td>
 </tr>
 </table>
 
