@@ -1,4 +1,4 @@
-supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It is fully self contained within 6 files + jQuery. When minified, disk size is 159KB with no external dependencies.
+supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It is fully self contained within 4 files + jQuery + favicon. When minified, total disk size is 158KB with no external dependencies.
 
 Page Load Performance Specs (Single Worker):
 <table>
@@ -8,27 +8,27 @@ Page Load Performance Specs (Single Worker):
   <td width="20%" align="center">Old Frontend</td>
 </tr>
 <tr>
-  <td width="20%" align="center">3.7 KB</td>
+  <td width="20%" align="center">3 KB</td>
   <td align="center">HTML</td>
-  <td width="20%" align="center">10.2 KB</td>
+  <td width="20%" align="center">10 KB</td>
 </tr>
 <tr>
-  <td align="center">3 / 82 KB</td>
+  <td align="center">3 / 64 KB</td>
   <td align="center">Static Files</td>
   <td align="center">48 / 4,702 KB</td>
 </tr>
 <tr>
-  <td align="center">82.7 KB</td>
+  <td align="center">82 KB</td>
   <td align="center">jQuery</td>
   <td align="center">261 KB</td>
 </tr>
 <tr>
-  <td align="center">7</td>
+  <td align="center">8</td>
   <td align="center">Data Lookups</td>
-  <td align="center">13</td>
+  <td align="center">14</td>
 </tr>
 <tr>
-  <td align="center">241 KB</td>
+  <td align="center">239 KB</td>
   <td align="center">Resources Total</td>
   <td align="center">6,041 KB</td>
 </tr>
