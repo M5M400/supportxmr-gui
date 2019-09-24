@@ -94,7 +94,12 @@ header,section,footer{margin:0;padding:0}
 .texttinysvg{font-size:10px;line-height:12px}
 
 /*Forms*/
-.FLD{width:100%;display:inline-block;border:0;padding:8px 5px 7px 5px;background:0 0}
+.FLD-l,.FLD-d{width:calc(100% - 4px);display:inline-block;border:0;padding:8px 5px 7px 5px;background-color:#efefef}
+.FLD-d{background-color:#3b3b3b}
+
+.FLD-l:-webkit-autofill,.FLD-l:-webkit-autofill:hover,.FLD-l:-webkit-autofill:focus,.FLD-l:-webkit-autofill:active{-webkit-box-shadow: 0 0 0 30px #efefef inset !important}
+.FLD-d:-webkit-autofill,.FLD-d:-webkit-autofill:hover,.FLD-d:-webkit-autofill:focus,.FLD-d:-webkit-autofill:active{-webkit-box-shadow: 0 0 0 30px #3b3b3b inset !important}
+
 .select-point{position:absolute;width:10px;height:10px;top:11px;right:-3px}
 #MinerAddrRecent select,#HeadMenu select{-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;outline:none;cursor:pointer}
 input:focus,select:focus{outline-color:transparent;outline-style:none}
@@ -105,7 +110,7 @@ input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #
 .btnback{background-color:rgba(19,19,19,.04);-webkit-box-shadow:inset 0px -2px 5px 0px rgba(0,0,0,.07);-moz-box-shadow:inset 0px -2px 5px 0px rgba(0,0,0,.07);box-shadow:inset 0px -2px 5px 0px rgba(0,0,0,.07)}
 .regbtn{display:inline-block;box-sizing:border-box;width:24px;height:24px;padding:4px}
 .nopoint{cursor:default !important}
-.Close{position:absolute;z-index:3;width:28px;height:28px;left:100%;margin-left:-38px;top:10px;padding:2px;box-sizing:border-box}
+.Close{position:absolute;z-index:3;width:28px;height:28px;left:100%;margin-left:-33px;top:6px;padding:2px;box-sizing:border-box}
 .Close:hover,.nav:hover,.hov:hover{opacity:.5}
 
 /*Animations*/
@@ -173,7 +178,8 @@ header{height:44px}
 #Stage.short{min-height:calc(100% - 160px)}
 .StageFade{opacity:1 !important}
 
-#News{border-radius:5px;padding:5px 8px 6px 8px;box-sizing:border-box}
+#News{border-radius:5px;padding:8px 38px 10px 8px;border-width:1px;border-style:solid;box-sizing:border-box}
+#News .NewsTime{float:right;padding-top:4px}
 
 #MinerAddressCell{position:relative;height:34px}
 .MinerAddressMulti{width:calc(100% - 90px)}

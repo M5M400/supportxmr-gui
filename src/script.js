@@ -306,9 +306,9 @@ function TimerUpdateData(){
 			if($.cookie('SupportXMRNews') == $D['alert']['created']){
 				$('#News').addClass('hide');
 			}else{
-				var ins = '<div class="textmed">'+$D['alert']['subject']+'</div>'+
-					'<div class="text"><span class="texttiny">('+Ago($D['alert']['created'])+' Ago)</span> - '+$D['alert']['body']+'</div>'+
-					'<div class="Close C0fl'+cmde+'">'+$I['x']+'</div>';
+				var ins = '<div class="textmed">'+$D['alert']['subject']+'<div class="NewsTime texttiny">('+Ago($D['alert']['created'])+' Ago)</div></div>'+
+					'<div class="text shimtop10">'+$D['alert']['body']+'</div>'+
+					'<div class="Close C1fl">'+$I['x']+'</div>';
 					
 				$('#News').removeClass('hide').html(ins);
 			}
@@ -502,10 +502,10 @@ function PaginationBoxWidth($T){
 }
 
 function pge_Home(){
-	var ins = '<section id="News" class="C1bk C0-l LR85 hide shimtop20"></section>'+
+	var ins = '<section id="News" class="C1br C0bk'+cmde+' C3'+cmde+' LR85 hide shimtop20"></section>'+
 		'<section id="MinerAccount">'+
 		'<table class="LR85 shim20 TDPadS C3'+cmde+'"><tr>'+
-			'<td width="99%"><div class="hbar"></div><div id="MinerAddressCell"><input id="MinerAddress" type="text" class="FLD text C3'+cmde+'" placeholder="Your Monero Address..." value="'+addr+'"></div><div class="hbar"></div></td>'+
+			'<td width="99%"><div class="hbar"></div><div id="MinerAddressCell"><input id="MinerAddress" type="text" class="FLD'+cmde+' text C3'+cmde+'" placeholder="Your Monero Address..." value="'+addr+'"></div><div class="hbar"></div></td>'+
 			'<td><div id="MinerPending" class="textlrg">--</div><div class="hbar shim4"></div><div class="texttiny C2 center">XMR Pending</div></td>'+
 			'<td><div id="MinerPaymentsBtn" class="btnback nopoint"><div class="Loader C1fl">'+$I['loader']+'</div></div></td>'+
 			'<td><div id="MinerPaid" class="textlrg">--</div><div class="hbar shim4"></div><div class="texttiny C2 center">XMR Paid</div></td>'+
@@ -528,6 +528,7 @@ function pge_Home(){
 
 function load_MinerAccount(){
 	if(addr && xmrreg.test(addr)){
+		$('#MinerPaymentsBtn').addClass('nopoint').html('<div class="Loader C1fl">'+$I['loader']+'</div>');
 		$.when(dta('account')).done(function(a){
 			if($A[addr]){
 				graph_Miner();
@@ -572,7 +573,7 @@ function load_MinerAccount(){
 function reset_MinerAccount(){
 	$('#MinerWorkersList, #MinerGraph').html('');
 	$('#MinerPayments').empty().addClass('hide');
-	$('#MinerPaymentsBtn').removeClass('C1fl').addClass('nopoint').html('<div class="C2fl o5">'+$I['settings']+'</div>');
+	$('#MinerPaymentsBtn').addClass('nopoint').html('<div class="C2fl o5">'+$I['settings']+'</div>');
 	$('#MinerPending, #MinerPaid, #MinerHashes, #MinerLastHash, #MinerWorkerCount').addClass('o5').html('--');
 	$('#MinerShares').addClass('o5').html('-- / --');
 }
