@@ -44,6 +44,8 @@ supportxmr-gui requires ECMAScript 5 (Chrome 23, Firefox 21, IE 10, Safari 6, Op
 
 Tor in high-security mode blocks svg elements and this UI is entirely svg-based. Tor's other security modes work fine.
 
+A very optimized font file is used and does not support accents or special characters. For international support you can substitute your own font with the necessary glyphs in the stylesheet. Any condensed sans-serif font will work fine as a substitute and you can optimize the font file for your needs.
+
 <b>Hosting</b><br>
 supportxmr-gui just needs the web server of your choice to serve favicon.ico and index.html which is a good candidate for Gzip compression.
 
