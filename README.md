@@ -8,12 +8,12 @@ Page Load Performance Specs (Single Worker):
   <td width="20%" align="center">Old Frontend</td>
 </tr>
 <tr>
-  <td width="20%" align="center">3 KB</td>
+  <td width="20%" align="center">2.5 KB</td>
   <td align="center">HTML</td>
   <td width="20%" align="center">10 KB</td>
 </tr>
 <tr>
-  <td align="center">3 / 71 KB</td>
+  <td align="center">3 / 72 KB</td>
   <td align="center">Static Files</td>
   <td align="center">48 / 6,031 KB</td>
 </tr>
@@ -46,6 +46,8 @@ supportxmr-gui just needs the web server of your choice to serve favicon.ico and
 
 The static files are best served on CDN and can have a long cache. This speeds up load times, increases your concurrency and will have some downages go unnoticed.
 
+<b>Language and Localization</b><br>
+supportxmr-gui automatically localizes decimals, thousand seperators, percent and time formats based on the users browser settings. Language used in the UI has been organized into a single point of configuration to make translation easier. There is also an optional font pack provided that extends glyph support to Latin W01 & W02: Albanian (sq), Croatian (hr), Czech (cs), Danish (da), Dutch (nl), English (en), Estonian (et), Finnish (fi), French (fr), German (de), Hungarian (hu), Icelandic (is), Italian (it), Latvian (lv), Lithuanian (lt), Norwegian (nn), Polish (pl), Portuguese (pt), Romanian (ro), Slovak (sk), Slovenian (sl), Spanish (es), Swedish (sv), Turkish (tr), Welsh (cy).
 
 
 
