@@ -69,8 +69,8 @@ header,section,footer{margin:0;padding:0}
 .shim20{margin-bottom:20px}
 
 .ROW0{background-color:transparent}
-.ROW1{background-color:rgba(55,55,55,0.05)}
-.ROW0:hover,.ROW1:hover{background-color:rgba(55,55,55,0.1)}
+.ROW1{background-color:rgba(5,5,5,0.05)}
+.ROW0:hover,.ROW1:hover{background-color:rgba(5,5,5,0.1)}
 
 .WingPanel{position:relative;width:calc(100% - 50px);margin-left:25px}
 .WingPanel table td{padding:5px 4px;white-space:nowrap}

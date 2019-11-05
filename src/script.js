@@ -310,7 +310,7 @@ function init(){
 	//Populate Icons
 	$C['TogMode'].innerHTML = $I['d'];
 	$C['TimerRefresh'].innerHTML = $I['refresh'];
-	document.getElementById('TimerLoader').innerHTML = $I['loadico'];
+	document.getElementById('TimerLoader').innerHTML = $I['load'];
 	document.querySelector('#HeadMenu .select-point').innerHTML = $I['arrow'];
 	document.getElementById('AddrDelete').innerHTML = $I['delete'];
 	document.querySelector('#AddrRecent .select-point').innerHTML = $I['arrow'];
@@ -875,7 +875,7 @@ function Workers_sort(srt, ord, sts){
 		n_in = $I['sort'],
 		r = document.getElementById('WorkerSortRate'),
 		r_cl = 'C2bk C0fl'+mde+' hov',
-		r_in = '<div class="preload C0fl'+mde+'">'+$I['loadico']+'</div>',
+		r_in = $I['load'],
 		ordV = (ord === 'D') ? 'A' : 'D',
 		orot = (ord === 'D') ? 'rot90' : 'rot270';
 		
@@ -1011,7 +1011,7 @@ function MinerPayments(typ){
 function EmailToggle(){
 	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
 	ic.classList.add('preload');
-	ic.innerHTML = $I['loadico'];
+	ic.innerHTML = $I['load'];
 	api('toggleEmail').then(function(){
 		api('user').then(function(){
 			var ico = $I['x'],
@@ -1048,7 +1048,7 @@ function AutoPay(s){
 	
 	if(c === 'OK'){
 		b.classList.remove('C1bk','C4bk','C5bk');
-		b.innerHTML = '<div class="C0fl'+mde+' preload">'+$I['loadico']+'</div>';
+		b.innerHTML = $I['load'];
 		api('updatethreshold', '', NumInput(document.getElementById('AutoPayFld').value)).then(function(){
 			b.classList.add('C5bk');
 			b.innerHTML = $$['trn']['updt'];
@@ -1425,6 +1425,7 @@ function Tbl(tar, typ, pge, lim){
 		ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+$$['tbl'][typ][k]['lbl']+'</td>';
 	}
 	ins += '</tr>';
+
 	if($D[typ]){
 		for(var i = 0; i < lim; i++){
 			if($D[typ][i]){
@@ -1442,8 +1443,8 @@ function Tbl(tar, typ, pge, lim){
 						val = '<span class="'+clr+'">'+Perc(val)+'</span>';
 					}else if(k === 'togo'){
 						val = BlockToGo($D[typ][i]['height'], $D[typ][i]['val']);
-					}else{
-						if($$['tbl'][typ]['hsh'] && $$['tbl'][typ]['hsh'] === 'y'){
+					}else if(k === 'hash'){
+						if($$['tbl'][typ]['hash'] && $$['tbl'][typ]['hash']['hsh'] === 'y'){
 							val = '<div class="HashTrun" data-hash="'+val+'">'+val+'</div>';
 						}
 					}
@@ -1461,6 +1462,7 @@ function Tbl(tar, typ, pge, lim){
 	document.getElementById(tar).innerHTML = ins;
 	if($D[typ]){
 		var tr = (typ === 'pay') ? 'tx' : '';
+		console.log(tr);
 		HashTrun(tr);
 		if(tar === 'PageBot'){
 			var pgs = 0,
