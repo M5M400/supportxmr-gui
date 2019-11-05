@@ -1,4 +1,4 @@
-supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It is javascript based and is self contained within 4 files + favicon. When minified, total disk size is 71KB with no external dependencies.
+supportxmr-gui is a lightweight, low resource pool UI for <a href="https://github.com/Snipa22/nodejs-pool" target="_blank">nodejs-pool</a> (<a href="https://github.com/Snipa22/" target="_blank">by Snipa22</a>). It is javascript based and is self contained within 4 files + favicon. When minified, total disk size is 76KB with no external dependencies.
 
 Page Load Performance Specs (Single Worker):
 <table>
