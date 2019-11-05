@@ -1,69 +1,60 @@
 var	mde = 'l',
-	$Q = {										//Config Settings
+	$Q = {										
 		'pool':{
-			'nme':'SupportXMR',					//also sets the cookie prefix
+			'nme':'SupportXMR',										//also sets the cookie prefix
 		},
 		'clr':{
-			'main':'f06923',					//C1
-			'back-l':'e8e8e8',					//C0 - light
-			'back-d':'313131'	   				//C0 - dark
+			'main':'f06923',										//C1
+			'secondary':'818181',									//C2
+			'back-l':'e8e8e8',										//C0 - light
+			'back-d':'313131'	   									//C0 - dark
 		},
 		'cur':{
-			'nme':'Monero',
+			'nme':'Monero',						
 			'sym':'XMR',
-			'blk':2,							//blocktime in minutes
-			'reg':/^[4|8]([0-9]|[A-B])(.){93}/	//address regex
+			'blk':2,												//blocktime in minutes
+			'reg':/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
 		},
 		'api':'https://supportxmr.com/api/',
+		//'api':'http://69.164.198.226/api/',
 		'explorer':'https://xmrchain.net/block/',
 		'explorertx':'https://xmrchain.net/tx/',
-		'news':true,							//enable motd alerts
-		'timer':60,								//set to 90 to reduce calls
+		'news':false,												//enable news (motd) alerts on homepage
+		'email':false,												//enable email notifications
+		'timer':60,													//refresh timer in seconds
 		'graph':{
-			'hrs':8,							//max chart length in hours
-			'pplns':true						//show pplns window on chart
+			'hrs':8,												//max chart length in hours
+			'pplns':false,											//show pplns window on chart
+			'blockmin':25											//min number of blocks to show (blocks take their own time scale) max 100
 		},
 		'pay':{
-			'min_inst':0.01,
-			'min_auto':0.1
+			'min_inst':0.01,										//minimum for instant pay
+			'min_auto':0.1,											//minimum for automatic threshold
+			'dec_auto':4											//decimal places for threshold
 		}
 	},
-	$L = {
-		'auto':'Auto Pay',
-		'back':'Back',
+	$$ = {
 		'calc':{
 			'1':'Per Day',
 			'7':'Per Week',
 			'30':'Per Month',
 			'365':'Per Year',
 		},
-		'conf':'Confirmed',
-		'eff':'Effort',
-		'home':'Home',
-		'invl':'Invalid',
-		'min':'Minimum',
-		'nav':{
-			'home':'Home',
-			'blocks':'Blocks',
-			'payments':'Payments',
-			'help':'Help'
-		},
-		'que':'Payment Queded',
-		'rcnt':'Recent',
-		'set':'Set Auto Pay',
-		'updt':'Updated',
-		'vwpy':'View Your Payments'
-	},
-	$$ = {
 		'hlp':{
 			'head':'Welcome to '+$Q['pool']['nme'],
 			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operators are M5M400 and Snipa22 who can be reached in the #monero-pools IRC or at <a href="mailto:support@supportxmr.com" class="C1 hov">support@supportxmr.com</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
 		},
 		'msg':{
-			'welcome':{'head':'Welcome to '+$Q['pool']['nme'], 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q['cur']['nme']+' address above. After you’ve submitted a share, your stats will appear here.'},
+			'welcome':{'head':'Welcome to '+$Q['pool']['nme'], 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q['cur']['nme']+' address above. After you\'ve submitted a share, your stats will appear here.'},
 			'addr_invalid':{'head':'Invalid '+$Q['cur']['nme']+' Address', 'text':'Double check that your address is complete.'},
-			'addr_notfound':{'head':'Address Not Found', 'text':'If you’ve submitted your first share, be patient, it may take a minute or two to update. If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u>'},
+			'addr_notfound':{'head':'Address Not Found', 'text':'If you\'ve submitted your first share, be patient, it may take a minute or two to update. If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u>'},
 			'addr_nodata':{'head':'No Data', 'text':''}
+		},
+		'nav':{
+			'home':'Home',
+			'blocks':'Blocks',
+			'payments':'Payments',
+			'help':'Help'
 		},
 		'pay':{
 			'DashPending':{'lbl':$Q['cur']['sym']+' Pending', 'var':'due'},
@@ -95,6 +86,19 @@ var	mde = 'l',
 				'amnt':{'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
 				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y'}
 			}
+		},
+		'trn':{
+			'avgeff':'Avg Effort',
+			'conf':'Confirmed',
+			'eff':'Effort',
+			'eml_on':'Email Alerts On',
+			'eml_off':'Email Alerts Off',
+			'min':'Minimum',
+			'que':'Payment Queued',
+			'rcnt':'Recent',
+			'set':'Set Auto Pay',
+			'updt':'Updated',
+			'vwpy':'View Your Payments'
 		}
 	};
 
@@ -103,12 +107,12 @@ var	mde = 'l',
 /*--------------------------------------*/
 
 var addr = UrlVars()['addr'] || '',
-	lang = window.navigator.userLanguage || window.navigator.language,
 	pref = 'LNA',
 	cookieprefix = $Q['pool']['nme'].replace(/[ ,;]/g, ''),
 	resizeTimer,
 	updateTimer = $Q['timer'],
 	updateCounter,
+	outoffocus = 0,
 	now = Rnd((new Date()).getTime() / 1000),
 	width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
 	netpop_open = '',
@@ -131,6 +135,12 @@ var addr = UrlVars()['addr'] || '',
 		'pool':0,
 		'poolstats':0,
 		'news':0
+	},
+	$L ={				//Localization
+		'perc':'9 %',
+		'thou':',',
+		'dec':'.',
+		'tme':'G:i'
 	},
 	$D = {				//Data Digests
 		'news':{},
@@ -155,6 +165,7 @@ var addr = UrlVars()['addr'] || '',
 		'settings':'<svg viewBox="0 0 99 99"><path d="M19.7 50.74V10.92l-6.4 1.69v38.12a16.1 16.1 0 0 0 0 31.53v4.17l6.4 1.65v-5.82a16.09 16.09 0 0 0 0-31.52zm-3.2 25.34a9.58 9.58 0 1 1 0-19.16 9.58 9.58 0 0 1 0 19.16zm36.2-59.51S52.66 0 52.7 0h-6.4v16.57a16.09 16.09 0 0 0 0 31.53V99h6.4V48.1a16.09 16.09 0 0 0 0-31.53zm-3.2 25.35a9.58 9.58 0 1 1 0-19.17 9.58 9.58 0 0 1 0 19.17zm36.2-1.18V12.62l-6.4-1.7v29.81a16.09 16.09 0 0 0 0 31.53v15.82l6.4-1.68V72.26a16.09 16.09 0 0 0 0-31.52zm-3.2 25.34a9.58 9.58 0 1 1 0-19.16 9.58 9.58 0 0 1 0 19.16z"/></svg>',
 		'loadico':'<svg viewBox="0 0 99 99"><path d="M49.5 0A49.5 49.5 0 0199 49.5c0 5.8-1.6 15.8-4.7 19.6a50.2 50.2 0 01-50.2 8.6c19.5 3.4 34.1-12.3 34.1-28.2a28.7 28.7 0 10-57.4 0c0 24.3 33.8 47 70.7 26.1A49.5 49.5 0 1149.5 0z"/><path opacity=".08" fill="#000" d="M44.1 77.7c41.9 5.9 60.6-41.7 35-68C91 18.9 99 33.3 99 49.6c0 5.8-1.6 15.8-4.7 19.6a50.2 50.2 0 01-50.2 8.6z"/></svg>',
 		'arrow':'<svg viewBox="0 0 99 99"><path d="M27 78l28-29-28-28C17 10 33-8 45 4l35 37c5 5 5 12 0 17L45 95c-12 12-29-6-18-17z"/></svg>',
+		'check':'<svg viewBox="0 0 99 99"><path d="M97 21l-8-9c-3-3-7-3-9 0L38 55 19 36c-2-3-6-3-8 0l-9 9c-3 3-2 7 0 9l23 24 9 9c2 3 6 3 8 0l9-9 46-48c3-3 3-7 0-9z"/></svg>',
 		'sort':'<svg viewBox="0 0 99 99"><path d="M56 45L35 25 15 45C8 52-6 40 3 32L29 6c4-3 9-3 12 0l27 26c9 8-4 20-12 13zm-13 9l21 20 20-20c7-7 21 5 12 13L70 93c-4 3-9 3-12 0L31 67c-9-8 4-20 12-13z"/></svg>',
 		'refresh':'<svg viewBox="0 0 99 99"><path d="M0 55.7v31l9.2-8.5a49.5 49.5 0 0 0 89.4-22.5H86.1a37.1 37.1 0 0 1-67.7 14l15.3-14H0zM49.5 0C24.3 0 3.5 18.9.4 43.3h12.5a37.1 37.1 0 0 1 68.3-13.1L68.1 43.3H99v-31l-8.9 9A49.4 49.4 0 0 0 49.5 0z"/></svg>',
 		'x':'<svg viewBox="0 0 99 99"><path d="M99 77L71 50l28-28L77 0 50 28 22 0 0 22l28 28L0 77l22 22 28-28 27 28"/></svg>',
@@ -192,7 +203,7 @@ document.body.addEventListener('change', function(e){
 	}
 }, false);
 document.body.addEventListener('click', function(e){
-	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#InstaPayBtn', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
+	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#InstaPayBtn', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#EmailToggleBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.closest(id[i]);
 		if(el){
@@ -221,6 +232,8 @@ document.body.addEventListener('click', function(e){
 				MinerPaymentHistory(1);
 			}else if(id[i] === '#PaymentHistoryBtnClose'){
 				MinerPayments('back');
+			}else if(id[i] === '#EmailToggleBtn'){
+				EmailToggle();
 			}else if(id[i] === '#InstaPayBtn'){
 				document.getElementById('MinerPaymentsMenu').innerHTML = $I['load'];
 				setTimeout(function(){
@@ -286,6 +299,8 @@ document.getElementById('Timer').onmouseout = function(e){
 };
 
 function init(){
+	Localize();
+	
 	//Cache Selectors
 	var k = Object.keys($C), i = k.length;
 	while(i--){
@@ -306,10 +321,10 @@ function init(){
 
 	//Load Menu
 	var i = 0, mn = '', ft = '';
-	for(var m in $L['nav']){
-		mn += '<option value="'+m+'">'+$L['nav'][m]+'</option>';
+	for(var m in $$['nav']){
+		mn += '<option value="'+m+'">'+$$['nav'][m]+'</option>';
 		if(i !== 0) ft += ' &middot; ';
-		ft += '<span class="nav" data-tar="'+m+'">'+$L['nav'][m]+'</span>';
+		ft += '<span class="nav" data-tar="'+m+'">'+$$['nav'][m]+'</span>';
 		i++;
 	}
 	document.querySelector('#HeadMenu select').innerHTML = mn;
@@ -369,7 +384,7 @@ function ErrAlert(tar, err){
 	}else{
 		var msg = '',
 			iserr = 'C4',
-			err_msg = 'Try refreshing, check your connection; otherwise we’ll be back up soon.';
+			err_msg = 'Try refreshing, check your connection; otherwise we\'ll be back up soon.';
 		
 		if(tar === 'NetGraph'){
 			msg = 'Network API Connection Error';
@@ -402,7 +417,17 @@ function LoadTimer(){
 	clearInterval(updateCounter);
 	TimerLoading('off');
 	updateCounter = setInterval(function(){
-		if(document.hasFocus()) updateTimer--;
+		if(document.hasFocus()){
+			if(outoffocus > 120){
+				//if returning after long absence
+				updateTimer = 0;
+				outoffocus = 0;
+			}else{
+				updateTimer--;
+			}
+		}else{
+			if(outoffocus < 122) outoffocus++;
+		}
 		if(updateTimer <= 0){
 			TimerLoading('on');
 			clearInterval(updateCounter);
@@ -454,7 +479,7 @@ function TimerUpdateData(){
 					if(getCookie('News') == $D['news']['created']){
 						h = 'hide';
 					}else{
-						c.innerHTML = '<div class="txtmed">'+$D['news']['subject']+'<div id="NewsTime" class="txttny noselect">('+Ago($D['news']['created'])+' Ago)</div></div>'+
+						c.innerHTML = '<div class="txtmed">'+$D['news']['subject']+'<div id="NewsTime" class="txttny noselect">('+Ago($D['news']['created'], 'y')+')</div></div>'+
 							'<div id="NewsBody" class="txt">'+$D['news']['body'].replace(/^(<br>)/,'')+'</div>'+
 							'<div id="NewsClose" class="Btn32 Btn32Corner C1fl">'+$I['x']+'</div>';
 					}
@@ -538,7 +563,7 @@ function MultipleAddress(){
 		h = 'hide';
 		
 	if(numadr > 1){
-		ins = '<option value="">'+$L['rcnt']+'</option>';
+		ins = '<option value="">'+$$['trn']['rcnt']+'</option>';
 		for(var k in $A){
 			if($A.hasOwnProperty(k) && k !== addr){
 				ins += '<option value="'+k+'">'+k.substring(0, 3)+'...'+k.substr(k.length - 4)+'</option>';
@@ -623,19 +648,19 @@ function Dash_init(){
 		u = document.getElementById('MinerCalcUnit');
 		
 	ins = '';
-	for(var k in $L['calc']){
-		ins += '<option value="'+k+'">'+$L['calc'][k]+'</option>';
+	for(var k in $$['calc']){
+		ins += '<option value="'+k+'">'+$$['calc'][k]+'</option>';
 	}
 	f.innerHTML = ins;
-	f.className = 'BtnElem txttny C0'+mde+' C1bk';
+	f.className = 'FrmElem txttny C0'+mde+' C1bk';
 	ins = '';
 	for(var k in $D['hashconv']){
 		ins += '<option value="'+k+'">'+k+'/s</option>';
 	}
 	u.innerHTML = ins;
 	u.value = 'H';
-	u.className = 'BtnElem txttny C0'+mde+' C1bk';
-	h.className = 'BtnElem txttny C0'+mde+' C1bk';
+	u.className = 'FrmElem txttny C0'+mde+' C1bk';
+	h.className = 'FrmElem txttny C0'+mde+' C1bk';
 }
 function Dash_load(typ){
 	var m = document.getElementById('MinerGraph'),
@@ -677,7 +702,7 @@ function Dash_load(typ){
 							plr = (wcn === 1) ? '' : 's';
 							
 						document.getElementById('MinerWorkerCount').innerHTML = wcn+' Worker'+plr;
-						document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'])+' Ago';
+						document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'], 'y');
 						
 						Workers_init();
 					}).catch(function(err){console.log(err)});
@@ -792,7 +817,6 @@ function Workers_init(){		///check this, getting called alot
 		for(i = 0; i < numwrk; i++){
 			s.push([i, $A[addr]['wrkrs'][i][srt]]);
 		}
-		
 		if(srt === 'name'){
 			s.sort(function(a, b){return a[1].toLowerCase().localeCompare(b[1].toLowerCase())});
 			if(ord === 'D') s.reverse();
@@ -803,7 +827,6 @@ function Workers_init(){		///check this, getting called alot
 				s.sort(function(a, b){return a[1] - b[1]});
 			}
 		}
-		
 		if(numwrk < 8) blkclss = ' WBlockFewGrid';
 		for(i = 0; i < numwrk; i++){
 			ky = s[i][0];
@@ -914,7 +937,7 @@ function Workers_detail(xid){
 			havg = HashConv(Rnd(avg / cnt, 0));
 			p.innerHTML = '<div id="WorkerPopClose" class="C1fl Btn16 Btn16Corner">'+$I['x']+'</div>'+
 				'<div class="BoxL center">'+havg['num']+' '+havg['unit']+'</div>'+
-				'<div class="BoxR center">'+Ago(d['last'])+' Ago</div>'+
+				'<div class="BoxR center">'+Ago(d['last'], 'y')+'</div>'+
 				'<div class="pbar shim4"></div>'+
 				'<div class="BoxL txttny C2 center">Avg '+Ago(timestart)+'</div>'+
 				'<div class="BoxR txttny C2 center">Last Share</div>'+
@@ -929,6 +952,7 @@ function Workers_detail(xid){
 }
 //Miner Payments
 function MinerPayments(typ){
+	typ = typ || '';
 	if(addr && $A[addr] && $A[addr]['hashes'] && $A[addr]['hashes'] > 0){
 		var m = document.getElementById('MinerPayments'), n = document.getElementById('NewsBody');
 		if(typ !== 'back' && (m.classList.contains('Opened') || m.classList.contains('OpenedBig'))){
@@ -940,93 +964,125 @@ function MinerPayments(typ){
 		}else{
 			if(n) n.classList.add('hide');
 			m.className = 'Opened';
-			m.innerHTML = '<div class="hbar"></div><div id="MinerPaymentsStage"></div>';
+			m.innerHTML = '<div class="hbar"></div><div id="MinerPaymentsStage">'+$I['load']+'</div>';
 			Dash_btn('closer');
 		}
 	}else{
 		return;
 	}
-	var l = document.getElementById('MinerPaymentsStage');
-	setTimeout(function(){
-		l.innerHTML = $I['load'];
-	}, 300);
-	setTimeout(function(){
-		var instant_txt = $Q['pay']['min_inst']+' '+$Q['cur']['sym']+' '+$L['min'],
-			instant_cls = 'o5 nopoint';
+	
+	api('user').then(function(){
+		var t = $Q['pay']['min_inst']+' '+$Q['cur']['sym']+' '+$$['trn']['min'],
+			c = 'o5 nopoint',
+			eml = ($Q['email']) ? 'EmailTog' : '',
+			ins = '';
 			
 		if($A[addr]['due'] >= $Q['pay']['min_inst']){
-			instant_txt = 'Pay '+$A[addr]['due']+' '+$Q['cur']['sym']+' Now';
-			instant_cls = 'C2bk_hov';
+			t = 'Pay '+$A[addr]['due']+' '+$Q['cur']['sym']+' Now';
+			c = 'C2bk_hov';
 		}
-			
-		l.innerHTML = '<div class="LR50 shimtop20 C0'+mde+' txtmed">'+
-			'<div id="InstaPayBtn" class="BtnElem C1bk '+instant_cls+' noselect">'+instant_txt+'</div>'+
-			'<div class="hbar shim10"></div>'+
-			'<input type="text" id="AutoPayFld" class="BtnElem txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount...">'+
-			'<div id="AutoPayBtn" class="BtnElem C1bk C2bk_hov o5 noselect">'+$L['set']+'</div>'+
-			'<div class="hbar shim10"></div>'+
+		ins = '<div class="LR50 shimtop20 C0'+mde+' txtmed">'+
+			'<div id="InstaPayBtn" class="BtnElem C1bk '+c+'">'+t+'</div><div class="hbar shim10"></div>'+
+			'<input type="text" id="AutoPayFld" class="FrmElem txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount...">'+
+			'<div id="AutoPayBtn" class="BtnElem C1bk C2bk_hov o5">'+$$['trn']['set']+'</div><div class="hbar shim10"></div>'+
 		'</div>'+
-		'<div id="PaymentHistory"><div class="LR50"><div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov noselect">'+$L['vwpy']+'</div></div></div>';
-	}, 1500);
+		'<div id="PaymentHistory"><div class="LR50">'+
+			'<div id="PaymentHistoryBtn" class="BtnElem '+eml+' C0'+mde+' txtmed C1bk C2bk_hov">'+$$['trn']['vwpy']+'</div>';
+		
+		if($Q['email']){
+			var check = $I['x'],
+				lbl = $$['trn']['eml_off'];
+			
+			if($A[addr]['email'] == '1'){
+				check = $I['check'];
+				lbl = $$['trn']['eml_on'];
+			}
+			
+			ins += '<div id="EmailToggleBtn" class="BtnElem DiscMde C1bk C2bk_hov">'+
+				'<div class="DiscIcon C0bk'+mde+' C1fl">'+check+'</div><span id="EmailToggleLbl" class="C0'+mde+' txtmed">'+lbl+'</span>'+
+			'</div>';
+		}
+		ins += '</div></div>';
+		
+		document.getElementById('MinerPaymentsStage').innerHTML = ins;
+		if($A[addr]['threshold'] > 0) document.getElementById('AutoPayFld').value = Rnd($A[addr]['threshold'], $Q['pay']['dec_auto'], 'txt');
+	});
+}
+function EmailToggle(){
+	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
+	ic.classList.add('preload');
+	ic.innerHTML = $I['loadico'];
+	api('toggleEmail').then(function(){
+		api('user').then(function(){
+			var ico = $I['x'],
+				lbl = $$['trn']['eml_off'];
+				
+			if($A[addr]['email'] == '1'){
+				ico = $I['check'];
+				lbl = $$['trn']['eml_on'];
+			}
+				
+			ic.classList.remove('preload');
+			ic.innerHTML = ico;
+			document.getElementById('EmailToggleLbl').innerHTML = lbl;
+		});
+	});
 }
 function InstaPay(){
-	var b = document.getElementById('InstaPayBtn');
-	b.className = 'C1bk';
+	var b = document.getElementById('InstaPayBtn'), c = 'C4bk', t;
 	b.innerHTML = '<div class="C0fl'+mde+' preload">'+$I['refresh']+'</div>';
-	setTimeout(function(){
-		b.className = 'C5bk';
-		b.innerHTML = 'Payment Queued';
-	}, 1500);	
+	api('forcepayment').then(function(sts){
+		b.classList.remove('C1bk','C4bk','C5bk');
+		t = sts['msg'];
+		if(sts && sts['msg'] && sts['msg'] === 'Payout scheduled'){
+			c = 'C5bk';
+			t = $$['trn']['que'];
+		}
+		b.classList.add(c);
+		b.innerHTML = t;
+	});	
 }
 function AutoPay(s){
 	var c = AutoPayCheck(),
 		b = document.getElementById('AutoPayBtn');
 	
 	if(c === 'OK'){
-		b.innerHTML = '<div class="C0fl'+mde+' preload">'+$I['refresh']+'</div>';
-		setTimeout(function(){
-			b.className = 'C5bk';
-			b.innerHTML = $L['updt'];
-		}, 1500);	
+		b.classList.remove('C1bk','C4bk','C5bk');
+		b.innerHTML = '<div class="C0fl'+mde+' preload">'+$I['loadico']+'</div>';
+		api('updatethreshold', '', NumInput(document.getElementById('AutoPayFld').value)).then(function(){
+			b.classList.add('C5bk');
+			b.innerHTML = $$['trn']['updt'];
+		});
 	}
 }
 function AutoPayCheck(){
-	var b = document.getElementById('AutoPayBtn'), b_cls = 'C1bk C2bk_hov o5', b_ins = $L['set'],
-		f = document.getElementById('AutoPayFld'), f_cls = 'txt C0bk'+mde+' C3'+mde+' C1br', f_val = '',
-		v = f.value.replace(/[^\d.]/g, ''),
+	var b = document.getElementById('AutoPayBtn'),
+		b_ins = $$['trn']['set'],
+		f = document.getElementById('AutoPayFld'),
+		val_num = NumInput(f.value),
 		r = 'err';
 
-	if(v.indexOf('.') > -1){
-		var vs = v.split('.'), ns = '';
-		if(vs.length > 2){
-			for(var i = 0; i < vs.length; i++){
-				ns += vs[i];
-				if(i === 0) ns += '.';
-			}
-			v = ns;
-		}
-	}
-	if(v && v > 0 && v < $Q['pay']['min_auto']){
-		b_cls = 'C4bk';
-		b_ins = $Q['pay']['min_auto']+' '+$Q['cur']['sym']+' '+$L['min'];
-		f_cls = 'txt C0bk'+mde+' C3'+mde+' C4br';
-		f_val = Rnd(v, 8, 'txt');
-	}else if(v >= $Q['pay']['min_auto']){
-		f_val = Rnd(v, 8, 'txt');
-		b_cls = 'C1bk C2bk_hov'
+	b.classList.remove('C1bk','C4bk','C5bk','o5');
+	f.classList.remove('C4','C4br');
+	if(val_num < $Q['pay']['min_auto']){
+		b.classList.add('C4bk');
+		b_ins = $Q['pay']['min_auto']+' '+$Q['cur']['sym']+' '+$$['trn']['min'];
+		f.classList.add('C4', 'C4br');
+	}else if(val_num >= $Q['pay']['min_auto']){
+		b.classList.add('C1bk');
 		r = 'OK';
+	}else{
+		b.classList.add('C1bk', 'o5');
 	}
-	b.className = b_cls;
 	b.innerHTML = b_ins;
-	f.className = f_cls;
-	f.value = f_val;
+	f.value = Rnd(val_num, $Q['pay']['dec_auto'], 'txt');
 	return r;
 }
 function MinerPaymentHistory(pge){
 	pge = (pge > 1) ? pge : 1;
 	document.getElementById('MinerPayments').className = 'OpenedBig';
-	document.getElementById('PaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov noselect">Close Payment History</div>'+
-		'<div id="MinerPaymentsTable">'+$I['load']+'</div></div>'+
+	document.getElementById('PaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Payment History</div>'+
+		'<div id="MinerPaymentsTable" class="C3'+mde+'">'+$I['load']+'</div></div>'+
 		'<input type="hidden" id="MinerPaymentsPage" value="'+pge+'">';
 		
 	api('pay', addr, pge).then(function(){
@@ -1067,7 +1123,7 @@ function dta_Help(){
 			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I['arrow']+'</div></div>'+
 			'<div class="helpteaser">Start here if you need a Monero address and wallet.</div>'+
 			'<div class="helpcontent hide">'+
-				'<p>The <a href="https://www.getmonero.org/downloads/" target="_blank" class="C1 hov">Official Monero Wallet</a> is recommended. Monero Outreach’s <a href="https://www.monerooutreach.org/stories/monero_wallet_quickstart.php" class="C1 hov" target="_blank">Wallet Guide</a> has a list of other wallet options including paper wallets.</p>'+
+				'<p>The <a href="https://www.getmonero.org/downloads/" target="_blank" class="C1 hov">Official Monero Wallet</a> is recommended. Monero Outreach\'s <a href="https://www.monerooutreach.org/stories/monero_wallet_quickstart.php" class="C1 hov" target="_blank">Wallet Guide</a> has a list of other wallet options including paper wallets.</p>'+
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
@@ -1079,7 +1135,7 @@ function dta_Help(){
 					'<td NOWRAP>'+
 						'<i>Alphabetically</i><br>'+
 						'<a href="https://github.com/KlausT/ccminer-cryptonight/releases" class="C1 hov" target="_blank">ccminer-cryptonight</a> (Nvidia)<br>'+
-						'<a href="https://bitcointalk.org/index.php?topic=638915.0" class="C1 hov" target="_blank">Claymore’s miner</a> (CPU, AMD)<br>'+
+						'<a href="https://bitcointalk.org/index.php?topic=638915.0" class="C1 hov" target="_blank">Claymore\'s miner</a> (CPU, AMD)<br>'+
 					'</td>'+
 					'<td NOWRAP>'+
 						'<a href="https://github.com/Dead2/CryptoGoblin/releases" class="C1 hov" target="_blank">CryptoGoblin</a> (CPU, Nvidia, AMD)<br>'+
@@ -1093,7 +1149,7 @@ function dta_Help(){
 			'<div class="helptitle txtbig">Step 3 - Configure Settings<div class="btnback">'+$I['arrow']+'</div></div>'+
 			'<div class="helpteaser">Select a pool server and port and configure you miner.</div>'+
 			'<div class="helpcontent hide">'+
-				'<p>Each mining software will have it’s own config, but they will all ask for the same information:</p>'+
+				'<p>Each mining software will have it\'s own config, but they will all ask for the same information:</p>'+
 				'<p><b>Your Monero Address</b><br>Often this will be labeled username, but check the instructions. You can specify a paymentID by using the following format: <i>address</i>.<i>paymentID</i></p>'+
 				'<p><b>Pool Address</b><br>The miner will want a url and a port, like this: pool.supportxmr.com:3333</p>'+
 				'<p><table class="txtsmall C3'+mde+'"><tr>'+
@@ -1102,7 +1158,7 @@ function dta_Help(){
 						'<ul><li>3333 Low-end CPU</li><li>5555 Fast/Multi CPU</li><li>7777 GPU rigs</li><li>9000 SSL/TLS</li></ul>'+
 					'</td>'+
 					'<td>'+
-						'<p>If you can’t get through firewall, try these:</p>'+
+						'<p>If you can\'t get through firewall, try these:</p>'+
 						'<ul><li>8080 Firewall bypass</li><li>80 Firewall bypass</li><li>443 Firewall bypass w/SSL/TLS</li></ul>'+
 					'</td>'+
 				'</tr></table></p>'+
@@ -1116,7 +1172,7 @@ function dta_Help(){
 			'<div class="helpteaser">Launch the miner and learn more.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>This pool uses PPLNS to determine payouts. It helps to combat pool hopping and ensures a good payout for miners.</p>'+
-				'<p>0.6% Pool Fee</p>'+
+				'<p>'+Perc('0.6')+' Pool Fee</p>'+
 				'<p>0.1 XMR Default Payout</p>'+
 				'<p>60 Block Confirmation Time</p>'+
 			'</div>'+
@@ -1127,22 +1183,28 @@ function dta_Help(){
 //Data
 var api = function(m, key, xid){
 	now = Rnd((new Date()).getTime() / 1000);
-	var i = 0, url = '', start = now - (3600 * GraphLib_Duration());
+	key = key || 0;
+	xid = xid || '';
+	
+	var i = 0,
+		url = '',
+		start = now - (3600 * GraphLib_Duration());
+
 	if(m === 'news' && now > ($U['news'] + 3600)){
 		url = 'pool/motd';
 	}else if(m === 'block'){
 		url = 'pool/blocks?limit=100';
 	}else if(m === 'blockhistory'){
-		url = 'pool/blocks?page='+key+'&limit='+xid;
-	}else if(m === 'net' && now > ($U['net'] + 300)){
+		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
+	}else if(m === 'net' && now > ($U['net'] + 180)){
 		url = 'network/chart/difficulty?timeScale=20';
-	}else if(m === 'pool' && now > ($U['pool'] + 300)){
+	}else if(m === 'pool' && now > ($U['pool'] + 180)){
 		url = 'pool/chart/hashrate?timeScale=20';
-	}else if(m === 'netheight' && now > ($U['netheight'] + 300)){
+	}else if(m === 'netheight' && now > ($U['netheight'] + 180)){
 		url = 'network/stats';
 	}else if(m === 'poolpay'){
 		url = 'pool/payments?page='+((key - 1) * xid)+'&limit='+xid;
-	}else if(m === 'poolstats' && now > ($U['poolstats'] + 300)){
+	}else if(m === 'poolstats' && now > ($U['poolstats'] + 180)){
 		url = 'pool/stats';
 	}else if(m === 'account'){
 		url = 'miner/'+addr+'/stats';
@@ -1152,17 +1214,25 @@ var api = function(m, key, xid){
 			xid = (xid > 1) ? (xid - 1) * 10 : 0;
 			url += '?page='+xid+'&limit=10';
 		}
-	}else if(m === 'workers' && (isEmpty($A[addr]['wrkrs']) || now > ($A[addr]['wrkrs_updt'] + 180))){
+	}else if(m === 'workers' && (isEmpty($A[addr]['wrkrs']) || now > ($A[addr]['wrkrs_updt'] + 120))){
 		url = 'miner/'+addr+'/identifiers';
 	}else if(m === 'minershash'){
 		url = 'miner/'+addr+'/chart/hashrate/';
 	}else if(m === 'worker' && $A[addr] && $A[addr]['wrkrs'][key]){
 		var kyup = ($A[addr]['wrkrs'][key] && $A[addr]['wrkrs'][key]['updt'] > 0) ? $A[addr]['wrkrs'][key]['updt'] : 0;
-		if(isEmpty($A[addr]['wrkrs'][key]['stats']) || now > (kyup + 180)){
+		if(isEmpty($A[addr]['wrkrs'][key]['stats']) || now > (kyup + 120)){
 			url = 'miner/'+addr+'/chart/hashrate/'+xid;
 		}
 	}else if(m === 'workerdetail'){
 		url = 'miner/'+addr+'/stats/'+xid;
+	}else if(m === 'user' && addr){
+		url = 'user/'+addr;
+	}else if(m === 'updatethreshold'){
+		url = 'user/updateThreshold';
+	}else if(m === 'forcepayment'){
+		url = 'user/forcePayment';
+	}else if(m === 'toggleEmail'){
+		url = 'user/toggleEmail';
 	}
 
 	return new Promise(function (resolve, reject){
@@ -1183,18 +1253,34 @@ var api = function(m, key, xid){
 						for(i = 0; i < dcnt; i++){
 							var v = d[i], tme = Rnd(v['ts'] / 1000);
 							if(['block','blockhistory'].indexOf(m) >= 0){
-								if(m === 'blockhistory' || tme >= start || i < 25){
+								if(m === 'blockhistory' || tme >= start || i < $Q['graph']['blockmin']){
 									var val = (v['valid'] == true) ? 't' : 'f';
-									$D[m][i] = {'tme':tme, 'hash':v['hash'], 'height':v['height'], 'reward':Rnd((v['value'] / 1000000000000), 8, 'txt'), 'eff':Rnd(v['shares'] / v['diff'] * 100), 'val':val};
+									$D[m][i] = {
+										'tme':tme,
+										'hash':v['hash'],
+										'height':v['height'],
+										'reward':Rnd((v['value'] / 1000000000000), 8, 'txt'),
+										'eff':Rnd(v['shares'] / v['diff'] * 100),
+										'val':val
+									};
 								}
 							}else if(m === 'net'){
 								if(tme >= start) $D[m][i] = {'tme':tme, 'hash':Rnd(v['diff'] / 120)};
 							}else if(m === 'pool'){
 								if(tme >= start) $D[m][i] = {'tme':tme, 'hash':v['hs']};
 							}else if(m === 'pay'){
-								$D[m][i] = {'tme':v['ts'], 'hash':v['txnHash'], 'amnt':Rnd((v['amount'] / 1000000000000), 8)};
+								$D[m][i] = {
+									'tme':v['ts'],
+									'hash':v['txnHash'],
+									'amnt':Rnd((v['amount'] / 1000000000000), 8)
+								};
 							}else if(m === 'poolpay'){
-								$D[m][i] = {'tme':tme, 'payees':v['payees'], 'amnt':Rnd((v['value'] / 1000000000000), 8, 'txt'), 'fee':Rnd((v['fee'] / 1000000000000), 8, 'txt')};
+								$D[m][i] = {
+									'tme':tme,
+									'payees':v['payees'],
+									'amnt':Rnd((v['value'] / 1000000000000), 8, 'txt'),
+									'fee':Rnd((v['fee'] / 1000000000000), 8, 'txt')
+								};
 							}
 						}
 					}else if(m === 'netheight'){
@@ -1217,7 +1303,9 @@ var api = function(m, key, xid){
 								'shares':Num(d['validShares'])+' / '+Num(d['invalidShares']),
 								'stats':{},
 								'wrkrs':{},
-								'wrkrs_updt':0
+								'wrkrs_updt':0,
+								'email':'',
+								'threshold':''
 							}
 						}
 					}else if(m === 'workers'){
@@ -1231,12 +1319,22 @@ var api = function(m, key, xid){
 						$A[addr]['stats'] = api_GraphFormat(d, dcnt, start);
 					}else if(m === 'worker'){
 						$A[addr]['wrkrs'][key]['stats'] = api_GraphFormat(d, dcnt, start);
+						$A[addr]['wrkrs'][key]['rate'] = ($A[addr]['wrkrs'][key]['stats'][0] && $A[addr]['wrkrs'][key]['stats'][0]['hsh']) ? $A[addr]['wrkrs'][key]['stats'][0]['hsh'] : 0;
 						$A[addr]['wrkrs'][key]['updt'] = now;
 					}else if(m === 'workerdetail'){
 						$A[addr]['wrkrs'][key]['last'] = d['lts'];
 						$A[addr]['wrkrs'][key]['hashes'] = d['totalHash'];
 						$A[addr]['wrkrs'][key]['val'] = (d['validShares'] > 0) ? d['validShares'] : 0;
 						$A[addr]['wrkrs'][key]['inv'] = (d['invalidShares'] > 0) ? d['invalidShares'] : 0;
+					}else if(['user','updatethreshold','forcepayment','toggleEmail'].indexOf(m) >= 0){
+						if(d && d['msg']){
+							if(m === 'user'){
+								$A[addr]['email'] = d['msg']['email_enabled'];
+								$A[addr]['threshold'] = Rnd((d['msg']['payout_threshold'] / 1000000000000), 8);
+							}else if(m === 'forcepayment'){
+								key = d;
+							}
+						}
 					}
 					resolve(key);
 				}else{
@@ -1249,12 +1347,30 @@ var api = function(m, key, xid){
 			}
 		};
 		if(url){
-			xhr.open('GET', $Q['api']+url, true);
+			var method = 'GET', params = '';
+			if(['updatethreshold','forcepayment','toggleEmail'].indexOf(m) >= 0){
+				method = 'POST';
+				if(m === 'updatethreshold'){
+					params = {'username':addr, 'threshold':xid};
+				}else if(m === 'toggleEmail'){
+					params = {'address':addr};
+				}else{
+					params = {'username':addr};
+				}
+				params = JSON.stringify(params);
+			}
+			
+			xhr.open(method, $Q['api']+url, true);
 			xhr.setRequestHeader('Content-Type', 'application/json');
-			xhr.send();
-			console.log('Lookup: '+m+':'+url);
+			
+			if(method === 'POST'){
+				xhr.send(params);
+			}else{
+				xhr.send();
+			}
+			//console.log('Lookup: '+m+':'+url+' '+method);
 		}else{
-			console.log('Skipped: '+m+':'+url);
+			//console.log('Skipped: '+m+':'+url);
 			resolve(key);
 		}
 	});
@@ -1280,11 +1396,22 @@ function api_GraphFormat(d, cnt, start){
 				r[r_key] = {'tme':r_now, 'hsh':avg};
 				
 				r_avg = hsh;
-				r_cnt = 0;				
+				r_cnt = 1;				
 				r_now = r_now - interval;
 				r_key++;
 			}
 		}
+	}
+	var d_cnt = numObj(d),
+		d_sum = 0,
+		r_cnt = numObj(r),
+		r_sum = 0;
+		
+	for(var i = 0; i < d_cnt; i++){
+		d_sum = d_sum + d[i]['hs'];
+	}
+	for(var i = 0; i < r_cnt; i++){
+		r_sum = r_sum + r[i]['hsh'];
 	}
 	return r;
 }
@@ -1307,7 +1434,14 @@ function Tbl(tar, typ, pge, lim){
 					var val = '';
 					if($D[typ] && $D[typ][i] && $D[typ][i][k]) val = $D[typ][i][k];
 					if(k === 'tme'){
-						val = Ago(val)+' Ago';
+						val = Ago(val, 'y');
+					}else if(k === 'height'){
+						val = Num(val);
+					}else if(k === 'eff'){
+						var clr = (val > 100) ? 'C4' : 'C5';
+						val = '<span class="'+clr+'">'+Perc(val)+'</span>';
+					}else if(k === 'togo'){
+						val = BlockToGo($D[typ][i]['height'], $D[typ][i]['val']);
 					}else{
 						if($$['tbl'][typ]['hsh'] && $$['tbl'][typ]['hsh'] === 'y'){
 							val = '<div class="HashTrun" data-hash="'+val+'">'+val+'</div>';
@@ -1326,22 +1460,20 @@ function Tbl(tar, typ, pge, lim){
 		
 	document.getElementById(tar).innerHTML = ins;
 	if($D[typ]){
-		if(typ === 'pay'){
-			HashTrun('tx');
-		}else{
-			HashTrun();
-		}
+		var tr = (typ === 'pay') ? 'tx' : '';
+		HashTrun(tr);
 		if(tar === 'PageBot'){
-			var pgs = 0, tot = (typ === 'poolpay') ? $D['poolstats']['payments'] : $D['poolstats']['blocks'];
+			var pgs = 0,
+				tot = (typ === 'poolpay') ? $D['poolstats']['payments'] : $D['poolstats']['blocks'];
+				
 			pgs = Math.ceil(tot / 25);
-			document.getElementById('PageTopR').innerHTML = '<span class="txtmed C3'+mde+'">Page</span><input id="TblPagBox" type="text" class="BtnElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'"><span class="txtmed C3'+mde+'">of '+Num(pgs)+'</span>';
+			document.getElementById('PageTopR').innerHTML = '<span class="txtmed C3'+mde+'">Page</span><input id="TblPagBox" type="text" class="FrmElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'"><span class="txtmed C3'+mde+'">of '+Num(pgs)+'</span>';
 			PaginationBoxWidth();
 		}
-		
-		var BL = document.getElementById(tar+'-WBL'),
-			BR = document.getElementById(tar+'-WBR');
-		
 		if(i > 0){
+			var BL = document.getElementById(tar+'-WBL'),
+				BR = document.getElementById(tar+'-WBR');
+			
 			if(pge > 1){
 				BL.className = 'WingBtnL PagBtn rot180 C1bk C0fl'+mde;
 				BL.setAttribute('data-page', pge - 1);
@@ -1381,7 +1513,9 @@ function Graph_Net(){
 			xratio = 0,
 			i = 0,
 			ncnt = numObj($D['net']),
+			ncnt_pt = 0,
 			pcnt = numObj($D['pool']),
+			pcnt_pt = 0,
 			bcnt = numObj($D['block']),
 			$P = {'n':{},'p':{},'b':{}},
 			pavg = 0,
@@ -1395,6 +1529,7 @@ function Graph_Net(){
 			right_x = width - padR,
 			graphhrs = GraphLib_Duration(),
 			timestart = now - (3600 * graphhrs),
+			firsthash = 0,
 			hsh_net = HashConv($D['net'][0]['hash']),
 			hsh_pool = HashConv($D['pool'][0]['hash']),
 			currenteffort = 0,
@@ -1403,14 +1538,22 @@ function Graph_Net(){
 				'<linearGradient id="P"><stop offset="0%" stop-color="#'+$Q['clr']['main']+'" stop-opacity="0.99" /><stop offset="98%" stop-color="#'+$Q['clr']['main']+'" stop-opacity="0.05" /><stop offset="100%" stop-color="#'+$Q['clr']['main']+'" stop-opacity="0.00" /></linearGradient>'+
 			'</defs>';
 		
-		i = ncnt;
-		while(i--){
-			if($D['net'][i]['hash'] > max) max = $D['net'][i]['hash'];
-		}
 		i = pcnt;
 		while(i--){
 			pavg = pavg + $D['pool'][i]['hash'];
 			if($D['pool'][i]['hash'] < min) min = $D['pool'][i]['hash'];
+			if($D['pool'][i]['hash'] > 0 && firsthash === 0){
+				firsthash = $D['pool'][i]['tme'];
+			}
+		}
+		
+		if(firsthash > timestart) timestart = firsthash;
+
+		i = ncnt;
+		while(i--){
+			if($D['net'][i]['tme'] >= timestart){
+				if($D['net'][i]['hash'] > max) max = $D['net'][i]['hash'];
+			}
 		}
 		
 		pavg = pavg / pcnt;
@@ -1418,37 +1561,36 @@ function Graph_Net(){
 		
 		//Create Points
 		for(i = 0; i < ncnt; i++){
-			$P['n'][i] = {
-				'x':Rnd(right_x - (now - $D['net'][i]['tme']) * xratio, 1),
-				'y':Rnd(height + 2 - ($D['net'][i]['hash'] - min) / (max - min) * height, 1)
-			};
+			if($D['net'][i]['tme'] >= timestart){
+				ncnt_pt++;
+				$P['n'][i] = {
+					'x':Rnd(right_x - (now - $D['net'][i]['tme']) * xratio, 1),
+					'y':Rnd(height + 2 - ($D['net'][i]['hash'] - min) / (max - min) * height, 1)
+				};
+			}
 		}
 		for(i = 0; i < pcnt; i++){
-			$P['p'][i] = {
-				'x':Rnd(right_x - (now - $D['pool'][i]['tme']) * xratio, 1),
-				'y':Rnd(height - 4 - ($D['pool'][i]['hash'] - min) / (max - min) * height, 1)
-			};
+			if($D['pool'][i]['tme'] >= timestart){
+				pcnt_pt++;
+				$P['p'][i] = {
+					'x':Rnd(right_x - (now - $D['pool'][i]['tme']) * xratio, 1),
+					'y':Rnd(height - 4 - ($D['pool'][i]['hash'] - min) / (max - min) * height, 1)
+				};
+			}
 		}
 	
 		//NetHash Line
 		ins += '<polyline class="C1st" stroke-width="'+linesize+'" fill="url(#P)" points="'+right_x+','+$P['n'][0]['y'];
-		for(i = 0; i < ncnt; i++){
+		for(i = 0; i < ncnt_pt; i++){
 			ins += ' '+$P['n'][i]['x']+','+$P['n'][i]['y'];
 		}
-		ins += ' -3,'+$P['n'][(ncnt - 1)]['y']+' -3,'+$P['p'][(ncnt - 1)]['y'];
-		i = pcnt;
+		ins += ' -3,'+$P['n'][(ncnt_pt - 1)]['y']+' -3,'+$P['p'][(ncnt_pt - 1)]['y'];
+		i = pcnt_pt;
 		while(i--){
 			ins += ' '+$P['p'][i]['x']+','+$P['p'][i]['y'];
 		}
-		ins += '" />'+
-			'<text x="'+(right_x + 5)+'" y="'+($P['n'][0]['y'] + 14)+'" class="txtmed C1fl">'+Rnd(hsh_net['num'], 1, 'txt')+'</text>'+
-			'<text x="'+(right_x + 5)+'" y="'+($P['p'][0]['y'] + 1)+'" class="txtmed C1fl">'+Rnd(hsh_pool['num'], 1, 'txt')+'</text>';
-		
-		if(fullsize === 'y'){
-			ins += '<text x="'+(right_x + 5)+'" y="'+($P['n'][0]['y'] + 23)+'" class="txttny C2fl o8">'+hsh_net['unit']+' Net</text>'+
-				'<text x="'+(right_x + 5)+'" y="'+($P['p'][0]['y'] - 17)+'" class="txttny C2fl o8">'+hsh_pool['unit']+' Pool</text>';
-		}
-		
+		ins += ' '+right_x+','+$P['p'][0]['y']+'" />';
+
 		if($Q['graph']['pplns']){
 			//PPLNS Window
 			var pplns = 2 * ($D['net'][0]['hash'] * 120) / pavg * xratio,
@@ -1456,10 +1598,10 @@ function Graph_Net(){
 				pmid = 0;
 				
 			ins += '<polygon class="C1fl" opacity=".75" points="'+right_x+','+$P['n'][0]['y'];
-			for(i = 0; i < ncnt; i++){
+			for(i = 0; i < ncnt_pt; i++){
 				if($P['n'][i]['x'] > right_x - pplns) ins += ' '+$P['n'][i]['x']+','+$P['n'][i]['y'];
 			}
-			for(p = (pcnt - 1); p >= 0; p--){
+			for(p = (pcnt_pt - 1); p >= 0; p--){
 				if($P['p'][p]['x'] > right_x - pplns){
 					ins += ' '+$P['p'][p]['x']+','+$P['p'][p]['y'];
 					if($P['p'][p]['x'] < plft) plft = $P['p'][p]['x'];
@@ -1468,13 +1610,21 @@ function Graph_Net(){
 			ins += ' '+right_x+','+$P['p'][0]['y']+'" />';
 			if(fullsize === 'y'){
 				pmid = (right_x + plft) / 2;
-				ins += '<text x="'+pmid+'" y="20" text-anchor="middle" class="C0fl'+mde+' txttny o9"><tspan x="'+pmid+'">PPLNS</tspan><tspan x="'+pmid+'" dy="10">Window</tspan></text>';
+				ins += '<text x="'+pmid+'" y="'+($P['n'][0]['y'] + 14)+'" text-anchor="middle" class="C0fl'+mde+' txttny o9"><tspan x="'+pmid+'">PPLNS</tspan><tspan x="'+pmid+'" dy="10">Window</tspan></text>';
 			}
 		}
 		
 		//Grid Lines & Labels
 		ins += GraphLib_Grid('line', 3, max, min, height, width, 'C0');
 		ins += GraphLib_Grid('lbl', 3, max, min, height, width, 'C0');
+		
+		ins += '<text x="'+(right_x + 5)+'" y="'+($P['n'][0]['y'] + 14)+'" class="txtmed C1fl">'+Rnd(hsh_net['num'], 1, 'txt')+'</text>'+
+			'<text x="'+(right_x + 5)+'" y="'+($P['p'][0]['y'] + 1)+'" class="txtmed C1fl">'+Rnd(hsh_pool['num'], 1, 'txt')+'</text>';
+		
+		if(fullsize === 'y'){
+			ins += '<text x="'+(right_x + 5)+'" y="'+($P['n'][0]['y'] + 23)+'" class="txttny C2fl o8">'+hsh_net['unit']+' Net</text>'+
+				'<text x="'+(right_x + 5)+'" y="'+($P['p'][0]['y'] - 17)+'" class="txttny C2fl o8">'+hsh_pool['unit']+' Pool</text>';
+		}
 
 		//Blocks
 		if(bcnt > 0){
@@ -1505,7 +1655,6 @@ function Graph_Net(){
 			}
 			avg_effort = Rnd(avg_effort / mod_bcnt);
 			currenteffort = Rnd((now - $D['block'][0]['tme']) / ($D['net'][0]['hash'] / $D['pool'][0]['hash'] * 120) * 100);
-			
 
 			mod_bcnt = 0;
 			for(i = 0; i < bcnt; i++){
@@ -1520,7 +1669,7 @@ function Graph_Net(){
 			}
 			bcnt = mod_bcnt;
 			
-			//Blocks
+			//Blocks  $Q['graph']['blockmin']
 			for(i = 0; i < bcnt; i++){
 				var clrclass = ($D['block'][i]['eff'] <= 100) ? 'C5fl' : 'C4fl',
 					$c = {'0':{'cl':'C1fl','sz':1},'1':{'cl':'o7 C0fl'+mde,'sz':.92},'2':{'cl':'Dot '+clrclass,'sz':.71}};
@@ -1552,21 +1701,27 @@ function Graph_Net(){
 				yL = $P['b'][(bcnt - 1)]['y'];
 				xR = $P['b'][0]['x'];
 				yR = $P['b'][0]['y'];
-				tm = Ago($D['block'][0]['tme'])+' Ago';
+				tm = Ago($D['block'][0]['tme'], 'y'),
+				avgeff = Perc(avg_effort)+' '+$$['trn']['avgeff'],
+				avgeff_w = avgeff.length * 5.5,
+				lstfnd = 'Found '+tm,
+				lstfnd_w = lstfnd.length * 5.7;
 
 				ins += '<line x1="'+xR+'" y1="'+(yR + 3 + (blocksize / 2))+'" x2="'+xR+'" y2="'+bline+'" class="line C2st" />'+
 					'<line x1="'+xR+'" y1="'+bline+'" x2="'+xL+'" y2="'+bline+'" class="line C2st" />'+
 					'<line x1="'+xL+'" y1="'+(yL + 3 + (blocksize / 2))+'" x2="'+xL+'" y2="'+bline+'" class="line C2st" />'+
-					'<rect x="'+(xL + 10)+'" y="'+height+'" width="90" height="13" class="C0fl'+mde+'" />'+
-					'<text x="'+(xL + 55)+'" y="'+text_y+'" text-anchor="middle" class="C2fl txttny">'+avg_effort+'% Avg Effort</text>'+
-					'<rect x="'+(xR - 100)+'" y="'+height+'" width="90" height="13" class="C0fl'+mde+'" />'+
-					'<text x="'+(xR - 55)+'" y="'+text_y+'" text-anchor="middle" class="C2fl txttny">Found '+tm+'</text>'+
-					'<rect x="'+(right_x - 7)+'" y="'+(text_y - 8)+'" width="11" height="9" class="C0fl'+mde+'" />'+
-					'<text x="'+(right_x - 8)+'" y="'+text_y+'" class="C2fl txttny">'+currenteffort+'% '+$L['eff']+'</text>'+
-					'<line x1="'+right_x+'" y1="'+(bline - 15)+'" x2="'+right_x+'" y2="'+yR+'" class="line C2st" />'+
+					//Effort
+					'<rect x="'+(xL + 5)+'" y="'+height+'" width="'+avgeff_w +'" height="13" class="C0fl'+mde+'" />'+
+					'<text x="'+(xL + (avgeff_w / 2) + 5)+'" y="'+text_y+'" text-anchor="middle" class="C2fl txttny">'+avgeff+'</text>'+
+					//Last Found
+					'<rect x="'+(xR - lstfnd_w - 5)+'" y="'+height+'" width="'+lstfnd_w+'" height="13" class="C0fl'+mde+'" />'+
+					'<text x="'+(xR - (lstfnd_w / 2) - 5)+'" y="'+text_y+'" text-anchor="middle" class="C2fl txttny">'+lstfnd+'</text>'+
+					'<rect x="'+(right_x - 9)+'" y="'+(text_y - 8)+'" width="14" height="9" class="C0fl'+mde+'" />'+
+					'<text x="'+(right_x - 8)+'" y="'+text_y+'" class="C2fl txttny">'+Perc(currenteffort)+' '+$$['trn']['eff']+'</text>'+
+					'<line x1="'+right_x+'" y1="'+($P['p'][0]['y'] + 1)+'" x2="'+right_x+'" y2="'+(text_y - 9)+'" class="line C2st" />'+
 					'<line x1="'+xR+'" y1="'+bline+'" x2="'+(right_x - 10)+'" y2="'+bline+'" class="line C2st" />';
 			}
-			ins += '<text x="5" y="'+text_y+'" class="C2fl txttny">'+Ago($D['pool'][(pcnt - 1)]['tme'])+' Ago</text>';
+			ins += '<text x="5" y="'+text_y+'" class="C2fl txttny">'+Ago($D['pool'][(pcnt_pt - 1)]['tme'], 'y')+'</text>';
 		}
 		
 		//Current Block Dot
@@ -1587,7 +1742,7 @@ function Graph_NetPop(xid){
 		NetPop = document.getElementById('GPop'),
 		clss = (b.getAttribute('cx') > (width / 2)) ? 'pleft' : 'pright',
 		ins = '<table class="TDPadS txt C3'+mde+'"><tr>'+
-			'<td><div class="txtmed">'+Ago($D['block'][xid]['tme'])+' Ago</div><div class="pbar"></div><div class="txttny">'+$D['block'][xid]['eff']+'% '+$$['tbl']['blockhistory']['eff']['lbl']+'</div></td>'+
+			'<td><div class="txtmed">'+Ago($D['block'][xid]['tme'], 'y')+'</div><div class="pbar"></div><div class="txttny">'+$D['block'][xid]['eff']+' '+$$['tbl']['blockhistory']['eff']['lbl']+'</div></td>'+
 			'<td><div class="txtmed">'+$D['block'][xid]['reward']+' '+$Q['cur']['sym']+'</div><div class="pbar"></div><div class="HashTrun txttny" data-hash="'+$D['block'][xid]['hash']+'"></div></td>'+
 			'<td><div id="GPopConfirm" class="txtmed">--</div><div class="pbar"></div><div class="txttny">'+$$['tbl']['blockhistory']['height']['lbl']+' '+Num($D['block'][xid]['height'])+'</div></td>'+
 		'</tr></table>'+
@@ -1661,14 +1816,14 @@ function Graph_Miner(){
 
 		ins = '<svg viewBox="0 0 '+width+' '+height+'" class="chart">'+
 			'<defs>'+
-				'<linearGradient id="M"><stop offset="0%" stop-color="#818181" stop-opacity="0.2" /><stop offset="15%" stop-color="#818181" stop-opacity="0.3" /><stop offset="100%" stop-color="#818181" stop-opacity="1" /></linearGradient>'+
+				'<linearGradient id="M"><stop offset="0%" stop-color="#'+$Q['clr']['secondary']+'" stop-opacity="0.2" /><stop offset="15%" stop-color="#'+$Q['clr']['secondary']+'" stop-opacity="0.3" /><stop offset="100%" stop-color="#'+$Q['clr']['secondary']+'" stop-opacity="1" /></linearGradient>'+
 			'</defs>';
 			
 		//Grid Lines
 		ins += GraphLib_Grid('line', 5, max, 0, height_pad, width, 'C2');
 		
 		//Miner Hash Line & Fill
-		ins += '<path class="C0fl'+mde+'" stroke="url(#M)" stroke-width="2" d="'+GraphLib_Bezier(points)+'M0,'+yR+' 0,'+(height + 3)+' '+(width + 3)+','+(height + 3)+' '+(width + 3)+','+yL+'" />';
+		ins += '<path class="C0fl'+mde+'" stroke="url(#M)" stroke-width="2" d="M'+right_x+','+points[(cnt - 1)]['y']+' '+GraphLib_Bezier(points)+'M0,'+yR+' 0,'+(height + 3)+' '+(width + 3)+','+(height + 3)+' '+(width + 3)+','+yL+'" />';
 		
 		//Miner Hash Lables with Vertical Adjust
 		var hsh = HashConv($H[0]['hsh']), hs_y = yL + 2, lb_y = yL + 11;
@@ -1707,7 +1862,6 @@ function Graph_Miner(){
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
 		GraphLib_ToolTipListener();
-		
 	}else{
 		ErrAlert('MinerGraph', 'NoData');
 		ins = '<div id="MinerGraphAlert" class="txtmed C2 o5">'+$$['msg']['addr_nodat']['head']+'</div>';
@@ -1773,7 +1927,7 @@ function GraphLib_Grid(m, num, max, min, h, w, cls){
 				r += '<line x1="50" y1="'+ylc+'" x2="'+w+'" y2="'+ylc+'" class="line '+cls+'st'+clss+' o8" />';
 			}else if(m === 'lbl'){
 				var yln = HashConv(yrt * y);
-				r += '<text x="5" y="'+ylc+'" class="'+cls+'fl'+clss+' txttny">'+yln['num']+' '+yln['unit']+'</text>';
+				r += '<text x="5" y="'+(ylc + 3)+'" class="'+cls+'fl'+clss+' txttny">'+yln['num']+' '+yln['unit']+'</text>';
 			}
 		}
 	}
@@ -1797,15 +1951,15 @@ function GraphLib_ToolTip(el, sts){
 			t_v = tv['num']+' '+tv['unit'];
 		}
 
-		var tmeago = Ago(tme)+' Ago '+Time(tme),
+		var tmeago = Ago(tme, 'y')+' '+Time(tme),
 			v_wid = t_v.length * 6 + offset,
 			t_wid = tmeago.length * 5.9 - 3;
 
 		$R = {
 			'Tip_Val':{'x':(t_x - (v_wid / 2) - 6), 'y':t_y, 'i':t_v},
-			'Tip_ValBx':{'x':(t_x - v_wid - 6), 'y':(t_y - 10), 'w':v_wid},
+			'Tip_ValBx':{'x':(t_x - v_wid - 6), 'y':(t_y - 11), 'w':v_wid},
 			'Tip_Tme':{'x':(t_x + 7 + (t_wid / 2)), 'y':t_y, 'i':tmeago},
-			'Tip_TmeBx':{'x':(t_x + 7), 'y':(t_y - 10), 'w':t_wid}
+			'Tip_TmeBx':{'x':(t_x + 7), 'y':(t_y - 11), 'w':t_wid}
 		};
 	}
 	for(var k in $R){
@@ -1821,9 +1975,9 @@ function GraphLib_ToolTip(el, sts){
 	}
 }
 function GraphLib_ToolTipSetup(){
-	return '<rect x="0" y="-999" width="9" height="13" rx="3" class="Tip_ValBx C1st C0fl'+mde+'" />'+
+	return '<rect x="0" y="-999" width="9" height="15" rx="3" class="Tip_ValBx C1st C0fl'+mde+'" />'+
 			'<text x="0" y="-999" text-anchor="middle" class="Tip_Val C2fl txttny"></text>'+
-			'<rect x="0" y="-999" width="9" height="13" rx="3" class="Tip_TmeBx C1st C0fl'+mde+'" />'+
+			'<rect x="0" y="-999" width="9" height="15" rx="3" class="Tip_TmeBx C1st C0fl'+mde+'" />'+
 			'<text x="0" y="-999" text-anchor="middle" class="Tip_Tme C2fl txttny"></text>';
 }
 function GraphLib_ToolTipListener(){
@@ -1860,15 +2014,42 @@ function GraphLib_Bezier(p){
     return h;
 }
 //Helpers
+function Localize(){
+	var brwlng = window.navigator.userLanguage || window.navigator.language;
+	if(brwlng){
+		var b = brwlng.split('-');
+		
+		if(brwlng === 'fr-CA' || ['AL','AR','AT','BY','BE','BO','BR','BG','CL','CO','CR','CU','CY','CZ','DK','EC','EE','FI','FR','DE','GR','GL','HU','IS','ID','IT','LV','LB','LT','MA','NL','NO','PE','PL','PT','RO','RU','RS','SK','SI','ES','SE','CH','TR','UA','UY','VE','VN'].indexOf(b[1]) > -1){
+			$L['dec'] = ',';
+		}else if(['IE','MY','PH','SG','TW'].indexOf(b[1]) > -1){
+			$L['dec'] = '·';
+		}
+		if(brwlng === 'fr-BE' || brwlng === 'fr-CA' || ['AL','AU','BG','CZ','EE','FI','FR','HU','LV','LT','NO','PE','PL','PT','RU','SK','ZA','SE','CH','UA','LK'].indexOf(b[1]) > -1){
+			$L['thou'] = ' ';
+		}else if(brwlng === 'de-BE' || ['AR','AT','BA','BR','CL','CO','CR','HR','DK','DE','GR','ID','IT','NL','RO','SI','ES','TR','VN'].indexOf(b[1]) > -1){
+			$L['thou'] = '.';
+		}
+		if(b[0] === 'en' || b[0] === 'he' || ['CN','CZ','IT','RU'].indexOf(b[1]) > -1){
+			$L['perc'] = '9%';
+		}else if(b[1] === 'TR'){
+			$L['perc'] = '%9';
+		}
+		if(b[0] === 'fr'){
+			$L['tme'] = 'ghi';
+		}else if(b[1] === 'DE'){
+			$L['tme'] = 'g.i';
+		}else if(brwlng === 'en-CA' || ['AU','BD','EG','IE','IN','MY','MT','MX','NZ','PK','PH','GB','US'].indexOf(b[1]) > -1){
+			$L['tme'] = 'g:i A';
+		}
+	}
+}
 function isEmpty(o){
 	return (o && Object.entries(o).length === 0 && o.constructor === Object) ? true : false;
 }
 function numObj(o){
-	var r = 0;
-	if(o && typeof o === 'object' && o !== null) r = Object.keys(o).length;
-    return r;
+    return (o && typeof o === 'object' && o !== null) ? Object.keys(o).length : 0;
 }
-function Ago(tme){
+function Ago(tme, lbl){
 	var t = now - parseInt(tme), r = 0;
 	if(t < 60){
 		t = t+' Sec';
@@ -1883,36 +2064,55 @@ function Ago(tme){
 		t = r+' Day';
 		if(r > 1) t += 's';
 	}
+	if(lbl === 'y') t += ' Ago';
 	return t;
 }
 function Time(tme){
 	var r = '';
 	if(tme > 1){
+		r = $L['tme'];
 		var date = new Date(tme * 1000),
-			hours = date.getHours(),
-			minutes = '0'+date.getMinutes(),
-			ap = '';
-			
-		if(lang === 'en-US' || lang === 'en-CA'){
-			ap = ' am';
-			if(hours >= 12){
-				hours = hours - 12;
-				ap = ' pm';
-			}
-		}	
-		r = hours+':'+minutes.substr(-2)+ap;
+			hr24 = date.getHours(),
+			hr12 = hr24,
+			min = '0'+date.getMinutes(),
+			ap = 'am';
+		
+		if(hr12 >= 12){
+			hr12 = hr12 - 12;
+			ap = ' pm';
+		}
+		r = r.replace('g', hr12);
+		r = r.replace('G', hr24);
+		r = r.replace('i', min.substr(-2));
+		r = r.replace('A', ap);
 	}
 	return r;
 }
+function Perc(n){
+	return $L['perc'].replace('9', n);
+}
 function Num(n){
 	n = n || 0;
-	return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+	return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1'+$L['thou']);
+}
+function NumInput(n){
+	n = n || 0;
+	if(n.indexOf($L['dec']) !== -1){
+		var na = n.split($L['dec']);
+		n = na[0].replace(/[^\d]/g, '')+'.'+na[1].replace(/[^\d]/g, '');
+	}else{
+		n = n.replace(/[^\d]/g, '')+'.0';
+	}
+	return parseFloat(n);
 }
 function Rnd(n, dec, m){
 	if(dec >= 1){
 		var d = Math.pow(10, dec);
 		n = Math.round(n * d) / d;
-		if(m === 'txt') n = n.toFixed(dec);
+		if(m === 'txt'){
+			n = n.toFixed(dec);
+			if($L['dec'] !== '.') n = n.replace('.', $L['dec']);
+		}
 	}else{
 		n = Math.round(n);
 	}
@@ -1947,7 +2147,7 @@ function BlockToGo(h, sts){
 		return '<span class="C4">Invalid</span>';
 	}else{
 		var b = 60 - ($D['netheight'] - h);
-		return (b <= 0) ? $L['conf'] : b+' To Go';
+		return (b <= 0) ? $$['trn']['conf'] : b+' To Go';
 	}
 }
 function SynchTime(t){
