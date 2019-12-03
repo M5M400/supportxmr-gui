@@ -1,7 +1,7 @@
 var	mde = 'l',
 	$Q = {										
 		'pool':{
-			'nme':'SupportXMR',										//also sets the cookie prefix
+			'nme':'MoneroOcean',										//also sets the cookie prefix
 		},
 		'clr':{
 			'main':'f06923',										//C1
@@ -15,8 +15,7 @@ var	mde = 'l',
 			'blk':2,												//blocktime in minutes
 			'reg':/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
 		},
-		'api':'https://supportxmr.com/api/',
-		//'api':'http://69.164.198.226/api/',
+		'api':'https://api.moneroocean.stream/',
 		'explorer':'https://xmrchain.net/block/',
 		'explorertx':'https://xmrchain.net/tx/',
 		'news':false,												//enable news (motd) alerts on homepage
@@ -42,7 +41,7 @@ var	mde = 'l',
 		},
 		'hlp':{
 			'head':'Welcome to '+$Q['pool']['nme'],
-			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operators are M5M400 and Snipa22 who can be reached in the #monero-pools IRC or at <a href="mailto:support@supportxmr.com" class="C1 hov">support@supportxmr.com</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
+			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
 		},
 		'msg':{
 			'welcome':{'head':'Welcome to '+$Q['pool']['nme'], 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q['cur']['nme']+' address above. After you\'ve submitted a share, your stats will appear here.'},
@@ -1117,7 +1116,7 @@ function dta_Payments(pge){
 }
 function dta_Help(){
 	document.getElementById('PageTopL').innerHTML = $$['hlp']['head'];
-	document.getElementById('PageTopR').innerHTML = '<span class="txttny C2">Join Us on IRC<br>#monero-pools</span>';
+	document.getElementById('PageTopR').innerHTML = '<span class="txttny C2">Join Us on <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a></span>';
 	var ins = '<p>'+$$['hlp']['text']+'</p>'+
 		'<div class="helpgroup">'+
 			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I['arrow']+'</div></div>'+
@@ -1130,7 +1129,7 @@ function dta_Help(){
 			'<div class="helptitle txtbig">Step 2 - Install Mining Software<div class="btnback">'+$I['arrow']+'</div></div>'+
 			'<div class="helpteaser">Install the software needed to mine Monero.</div>'+
 			'<div class="helpcontent hide">'+
-				'<p>Select the miner that best suits your hardware and follow their installation instructions. If you need help, visit #monero-pools.</p>'+
+				'<p>Select the miner that best suits your hardware and follow their installation instructions. If you need help, visit <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>.</p>'+
 				'<p><table class="txtsmall C3'+mde+'"><tr>'+
 					'<td NOWRAP>'+
 						'<i>Alphabetically</i><br>'+
@@ -1151,7 +1150,7 @@ function dta_Help(){
 			'<div class="helpcontent hide">'+
 				'<p>Each mining software will have it\'s own config, but they will all ask for the same information:</p>'+
 				'<p><b>Your Monero Address</b><br>Often this will be labeled username, but check the instructions. You can specify a paymentID by using the following format: <i>address</i>.<i>paymentID</i></p>'+
-				'<p><b>Pool Address</b><br>The miner will want a url and a port, like this: pool.supportxmr.com:3333</p>'+
+				'<p><b>Pool Address</b><br>The miner will want a url and a port, like this: gulf.moneroocean.stream:10032</p>'+
 				'<p><table class="txtsmall C3'+mde+'"><tr>'+
 					'<td>'+
 						'<p>Port descriptions:</p>'+
