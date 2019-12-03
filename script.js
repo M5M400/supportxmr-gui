@@ -22,13 +22,13 @@ var	mde = 'l',
 		'email':false,												//enable email notifications
 		'timer':60,													//refresh timer in seconds
 		'graph':{
-			'hrs':8,												//max chart length in hours
+			'hrs':72,												//max chart length in hours
 			'pplns':false,											//show pplns window on chart
 			'blockmin':25											//min number of blocks to show (blocks take their own time scale) max 100
 		},
 		'pay':{
-			'min_inst':0.01,										//minimum for instant pay
-			'min_auto':0.1,											//minimum for automatic threshold
+			'min_inst':0.003,										//minimum for instant pay
+			'min_auto':0.003,											//minimum for automatic threshold
 			'dec_auto':4											//decimal places for threshold
 		}
 	},
