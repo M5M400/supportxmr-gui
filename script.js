@@ -458,6 +458,10 @@ function TimerUpdateData(){
 		var typ = (l.innerHTML !== '--') ? 'refresh' : '';
 		Dash_load(typ);
 	}
+
+	updateTimer = $Q['timer'];
+	$C['TimerText'].innerHTML = updateTimer;
+	LoadTimer();
 	
 	if($Q['news']){
 		var n = document.getElementById('News'), c = document.getElementById('NewsCard'), h = '';
@@ -1181,10 +1185,6 @@ var api = function(m, key, xid){
 		url = 'pool/blocks?limit=100';
 	}else if(m === 'blockhistory'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
-	}else if(m === 'net' && now > ($U['net'] + 180)){
-		url = 'network/chart/difficulty?timeScale=20';
-	}else if(m === 'pool' && now > ($U['pool'] + 180)){
-		url = 'pool/chart/hashrate?timeScale=20';
 	}else if(m === 'netheight' && now > ($U['netheight'] + 180)){
 		url = 'network/stats';
 	}else if(m === 'poolpay'){
