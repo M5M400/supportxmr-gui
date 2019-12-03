@@ -263,9 +263,6 @@ document.body.addEventListener('click', function(e){
 				}
 			}else if(id[i] === '.Worker'){
 				Workers_detail(el.getAttribute('data-key'));
-			}else if(id[i] === '.blockgroup'){
-				netpop_open = el.getAttribute('data-block');
-				Graph_NetPop(netpop_open);
 			}else if(id[i] === '.helptitle'){
 				var b = el.querySelector('.btnback'), b_cl = 'btnback', c_cl = 'helpcontent', t_cl = 'helpteaser';
 				if(b.classList.contains('rot90')){
@@ -461,14 +458,6 @@ function TimerUpdateData(){
 		var typ = (l.innerHTML !== '--') ? 'refresh' : '';
 		Dash_load(typ);
 	}
-	api('net').then(function(){
-		api('pool').then(function(){
-			Graph_Net();
-			updateTimer = $Q['timer'];
-			$C['TimerText'].innerHTML = updateTimer;
-			LoadTimer();
-		}).catch(function(err){ErrAlert('NetGraph', '')});
-	}).catch(function(err){ErrAlert('NetGraph', '')});
 	
 	if($Q['news']){
 		var n = document.getElementById('News'), c = document.getElementById('NewsCard'), h = '';
@@ -492,7 +481,6 @@ function Resize(){
 	clearTimeout(resizeTimer);
 	resizeTimer = setTimeout(function(){
 		width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		Graph_Net();
 		Graph_Miner_init();
 		Workers_init();
 		HashTrun();
@@ -592,7 +580,6 @@ function Navigate(tar){
 			tar = 'home';
 		}
 		
-		$C['NetGraph'].className = n;
 		$C['Stage'].className = m;
 		$C['Stage'].innerHTML = h;
 		$C['Addr'].className = d;
@@ -608,7 +595,6 @@ function Navigate(tar){
 			Dash_load();
 		}
 
-		Graph_Net();
 		document.querySelector('#HeadMenu select').value = tar;
 		document.querySelector('#FootR .nav[data-tar="'+tar+'"]').classList.add('o5');
 	}, 300);
@@ -1507,257 +1493,6 @@ function PaginationBoxWidth(){
 	b.value = val;
 }
 //Graphing
-function Graph_Net(){
-	if($C['NetGraph'] != null && $D['net'][0] && $D['net'][0]['hash']){
-		var min = 999999999999,
-			max = 0,
-			xratio = 0,
-			i = 0,
-			ncnt = numObj($D['net']),
-			ncnt_pt = 0,
-			pcnt = numObj($D['pool']),
-			pcnt_pt = 0,
-			bcnt = numObj($D['block']),
-			$P = {'n':{},'p':{},'b':{}},
-			pavg = 0,
-			divheight = $C['NetGraph'].clientHeight,
-			fullsize = (divheight > 75) ? 'y' : 'n',
-			bottom = (fullsize === 'y') ? 24 : 0,
-			height = divheight - bottom,
-			blocksize = (fullsize === 'y') ? 6.5 : 4.5,
-			linesize = (fullsize === 'y') ? 1.25 : .75,
-			padR = (width > 900) ? 55 : 50,
-			right_x = width - padR,
-			graphhrs = GraphLib_Duration(),
-			timestart = now - (3600 * graphhrs),
-			firsthash = 0,
-			hsh_net = HashConv($D['net'][0]['hash']),
-			hsh_pool = HashConv($D['pool'][0]['hash']),
-			currenteffort = 0,
-			ins = '<svg viewBox="0 0 '+width+' '+height+'" class="chart">'+
-			'<defs>'+
-				'<linearGradient id="P"><stop offset="0%" stop-color="#'+$Q['clr']['main']+'" stop-opacity="0.99" /><stop offset="98%" stop-color="#'+$Q['clr']['main']+'" stop-opacity="0.05" /><stop offset="100%" stop-color="#'+$Q['clr']['main']+'" stop-opacity="0.00" /></linearGradient>'+
-			'</defs>';
-		
-		i = pcnt;
-		while(i--){
-			pavg = pavg + $D['pool'][i]['hash'];
-			if($D['pool'][i]['hash'] < min) min = $D['pool'][i]['hash'];
-			if($D['pool'][i]['hash'] > 0 && firsthash === 0){
-				firsthash = $D['pool'][i]['tme'];
-			}
-		}
-		
-		if(firsthash > timestart) timestart = firsthash;
-
-		i = ncnt;
-		while(i--){
-			if($D['net'][i]['tme'] >= timestart){
-				if($D['net'][i]['hash'] > max) max = $D['net'][i]['hash'];
-			}
-		}
-		
-		pavg = pavg / pcnt;
-		xratio = right_x / (now - timestart);
-		
-		//Create Points
-		for(i = 0; i < ncnt; i++){
-			if($D['net'][i]['tme'] >= timestart){
-				ncnt_pt++;
-				$P['n'][i] = {
-					'x':Rnd(right_x - (now - $D['net'][i]['tme']) * xratio, 1),
-					'y':Rnd(height + 2 - ($D['net'][i]['hash'] - min) / (max - min) * height, 1)
-				};
-			}
-		}
-		for(i = 0; i < pcnt; i++){
-			if($D['pool'][i]['tme'] >= timestart){
-				pcnt_pt++;
-				$P['p'][i] = {
-					'x':Rnd(right_x - (now - $D['pool'][i]['tme']) * xratio, 1),
-					'y':Rnd(height - 4 - ($D['pool'][i]['hash'] - min) / (max - min) * height, 1)
-				};
-			}
-		}
-	
-		//NetHash Line
-		ins += '<polyline class="C1st" stroke-width="'+linesize+'" fill="url(#P)" points="'+right_x+','+$P['n'][0]['y'];
-		for(i = 0; i < ncnt_pt; i++){
-			ins += ' '+$P['n'][i]['x']+','+$P['n'][i]['y'];
-		}
-		ins += ' -3,'+$P['n'][(ncnt_pt - 1)]['y']+' -3,'+$P['p'][(ncnt_pt - 1)]['y'];
-		i = pcnt_pt;
-		while(i--){
-			ins += ' '+$P['p'][i]['x']+','+$P['p'][i]['y'];
-		}
-		ins += ' '+right_x+','+$P['p'][0]['y']+'" />';
-
-		if($Q['graph']['pplns']){
-			//PPLNS Window
-			var pplns = 2 * ($D['net'][0]['hash'] * 120) / pavg * xratio,
-				plft = 9999999999,
-				pmid = 0;
-				
-			ins += '<polygon class="C1fl" opacity=".75" points="'+right_x+','+$P['n'][0]['y'];
-			for(i = 0; i < ncnt_pt; i++){
-				if($P['n'][i]['x'] > right_x - pplns) ins += ' '+$P['n'][i]['x']+','+$P['n'][i]['y'];
-			}
-			for(p = (pcnt_pt - 1); p >= 0; p--){
-				if($P['p'][p]['x'] > right_x - pplns){
-					ins += ' '+$P['p'][p]['x']+','+$P['p'][p]['y'];
-					if($P['p'][p]['x'] < plft) plft = $P['p'][p]['x'];
-				}
-			}
-			ins += ' '+right_x+','+$P['p'][0]['y']+'" />';
-			if(fullsize === 'y'){
-				pmid = (right_x + plft) / 2;
-				ins += '<text x="'+pmid+'" y="'+($P['n'][0]['y'] + 14)+'" text-anchor="middle" class="C0fl'+mde+' txttny o9"><tspan x="'+pmid+'">PPLNS</tspan><tspan x="'+pmid+'" dy="10">Window</tspan></text>';
-			}
-		}
-		
-		//Grid Lines & Labels
-		ins += GraphLib_Grid('line', 3, max, min, height, width, 'C0');
-		ins += GraphLib_Grid('lbl', 3, max, min, height, width, 'C0');
-		
-		ins += '<text x="'+(right_x + 5)+'" y="'+($P['n'][0]['y'] + 14)+'" class="txtmed C1fl">'+Rnd(hsh_net['num'], 1, 'txt')+'</text>'+
-			'<text x="'+(right_x + 5)+'" y="'+($P['p'][0]['y'] + 1)+'" class="txtmed C1fl">'+Rnd(hsh_pool['num'], 1, 'txt')+'</text>';
-		
-		if(fullsize === 'y'){
-			ins += '<text x="'+(right_x + 5)+'" y="'+($P['n'][0]['y'] + 23)+'" class="txttny C2fl o8">'+hsh_net['unit']+' Net</text>'+
-				'<text x="'+(right_x + 5)+'" y="'+($P['p'][0]['y'] - 17)+'" class="txttny C2fl o8">'+hsh_pool['unit']+' Pool</text>';
-		}
-
-		//Blocks
-		if(bcnt > 0){
-			var max_effort = 0,
-				blockstart = timestart,
-				avg_effort = 0,
-				mod_bcnt = 0,
-				win_bcnt = 0,
-				bline = height + 5,
-				right_x = width - padR;
-				
-			for(var j = 0; j < bcnt; j++){
-				var ch = 'n';
-				if($D['block'][j]['tme'] >= timestart){
-					ch = 'y';
-				}else{
-					if(win_bcnt < 6){
-						if($D['block'][j]['tme'] < blockstart) blockstart = $D['block'][j]['tme'];
-						ch = 'y';
-						win_bcnt++;
-					}
-				}
-				if(ch === 'y'){
-					mod_bcnt++;
-					avg_effort = avg_effort + parseInt($D['block'][j]['eff']);
-					if($D['block'][j]['eff'] > max_effort) max_effort = $D['block'][j]['eff'];
-				}
-			}
-			avg_effort = Rnd(avg_effort / mod_bcnt);
-			currenteffort = Rnd((now - $D['block'][0]['tme']) / ($D['net'][0]['hash'] / $D['pool'][0]['hash'] * 120) * 100);
-
-			mod_bcnt = 0;
-			for(i = 0; i < bcnt; i++){
-				//$P['n'][i]['x']
-				if($D['block'][i]['tme'] >= blockstart){
-					var x = Rnd(right_x - (now - $D['block'][i]['tme']) * (right_x / (now - blockstart)), 1);
-					if(x > 57){
-						$P['b'][i] = {'x':x,'y':Rnd(height - 10 - ($D['block'][i]['eff'] * ((height - 25) / max_effort)), 1)};
-						mod_bcnt++;
-					}	
-				}
-			}
-			bcnt = mod_bcnt;
-			
-			//Blocks  $Q['graph']['blockmin']
-			for(i = 0; i < bcnt; i++){
-				var clrclass = ($D['block'][i]['eff'] <= 100) ? 'C5fl' : 'C4fl',
-					$c = {'0':{'cl':'C1fl','sz':1},'1':{'cl':'o7 C0fl'+mde,'sz':.92},'2':{'cl':'Dot '+clrclass,'sz':.71}};
-				
-				for(var j = 0; j <= 2; j++){
-					var cls = '',
-						dta = '';
-						
-					if(j === 2){
-						cls = ' ToolTip blockgroup';
-						dta = ' data-block="'+i+'" data-eff="'+$D['block'][i]['eff']+'" data-tme="'+$D['block'][i]['tme']+'"';
-					}
-					ins += '<circle cx="'+$P['b'][i]['x']+'" cy="'+$P['b'][i]['y']+'" r="'+(blocksize * $c[j]['sz'])+'" class="'+$c[j]['cl']+cls+'"'+dta+' />';
-				}
-			}	
-		}
-
-		//Blocks Bottom Details
-		if(fullsize === 'y'){
-			var text_y = bline + 4, 
-				xL = 0,
-				yL = 0,
-				xR = right_x,
-				yR = 0,
-				tm = '';
-				
-			if(bcnt > 0){
-				xL = $P['b'][(bcnt - 1)]['x'];
-				yL = $P['b'][(bcnt - 1)]['y'];
-				xR = $P['b'][0]['x'];
-				yR = $P['b'][0]['y'];
-				tm = Ago($D['block'][0]['tme'], 'y'),
-				avgeff = Perc(avg_effort)+' '+$$['trn']['avgeff'],
-				avgeff_w = avgeff.length * 5.5,
-				lstfnd = 'Found '+tm,
-				lstfnd_w = lstfnd.length * 5.7;
-
-				ins += '<line x1="'+xR+'" y1="'+(yR + 3 + (blocksize / 2))+'" x2="'+xR+'" y2="'+bline+'" class="line C2st" />'+
-					'<line x1="'+xR+'" y1="'+bline+'" x2="'+xL+'" y2="'+bline+'" class="line C2st" />'+
-					'<line x1="'+xL+'" y1="'+(yL + 3 + (blocksize / 2))+'" x2="'+xL+'" y2="'+bline+'" class="line C2st" />'+
-					//Effort
-					'<rect x="'+(xL + 5)+'" y="'+height+'" width="'+avgeff_w +'" height="13" class="C0fl'+mde+'" />'+
-					'<text x="'+(xL + (avgeff_w / 2) + 5)+'" y="'+text_y+'" text-anchor="middle" class="C2fl txttny">'+avgeff+'</text>'+
-					//Last Found
-					'<rect x="'+(xR - lstfnd_w - 5)+'" y="'+height+'" width="'+lstfnd_w+'" height="13" class="C0fl'+mde+'" />'+
-					'<text x="'+(xR - (lstfnd_w / 2) - 5)+'" y="'+text_y+'" text-anchor="middle" class="C2fl txttny">'+lstfnd+'</text>'+
-					'<rect x="'+(right_x - 9)+'" y="'+(text_y - 8)+'" width="14" height="9" class="C0fl'+mde+'" />'+
-					'<text x="'+(right_x - 8)+'" y="'+text_y+'" class="C2fl txttny">'+Perc(currenteffort)+' '+$$['trn']['eff']+'</text>'+
-					'<line x1="'+right_x+'" y1="'+($P['p'][0]['y'] + 1)+'" x2="'+right_x+'" y2="'+(text_y - 9)+'" class="line C2st" />'+
-					'<line x1="'+xR+'" y1="'+bline+'" x2="'+(right_x - 10)+'" y2="'+bline+'" class="line C2st" />';
-			}
-			ins += '<text x="5" y="'+text_y+'" class="C2fl txttny">'+Ago($D['pool'][(pcnt_pt - 1)]['tme'], 'y')+'</text>';
-		}
-		
-		//Current Block Dot
-		ins += '<circle cx="'+right_x+'" cy="'+$P['p'][0]['y']+'" r="2" class="C1fl" />';
-		
-		//Block Tool Tip
-		ins += GraphLib_ToolTipSetup();
-		
-		ins += '</svg><div id="GPop" class="pleft C0bk'+mde+' C1br hide"></div>';
-		$C['NetGraph'].innerHTML = ins;
-		if(netpop_open) Graph_NetPop(netpop_open);
-		
-		GraphLib_ToolTipListener();
-	}
-}
-function Graph_NetPop(xid){
-	var b = document.querySelector('.blockgroup[data-block="'+xid+'"]'),
-		NetPop = document.getElementById('GPop'),
-		clss = (b.getAttribute('cx') > (width / 2)) ? 'pleft' : 'pright',
-		ins = '<table class="TDPadS txt C3'+mde+'"><tr>'+
-			'<td><div class="txtmed">'+Ago($D['block'][xid]['tme'], 'y')+'</div><div class="pbar"></div><div class="txttny">'+$D['block'][xid]['eff']+' '+$$['tbl']['blockhistory']['eff']['lbl']+'</div></td>'+
-			'<td><div class="txtmed">'+$D['block'][xid]['reward']+' '+$Q['cur']['sym']+'</div><div class="pbar"></div><div class="HashTrun txttny" data-hash="'+$D['block'][xid]['hash']+'"></div></td>'+
-			'<td><div id="GPopConfirm" class="txtmed">--</div><div class="pbar"></div><div class="txttny">'+$$['tbl']['blockhistory']['height']['lbl']+' '+Num($D['block'][xid]['height'])+'</div></td>'+
-		'</tr></table>'+
-		'<div id="NetGraphClose" class="Btn16 Btn16Corner C1fl" data-block="'+xid+'">'+$I['x']+'</div>';
-
-	NetPop.classList.remove('hide', 'pleft', 'pright');
-	NetPop.classList.add(clss);
-	NetPop.innerHTML = ins;
-	HashTrun();
-	
-	api('netheight').then(function(){
-		document.getElementById('GPopConfirm').innerHTML = BlockToGo($D['block'][xid]['height'], $D['block'][xid]['val']);
-	}).catch(function(err){console.log(err)});
-}
 function Graph_Miner_init(){
 	var m = document.getElementById('MinerGraph');
 	if(m != null && addr && $A[addr]){
