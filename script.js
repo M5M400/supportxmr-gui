@@ -1001,8 +1001,7 @@ function EmailToggle(){
 	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
 	ic.classList.add('preload');
 	ic.innerHTML = $I['load'];
-        $A[addr]['email'] = 1 - $A[addr]['email'];
-	api('toggleEmail', $A[addr]['email']).then(function(){
+	api('toggleEmail', $A[addr]['email'] == '1' ? false : true).then(function(){
 		api('user').then(function(){
 			var ico = $I['x'],
 				lbl = $$['trn']['eml_off'];
