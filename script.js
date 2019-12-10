@@ -1338,7 +1338,7 @@ var api = function(m, key, xid){
 				if(m === 'updatethreshold'){
 					params = {'username':addr, 'threshold':xid};
 				}else if(m === 'toggleEmail'){
-					params = {'username':addr, 'enabled': (xid == 'enabled' ? 1 : 0)};
+					params = {'username':addr, 'enabled': (xid == 'enabled' ? '1' : '0')};
 				}else{
 					params = {'username':addr};
 				}
