@@ -1001,7 +1001,7 @@ function EmailToggle(){
 	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
 	ic.classList.add('preload');
 	ic.innerHTML = $I['load'];
-	api('toggleEmail', $A[addr]['email'] == '1' ? false : true).then(function(){
+	api('toggleEmail', $A[addr]['email'] == '1' ? "enabled" : "disabled").then(function(){
 		api('user').then(function(){
 			var ico = $I['x'],
 				lbl = $$['trn']['eml_off'];
@@ -1338,7 +1338,7 @@ var api = function(m, key, xid){
 				if(m === 'updatethreshold'){
 					params = {'username':addr, 'threshold':xid};
 				}else if(m === 'toggleEmail'){
-					params = {'username':addr, 'enabled':xid};
+					params = {'username':addr, 'enabled': (xid == 'enabled' ? true : false)};
 				}else{
 					params = {'username':addr};
 				}
