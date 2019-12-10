@@ -1001,20 +1001,19 @@ function EmailToggle(){
 	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
 	ic.classList.add('preload');
 	ic.innerHTML = $I['load'];
-	api('toggleEmail', '', $A[addr]['email'] == '1' ? "disabled" : "enabled").then(function(){
-		api('user').then(function(){
-			var ico = $I['x'],
-				lbl = $$['trn']['eml_off'];
-				
-			if($A[addr]['email'] == '1'){
-				ico = $I['check'];
-				lbl = $$['trn']['eml_on'];
-			}
-				
-			ic.classList.remove('preload');
-			ic.innerHTML = ico;
-			document.getElementById('EmailToggleLbl').innerHTML = lbl;
-		});
+        $A[addr]['email'] = $A[addr]['email'] == '1' ? "0" : "1";
+	api('toggleEmail', '', $A[addr]['email']).then(function(){
+		var ico = $I['x'],
+			lbl = $$['trn']['eml_off'];
+			
+		if($A[addr]['email'] == '1'){
+			ico = $I['check'];
+			lbl = $$['trn']['eml_on'];
+		}
+			
+		ic.classList.remove('preload');
+		ic.innerHTML = ico;
+		document.getElementById('EmailToggleLbl').innerHTML = lbl;
 	});
 }
 function InstaPay(){
@@ -1338,7 +1337,7 @@ var api = function(m, key, xid){
 				if(m === 'updatethreshold'){
 					params = {'username':addr, 'threshold':xid};
 				}else if(m === 'toggleEmail'){
-					params = {'username':addr, 'enabled': (xid == 'enabled' ? '1' : '0')};
+					params = {'username':addr, 'enabled':xid};
 				}else{
 					params = {'username':addr};
 				}
