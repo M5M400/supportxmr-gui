@@ -19,7 +19,7 @@ var	mde = 'l',
 		'explorer':'https://xmrchain.net/block/',
 		'explorertx':'https://xmrchain.net/tx/',
 		'news':false,												//enable news (motd) alerts on homepage
-		'email':false,												//enable email notifications
+		'email':true,												//enable email notifications
 		'timer':60,													//refresh timer in seconds
 		'graph':{
 			'hrs':72,												//max chart length in hours
@@ -1001,7 +1001,8 @@ function EmailToggle(){
 	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
 	ic.classList.add('preload');
 	ic.innerHTML = $I['load'];
-	api('toggleEmail').then(function(){
+        $A[addr]['email'] = 1 - $A[addr]['email'];
+	api('toggleEmail', $A[addr]['email']).then(function(){
 		api('user').then(function(){
 			var ico = $I['x'],
 				lbl = $$['trn']['eml_off'];
@@ -1338,7 +1339,7 @@ var api = function(m, key, xid){
 				if(m === 'updatethreshold'){
 					params = {'username':addr, 'threshold':xid};
 				}else if(m === 'toggleEmail'){
-					params = {'address':addr};
+					params = {'username':addr, 'enabled':xid};
 				}else{
 					params = {'username':addr};
 				}
