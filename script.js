@@ -27,8 +27,8 @@ var	mde = 'l',
 			'blockmin':25											//min number of blocks to show (blocks take their own time scale) max 100
 		},
 		'pay':{
-			'min_inst':0.003,										//minimum for instant pay
-			'min_auto':0.003,											//minimum for automatic threshold
+			'min_auto':0.003,										//minimum for automatic threshold
+			'def_auto':0.3,											//minimum for automatic threshold
 			'dec_auto':4											//decimal places for threshold
 		}
 	},
@@ -202,7 +202,7 @@ document.body.addEventListener('change', function(e){
 	}
 }, false);
 document.body.addEventListener('click', function(e){
-	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#InstaPayBtn', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#EmailToggleBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
+	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#EmailToggleBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.closest(id[i]);
 		if(el){
@@ -223,8 +223,6 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '#NewsClose'){
 				document.getElementById('News').className = 'hide';
 				setCookie('News', $D['news']['created']);
-			}else if(id[i] === '#InstaPayBtn'){
-				InstaPay();
 			}else if(id[i] === '#AutoPayBtn'){
 				AutoPay();
 			}else if(id[i] === '#PaymentHistoryBtn'){
@@ -233,11 +231,6 @@ document.body.addEventListener('click', function(e){
 				MinerPayments('back');
 			}else if(id[i] === '#EmailToggleBtn'){
 				EmailToggle();
-			}else if(id[i] === '#InstaPayBtn'){
-				document.getElementById('MinerPaymentsMenu').innerHTML = $I['load'];
-				setTimeout(function(){
-					document.getElementById('MinerPaymentsMenu').innerHTML = '<div class="center C3'+mde+' txt">Demo - Need Endpoint</div>';
-				}, 1500);
 			}else if(id[i] === '#AddrDelete'){
 				SaveAddr($C['AddrField'].value, 'del');
 			}else if(id[i] === '#WorkerPopClose'){
@@ -961,17 +954,10 @@ function MinerPayments(typ){
 	}
 	
 	api('user').then(function(){
-		var t = $Q['pay']['min_inst']+' '+$Q['cur']['sym']+' '+$$['trn']['min'],
-			c = 'o5 nopoint',
-			eml = ($Q['email']) ? 'EmailTog' : '',
-			ins = '';
+		var eml = ($Q['email']) ? 'EmailTog' : '',
+		    ins = '';
 			
-		if($A[addr]['due'] >= $Q['pay']['min_inst']){
-			t = 'Pay '+$A[addr]['due']+' '+$Q['cur']['sym']+' Now';
-			c = 'C2bk_hov';
-		}
 		ins = '<div class="LR50 shimtop20 C0'+mde+' txtmed">'+
-			'<div id="InstaPayBtn" class="BtnElem C1bk '+c+'">'+t+'</div><div class="hbar shim10"></div>'+
 			'<input type="text" id="AutoPayFld" class="FrmElem txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount...">'+
 			'<div id="AutoPayBtn" class="BtnElem C1bk C2bk_hov o5">'+$$['trn']['set']+'</div><div class="hbar shim10"></div>'+
 		'</div>'+
@@ -1002,7 +988,7 @@ function EmailToggle(){
 	ic.classList.add('preload');
 	ic.innerHTML = $I['load'];
         $A[addr]['email'] = $A[addr]['email'] == '1' ? "0" : "1";
-	api('toggleEmail', '', $A[addr]['email']).then(function(){
+	api('subscribeEmail', '', $A[addr]['email']).then(function(){
 		var ico = $I['x'],
 			lbl = $$['trn']['eml_off'];
 			
@@ -1015,20 +1001,6 @@ function EmailToggle(){
 		ic.innerHTML = ico;
 		document.getElementById('EmailToggleLbl').innerHTML = lbl;
 	});
-}
-function InstaPay(){
-	var b = document.getElementById('InstaPayBtn'), c = 'C4bk', t;
-	b.innerHTML = '<div class="C0fl'+mde+' preload">'+$I['refresh']+'</div>';
-	api('forcepayment').then(function(sts){
-		b.classList.remove('C1bk','C4bk','C5bk');
-		t = sts['msg'];
-		if(sts && sts['msg'] && sts['msg'] === 'Payout scheduled'){
-			c = 'C5bk';
-			t = $$['trn']['que'];
-		}
-		b.classList.add(c);
-		b.innerHTML = t;
-	});	
 }
 function AutoPay(s){
 	var c = AutoPayCheck(),
@@ -1213,10 +1185,8 @@ var api = function(m, key, xid){
 		url = 'user/'+addr;
 	}else if(m === 'updatethreshold'){
 		url = 'user/updateThreshold';
-	}else if(m === 'forcepayment'){
-		url = 'user/forcePayment';
-	}else if(m === 'toggleEmail'){
-		url = 'user/toggleEmail';
+	}else if(m === 'subscribeEmail'){
+		url = 'user/subscribeEmail';
 	}
 
 	return new Promise(function (resolve, reject){
@@ -1310,13 +1280,12 @@ var api = function(m, key, xid){
 						$A[addr]['wrkrs'][key]['hashes'] = d['totalHash'];
 						$A[addr]['wrkrs'][key]['val'] = (d['validShares'] > 0) ? d['validShares'] : 0;
 						$A[addr]['wrkrs'][key]['inv'] = (d['invalidShares'] > 0) ? d['invalidShares'] : 0;
-					}else if(['user','updatethreshold','forcepayment','toggleEmail'].indexOf(m) >= 0){
+					}else if(['user','updatethreshold','subscribeEmail'].indexOf(m) >= 0){
 						if(d && d['msg']){
 							if(m === 'user'){
 								$A[addr]['email'] = d['msg']['email_enabled'];
-								$A[addr]['threshold'] = Rnd((d['msg']['payout_threshold'] / 1000000000000), 8);
-							}else if(m === 'forcepayment'){
-								key = d;
+								var threshold = d['msg']['payout_threshold'];
+								$A[addr]['threshold'] = Rnd(threshold ? threshold / 1000000000000 : $Q['pay']['def_auto'], 8);
 							}
 						}
 					}
@@ -1332,11 +1301,11 @@ var api = function(m, key, xid){
 		};
 		if(url){
 			var method = 'GET', params = '';
-			if(['updatethreshold','forcepayment','toggleEmail'].indexOf(m) >= 0){
+			if(['updatethreshold','subscribeEmail'].indexOf(m) >= 0){
 				method = 'POST';
 				if(m === 'updatethreshold'){
 					params = {'username':addr, 'threshold':xid};
-				}else if(m === 'toggleEmail'){
+				}else if(m === 'subscribeEmail'){
 					params = {'username':addr, 'enabled':xid};
 				}else{
 					params = {'username':addr};

@@ -228,11 +228,11 @@ header{height:44px}
 #MinerPaymentsStage{position:relative;height:calc(100% - 1px)}
 
 #AutoPayBtn{width:calc(50% - 9px);margin-left:9px;height:32px}
-#InstaPayBtn,#PaymentHistoryBtn,#PaymentHistoryBtnClose{width:100%;height:32px}
+#PaymentHistoryBtn,#PaymentHistoryBtnClose{width:100%;height:32px}
 #PaymentHistoryBtn.EmailTog{width:calc(100% - 158px)}
 #EmailToggleBtn{width:140px;height:32px;margin-left:18px}
 #AutoPayFld{width:calc(50% - 9px);height:32px;border-width:1px;border-style:solid;padding:5px}
-#InstaPayBtn .preload,#AutoPayBtn .preload{display:inline-block;height:22px;width:22px}
+#AutoPayBtn .preload{display:inline-block;height:22px;width:22px}
 
 #MinerPaymentsTable{min-height:100px}
 #MinerPaymentsStage table{height:1;border-style:solid;border-width:0 1px;border-color:rgba(0,0,0,.1);padding:3px}
@@ -279,7 +279,7 @@ footer,#MinerGraph,#MinerPayments{-webkit-box-shadow:inset 0px 25px 16px -22px r
 @media all and (max-width:900px){
 	.txtbig{font-size:24px}
 	.txtmed{font-size:18px}
-	#InstaPayBtn,#AutoPayBtn,#PaymentHistory{padding:6px}
+	#AutoPayBtn,#PaymentHistory{padding:6px}
 	#HeadMenu{width:75px;margin-left:-165px}
 	.txtsmall{font-size:12px;line-height:15px}
 	#MinerPaymentsStage{width:80%;left:10%}
