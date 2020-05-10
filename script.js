@@ -768,7 +768,7 @@ function Dash_calc(){
 	
 	for(var i = 0; i < 6; i++){
 		if($D['block'][i]){
-			rew = rew + parseFloat($D['block'][i]['reward']);
+			rew = rew + parseFloat($D['block'][i]['reward'].replace($L['dec'], '.'));
 			j++;
 		}
 	}
