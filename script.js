@@ -29,6 +29,8 @@ var	mde = 'l',
 		'pay':{
 			'min_auto':0.003,										//minimum for automatic threshold
 			'def_auto':0.3,											//minimum for automatic threshold
+			'max_fee':0.0004,										//max fee (for min_auto)
+			'zero_fee_pay':4,										//theshold that makes fee to be zero
 			'dec_auto':4											//decimal places for threshold
 		}
 	},
@@ -95,8 +97,8 @@ var	mde = 'l',
 			'min':'Minimum',
 			'que':'Payment Queued',
 			'rcnt':'Recent',
-			'set':'Set Auto Pay',
-			'updt':'Updated',
+			'set':'Update threshold',
+			'updt':'Threshold updated',
 			'vwpy':'Your Payments'
 		}
 	};
@@ -958,10 +960,12 @@ function MinerPayments(typ){
 		    ins = '';
 			
 		ins = '<div class="LR50 shimtop20 C0'+mde+' txtmed">'+
-			'<input type="text" id="AutoPayFld" class="FrmElem txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount...">'+
-			'<div id="AutoPayBtn" class="BtnElem C1bk C2bk_hov o5">'+$$['trn']['set']+'</div><div class="hbar shim10"></div>'+
-		'</div>'+
-		'<div id="PaymentHistory"><div class="LR50">'+
+			'<table class="C3l noborder"><tr>'+
+			'<td width="50%" class="center"><span><input type="text" id="AutoPayFld" class="center txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount..."></span><div class="pbar"></div><span class="txttny C2 noselect">Auto pay threshold (XMR)</span></td>'+
+			'<td width="50%" class="center"><div id="AutoPayBtn" class="BtnElem C1bk C2bk_hov o5">'+$$['trn']['set']+'</div><div class="pbar"></div><span id="AutoPayFeeLbl" class="txttny C2 noselect">' + fee_txt($A[addr]['threshold']) + '</span></td>'+
+			'</tr></table>'+
+	                '<div class="hbar shim10"></div></div>'+
+			'<div id="PaymentHistory"><div class="LR50">'+
 			'<div id="PaymentHistoryBtn" class="BtnElem '+eml+' C0'+mde+' txtmed C1bk C2bk_hov">'+$$['trn']['vwpy']+'</div>';
 		
 		if($Q['email']){
@@ -980,7 +984,7 @@ function MinerPayments(typ){
 		ins += '</div></div>';
 		
 		document.getElementById('MinerPaymentsStage').innerHTML = ins;
-		if($A[addr]['threshold'] > 0) document.getElementById('AutoPayFld').value = Rnd($A[addr]['threshold'], $Q['pay']['dec_auto'], 'txt');
+		document.getElementById('AutoPayFld').value = Rnd($A[addr]['threshold'], $Q['pay']['dec_auto'], 'txt');
 	});
 }
 function EmailToggle(){
@@ -1015,6 +1019,12 @@ function AutoPay(s){
 		});
 	}
 }
+function fee_txt(threshold) {
+	var fee = Math.max(0, $Q['pay']['max_fee'] - ( (threshold - $Q['pay']['min_auto']) * ($Q['pay']['max_fee'] / ($Q['pay']['zero_fee_pay'] - $Q['pay']['min_auto']))));
+	var percent = 100 * (fee / threshold);
+	return "With " + Rnd(fee, 6, 'txt') + " (" + Rnd(percent, 2, 'txt') + "%) XMR tx fee";
+}
+
 function AutoPayCheck(){
 	var b = document.getElementById('AutoPayBtn'),
 		b_ins = $$['trn']['set'],
@@ -1031,6 +1041,8 @@ function AutoPayCheck(){
 	}else if(val_num >= $Q['pay']['min_auto']){
 		b.classList.add('C1bk');
 		r = 'OK';
+		var l = document.getElementById('AutoPayFeeLbl');
+                l.innerHTML = fee_txt(val_num);
 	}else{
 		b.classList.add('C1bk', 'o5');
 	}
