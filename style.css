@@ -166,12 +166,9 @@ select,.select-point{cursor:pointer}
 .GAlert,#GPop{position:absolute;z-index:9999;top:50%;border-radius:5px;border-width:1px;border-style:solid;box-sizing:border-box}
 .GAlert{width:450px;left:50%;margin-left:-225px;margin-top:-23px;padding:4px}
 
-#NetGraph{position:relative;height:120px;margin-left:-2px}
-#NetGraph.short{height:40px;margin-top:10px}
 #GPop{width:40%;height:53px;left:5%;margin-top:-27px;padding:4px}
 #GPop.pright{left:55%}
 #GPop table td{width:33%;text-align:center}
-#NetGraph .blockgroup{cursor:pointer}
 
 #MinerGraph{position:relative;height:150px}
 #MinerGraph .MinerMsg{padding-top:25px;text-align:center}

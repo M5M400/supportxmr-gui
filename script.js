@@ -12,12 +12,15 @@ var	mde = 'l',
 		'cur':{
 			'nme':'Monero',						
 			'sym':'XMR',
-			'blk':2,												//blocktime in minutes
+			'port': 18081,
+			//'blk':2,												//blocktime in minutes
 			'reg':/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
 		},
 		'api':'https://api.moneroocean.stream/',
-		'explorer':'https://xmrchain.net/block/',
-		'explorertx':'https://xmrchain.net/tx/',
+		'fiat_name': 'usd',
+		'fiat_symbol': '$',
+		//'explorer':'https://xmrchain.net/block/',
+		//'explorertx':'https://xmrchain.net/tx/',
 		'news':false,												//enable news (motd) alerts on homepage
 		'email':true,												//enable email notifications
 		'timer':60,													//refresh timer in seconds
@@ -72,6 +75,7 @@ var	mde = 'l',
 				'tme':{'lbl':'Payment Sent', 'cls':'condte'},
 				'payees':{'lbl':'Payees', 'cls':'consmall'},
 				'amnt':{'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
+				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'},
 				'fee':{'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'right'}
 			},
 			'blockhistory':{
@@ -80,12 +84,12 @@ var	mde = 'l',
 				'eff':{'lbl':'Effort', 'cls':'continy'},
 				'reward':{'lbl':'Reward ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				'height':{'lbl':'Height', 'cls':'consmall'},
-				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y'}	
+				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'block'}	
 			},
 			'pay':{
 				'tme':{'lbl':'Payment Sent', 'cls':'condte'},
 				'amnt':{'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
-				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y'}
+				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'}
 			}
 		},
 		'trn':{
@@ -102,6 +106,141 @@ var	mde = 'l',
 			'vwpy':'Your Payments'
 		}
 	};
+
+var COINS = {
+	18081: {
+		name: "XMR",
+		divisor: 1000000000000,
+		url: "https://xmrchain.net",
+		time: 120,
+	},
+	18181: {
+		name: "XMC",
+		divisor: 1000000000000,
+		url: "http://explorer.monero-classic.org",
+		time: 120,
+	},
+	19734: {
+		name: "SUMO",
+		divisor: 1000000000,
+		url: "https://explorer.sumokoin.com",
+		time: 240,
+	},
+	12211: {
+		name: "RYO",
+		divisor: 1000000000,
+		url: "https://explorer.ryo-currency.com",
+		time: 240,
+	},
+	18981: {
+		name: "GRFT",
+		divisor: 10000000000,
+		url: "https://blockexplorer.graft.network",
+		time: 120,
+	},
+	38081: {
+		name: "MSR",
+		divisor: 1000000000000,
+		url: "https://explorer.getmasari.org",
+		time: 60,
+	},
+	48782: {	
+		name: "LTHN",
+		divisor: 100000000,
+		url: "https://lethean.io/explorer",
+		time: 120,
+	},
+	34568: {
+		name: "WOW",
+		divisor: 100000000000,
+		url: "http://explore.wownero.com",
+		time: 300,
+	},
+	19281: {
+		name: "XMV",
+		divisor: 100000000000,
+		url: "https://explorer.monerov.online",
+		time: 60,
+		unit: "G",
+		factor: 16,
+	},
+	19950: {
+		name: "XWP",
+		divisor: 1000000000000,
+		url: "https://explorer.xwp.one",
+		time: 15,
+		unit: "G",
+		factor: 32,
+	},
+	11181: {
+		name: "AEON",
+		divisor: 1000000000000,
+		url: "https://aeonblockexplorer.com",
+		time: 240,
+	},
+	17750: {
+		name: "XHV",
+		divisor: 1000000000000,
+		url: "https://explorer.havenprotocol.org",
+		time: 120,
+	},
+	20206: {
+		name: "DERO",
+		divisor: 1000000000000,
+		url: "https://explorer.dero.io",
+		time: 27,
+	},
+	13102: {
+		name: "XTA",
+		divisor: 1000000000000,
+		url: "https://explorer.italo.network",
+		time: 120,
+	},
+	24182: {
+		name: "TUBE",
+		divisor: 100000000,
+		url: "https://explorer.ipbc.io",
+		time: 120,
+	},
+	20189: {
+		name: "XLA",
+		divisor: 100,
+		url: "https://explorer.scalaproject.io",
+		time: 300,
+	},
+	22023: {
+		name: "LOKI",
+		divisor: 1000000000,
+		url: "https://lokiblocks.com",
+		time: 120,
+	},
+	33124: {
+		name: "XTNC",
+		divisor: 1000000000,
+		url: "https://explorer.xtendcash.com",
+		time: 120,
+		unit: "G",
+		factor: 32,
+	},
+	11898: {
+		name: "TRTL",
+		divisor: 100,
+		url: "https://explorer.turtlecoin.lol",
+		time: 30,
+	},
+	13007: {
+		name: "IRD",
+		divisor: 100000000,
+		url: "https://explorer.ird.cash",
+		time: 175,
+	},
+	19994: {
+		name: "ARQ",
+		divisor: 1000000000,
+		url: "https://explorer.arqma.com",
+		time: 120,
+	},
+};
 
 /*--------------------------------------*/
 /*-----End of Customization Section------- (You can customize the rest, but shouldn't need to) */
@@ -121,7 +260,7 @@ var addr = UrlVars()['addr'] || '',
 	$C = {				//Selector Cache
 		'TogMode':'',
 		'Timer':'',
-		'NetGraph':'',
+		'NetStats':'',
 		'Addr':'',
 		'Stage':'',
 		'DashPayBtn':'',
@@ -131,9 +270,10 @@ var addr = UrlVars()['addr'] || '',
 		'TimerRefresh':''
 	},
 	$U = {				//Update Times
-		'net':0,
-		'netheight':0,
-		'pool':0,
+		//'net':0,		// not used
+		'netstats':0,
+		'netdiff':0,
+		//'pool':0,		// not used
 		'poolstats':0,
 		'news':0
 	},
@@ -147,12 +287,12 @@ var addr = UrlVars()['addr'] || '',
 		'news':{},
 		'block':{},
 		'blockhistory':{},
-		'net':{},
-		'pool':{},
+		//'net':{},		//Not used
+		//'pool':{},		//Not used
 		'poolstats':{},
 		'pay':{},
 		'poolpay':{},
-		'netheight':'',
+		'netstats':{},
 		'hashconv':{
 			'GH':1000000000,
 			'MH':1000000,
@@ -377,7 +517,7 @@ function ErrAlert(tar, err){
 			iserr = 'C4',
 			err_msg = 'Try refreshing, check your connection; otherwise we\'ll be back up soon.';
 		
-		if(tar === 'NetGraph'){
+		if(tar === 'NetStats'){
 			msg = 'Network API Connection Error';
 			if(n != null) n.classList.add('o3');
 
@@ -446,7 +586,7 @@ function TimerLoading(sts){
 function TimerUpdateData(){
 	api('block').then(function(){
 		ErrAlert('X');
-	}).catch(function(err){ErrAlert('NetGraph', '')});
+	}).catch(function(err){ErrAlert('NetStats', '')});
 	
 	var l = document.getElementById('MinerHashes');
 	if(l){
@@ -454,10 +594,22 @@ function TimerUpdateData(){
 		Dash_load(typ);
 	}
 
-	updateTimer = $Q['timer'];
-	$C['TimerText'].innerHTML = updateTimer;
-	LoadTimer();
-	
+	api('netstats').then(function(){
+		api('poolstats').then(function(){
+			var wh = HashConv(difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']));
+                        document.getElementById('WorldHash').innerHTML = wh['num'] + ' ' + wh['unit'];
+			var ph = HashConv($D['poolstats']['hash']);
+			document.getElementById('PoolHash').innerHTML = ph['num'] + ' ' + ph['unit'];
+			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D['poolstats']['roundhashes'] / $D['netstats']['diff'], 2, 'txt') + "%";
+			document.getElementById('BlockCount').innerHTML = $D['poolstats']['blocks'];
+			document.getElementById('AccountCount').innerHTML = $D['poolstats']['accounts'];
+			document.getElementById('PaymentsMade').innerHTML = $D['poolstats']['payments'];
+			updateTimer = $Q['timer'];
+			$C['TimerText'].innerHTML = updateTimer;
+			LoadTimer();
+		}).catch(function(err){ErrAlert('NetStats', '')});
+	}).catch(function(err){ErrAlert('NetStats', '')});
+
 	if($Q['news']){
 		var n = document.getElementById('News'), c = document.getElementById('NewsCard'), h = '';
 		if(n != null && c.innerHTML === ''){
@@ -774,8 +926,9 @@ function Dash_calc(){
 			j++;
 		}
 	}
-	var t = h_raw / $D['net'][0]['hash'] * 1440 / $Q['cur']['blk'] * rew / j * f.value;
-	document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'];	
+	var t = h_raw / difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']) * (24*60*60) / COINS[$Q['cur']['port']].time * rew / j * f.value;
+	var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats'][$Q['fiat_name'] + "_price"], 2, 'txt');
+	document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'] + " (" + fiat + ")";
 }
 //Workers
 function Workers_init(){		///check this, getting called alot
@@ -1064,8 +1217,8 @@ function MinerPaymentHistory(pge){
 //Other Pages
 function dta_Blocks(pge){
 	api('poolstats').then(function(){
-		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['blocks'])+' Blocks Found with '+Num($D['poolstats']['hashes'])+' Hashes';
-		api('netheight').then(function(){
+		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['blocks'])+' Blocks Found';
+		api('netstats').then(function(){
 			if(pge === 1 && numObj($D['block']) >= 25){
 				$D['blockhistory'] = $D['block'];
 				Tbl('PageBot', 'blockhistory', 1, 25);
@@ -1081,7 +1234,7 @@ function dta_Blocks(pge){
 function dta_Payments(pge){
 	document.getElementById('PageBot').innerHTML = $I['load'];
 	api('poolstats').then(function(){
-		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['payments'])+' Payments to '+Num($D['poolstats']['minerspaid'])+' Miners';
+		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['payments'])+' Payments to '+Num($D['poolstats']['accountspaid'])+' Miners';
 		api('poolpay', pge, 25).then(function(){
 			Tbl('PageBot', 'poolpay', pge, 25);
 		}).catch(function(err){console.log(err)});
@@ -1168,7 +1321,7 @@ var api = function(m, key, xid){
 		url = 'pool/blocks?limit=100';
 	}else if(m === 'blockhistory'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
-	}else if(m === 'netheight' && now > ($U['netheight'] + 180)){
+	}else if(m === 'netstats' && now > ($U['netstats'] + 180)){
 		url = 'network/stats';
 	}else if(m === 'poolpay'){
 		url = 'pool/payments?page='+((key - 1) * xid)+'&limit='+xid;
@@ -1210,11 +1363,11 @@ var api = function(m, key, xid){
 				if(d){
 					var dcnt = numObj(d);
 					//Update Data Times
-					if(['net','netheight','pool','poolstats','news'].indexOf(m) >= 0) $U[m] = now;
+					if(['netstats','poolstats','news'/*,'net','pool'*/].indexOf(m) >= 0) $U[m] = now;
 					//Process Data
 					if(m === 'news'){
 						$D[m] = d;
-					}else if(['block','blockhistory','net','pool','pay','poolpay'].indexOf(m) >= 0){
+					}else if(['block','blockhistory','pay','poolpay'/*,'net','pool'*/].indexOf(m) >= 0){
 						$D[m] = {};
 						for(i = 0; i < dcnt; i++){
 							var v = d[i], tme = Rnd(v['ts'] / 1000);
@@ -1230,10 +1383,10 @@ var api = function(m, key, xid){
 										'val':val
 									};
 								}
-							}else if(m === 'net'){
-								if(tme >= start) $D[m][i] = {'tme':tme, 'hash':Rnd(v['diff'] / 120)};
-							}else if(m === 'pool'){
-								if(tme >= start) $D[m][i] = {'tme':tme, 'hash':v['hs']};
+							//}else if(m === 'net'){
+							//	if(tme >= start) $D[m][i] = {'tme':tme, 'hash':Rnd(v['diff'] / 120)};
+							//}else if(m === 'pool'){
+							//	if(tme >= start) $D[m][i] = {'tme':tme, 'hash':v['hs']};
 							}else if(m === 'pay'){
 								$D[m][i] = {
 									'tme':v['ts'],
@@ -1243,22 +1396,30 @@ var api = function(m, key, xid){
 							}else if(m === 'poolpay'){
 								$D[m][i] = {
 									'tme':tme,
+									'hash':v['hash'],
 									'payees':v['payees'],
 									'amnt':Rnd((v['value'] / 1000000000000), 8, 'txt'),
 									'fee':Rnd((v['fee'] / 1000000000000), 8, 'txt')
 								};
 							}
 						}
-					}else if(m === 'netheight'){
-						$D[m] = d['height'];
+					}else if(m === 'netstats'){
+						$D[m] = {
+							'height': d['height'],
+							'diff': d['difficulty'],
+						};
 					}else if(m === 'poolstats'){
 						$D[m] = {
 							'blocks':d['pool_statistics']['totalBlocksFound'],
-							'hashes':d['pool_statistics']['totalHashes'],
 							'payments':d['pool_statistics']['totalPayments'],
-							'minerspaid':d['pool_statistics']['totalMinersPaid']
+							'accountspaid':d['pool_statistics']['totalMinersPaid'],
+							'usd_price':d['pool_statistics']['price']['usd'],
+							'eur_price':d['pool_statistics']['price']['eur'],
+							'hash':d['pool_statistics']['hashRate'],
+							'accounts':d['pool_statistics']['miners'],
+							'roundhashes':d['pool_statistics']['roundHashes'],
 						};
-						$U['pool'] = now;
+						$U['poolstats'] = now;
 					}else if(m === 'account'){
 						if(d && d['totalHashes'] && d['totalHashes'] > 0){
 							$A[addr] = {
@@ -1410,7 +1571,7 @@ function Tbl(tar, typ, pge, lim){
 						val = BlockToGo($D[typ][i]['height'], $D[typ][i]['val']);
 					}else if(k === 'hash'){
 						if($$['tbl'][typ]['hash'] && $$['tbl'][typ]['hash']['hsh'] === 'y'){
-							val = '<div class="HashTrun" data-hash="'+val+'">'+val+'</div>';
+							val = '<div class="HashTrun" data-hash="'+val+'" type="'+$$['tbl'][typ]['hash']['typ']+'" port="'+$Q['cur']['port']+'">'+val+'</div>';
 						}
 					}
 					ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+val+'</td>';
@@ -1426,9 +1587,9 @@ function Tbl(tar, typ, pge, lim){
 		
 	document.getElementById(tar).innerHTML = ins;
 	if($D[typ]){
-		var tr = (typ === 'pay') ? 'tx' : '';
-		console.log(tr);
-		HashTrun(tr);
+		//var tr = (typ === 'pay') ? 'tx' : '';
+		//console.log(tr);
+		HashTrun();
 		if(tar === 'PageBot'){
 			var pgs = 0,
 				tot = (typ === 'poolpay') ? $D['poolstats']['payments'] : $D['poolstats']['blocks'];
@@ -1758,6 +1919,11 @@ function Localize(){
 			$L['tme'] = 'g:i A';
 		}
 	}
+	var tz = new Date().getTimezoneOffset();
+	if (tz >= -120 && tz <= 0) {
+		$Q['fiat_name'] = "eur";
+		$Q['fiat_symbol'] = "€";
+	}
 }
 function isEmpty(o){
 	return (o && Object.entries(o).length === 0 && o.constructor === Object) ? true : false;
@@ -1834,15 +2000,27 @@ function Rnd(n, dec, m){
 	}
 	return n;
 }
-function HashTrun(typ){
+function hashToLink(hash, port, fit, type) {
+	if (hash == undefined) return 'none';
+	var url = port in COINS ? COINS[port].url : "";
+        var txt = hash;
+        if (hash.length > (fit * 2)) txt = hash.substring(0, (fit - 1)) + '&hellip;' + hash.slice((2 - fit));
+	if (port == 11898) {
+		return "<a class=\"C1 hov\" target=\"_blank\" href=\"" + url + "/block.html?hash=" + hash + "\">" + txt + "</a>";
+	} else {
+		return "<a class=\"C1 hov\" target=\"_blank\" href=\"" + url + "/" + type + "/" + hash + "\">" + txt + "</a>";
+	}
+};
+function difficultyToHashRate(hashrate, port) {
+	return Math.floor(port in COINS ? hashrate / COINS[port].time : 0);
+};
+function HashTrun(){
 	document.querySelectorAll('.HashTrun').forEach(function(h){
-		var hsh = h.getAttribute('data-hash'),
-			exp = (typ === 'tx') ? $Q['explorertx'] : $Q['explorer'],
-			txt = hsh,
+		var	hash = h.getAttribute('data-hash'),
+			type = h.getAttribute('type'),
+			port = h.getAttribute('port'),
 			fit = Math.floor(h.clientWidth / 7.02 / 2);
-			
-		if(hsh.length > (fit * 2)) txt = hsh.substring(0, (fit - 1))+'...'+hsh.slice((2 - fit));
-		h.innerHTML = '<a href="'+exp+hsh+'" target="_blank" class="C1 hov">'+txt+'</a>';
+		h.innerHTML = hashToLink(hash, port, fit, type);
 	});
 }
 function HashConv(h){
@@ -1862,7 +2040,7 @@ function BlockToGo(h, sts){
 	if(sts === 'f'){
 		return '<span class="C4">Invalid</span>';
 	}else{
-		var b = 60 - ($D['netheight'] - h);
+		var b = 60 - ($D['netstats']['height'] - h);
 		return (b <= 0) ? $$['trn']['conf'] : b+' To Go';
 	}
 }
