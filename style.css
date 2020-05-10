@@ -222,7 +222,7 @@ header{height:44px}
 
 #MinerPayments{position:relative;height:0;border-bottom:1px solid rgba(0,0,0,.25);transition:height 300ms;overflow:hidden}
 #MinerPayments.Opened{height:180px}
-#MinerPayments.OpenedBig{height:375px}
+#MinerPayments.OpenedBig{height:480px}
 #MinerPayments .LR85{height:calc(100% - 1px)}
 
 #MinerPaymentsStage{position:relative;height:calc(100% - 1px)}
@@ -235,7 +235,7 @@ header{height:44px}
 #InstaPayBtn .preload,#AutoPayBtn .preload{display:inline-block;height:22px;width:22px}
 
 #MinerPaymentsTable{min-height:100px}
-#MinerPaymentsStage table{height:100%;border-style:solid;border-width:0 1px;border-color:rgba(0,0,0,.1);padding:3px}
+#MinerPaymentsStage table{height:1;border-style:solid;border-width:0 1px;border-color:rgba(0,0,0,.1);padding:3px}
 
 #WorkerList{min-height:100px}
 .WorkerWrap{float:left;position:relative;width:20%;height:65px;padding:5px 4px;box-sizing:border-box}

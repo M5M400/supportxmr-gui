@@ -97,7 +97,7 @@ var	mde = 'l',
 			'rcnt':'Recent',
 			'set':'Set Auto Pay',
 			'updt':'Updated',
-			'vwpy':'View Your Payments'
+			'vwpy':'Your Payments'
 		}
 	};
 
