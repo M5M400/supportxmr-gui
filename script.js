@@ -19,8 +19,6 @@ var	mde = 'l',
 		'api':'https://api.moneroocean.stream/',
 		'fiat_name': 'usd',
 		'fiat_symbol': '$',
-		//'explorer':'https://xmrchain.net/block/',
-		//'explorertx':'https://xmrchain.net/tx/',
 		'news':false,												//enable news (motd) alerts on homepage
 		'email':true,												//enable email notifications
 		'timer':60,													//refresh timer in seconds
@@ -61,7 +59,7 @@ var	mde = 'l',
 			'help':'Help'
 		},
 		'pay':{
-			'DashPending':{'lbl':$Q['cur']['sym']+' Pending', 'var':'due'},
+			'DashPending':{'lbl':'<span id="PendingPay">--</span> '+$Q['cur']['sym']+' Pending', 'var':'due'},
 			'DashPaid':{'lbl':$Q['cur']['sym']+' Paid', 'var':'paid'}
 		},
 		'sts':{
@@ -270,12 +268,14 @@ var addr = UrlVars()['addr'] || '',
 		'TimerRefresh':''
 	},
 	$U = {				//Update Times
-		//'net':0,		// not used
 		'netstats':0,
-		'netdiff':0,
-		//'pool':0,		// not used
 		'poolstats':0,
 		'news':0
+	},
+	$P = {				//Promise cache
+		'netstats':false,
+		'poolstats':false,
+		'news':false
 	},
 	$L ={				//Localization
 		'perc':'9 %',
@@ -317,7 +317,7 @@ var addr = UrlVars()['addr'] || '',
 //Event Binding
 window.addEventListener('resize', function(){Resize()});
 document.body.addEventListener('change', function(e){
-	var id = ['#HeadMenu select', '#TblPagBox', '#AddrField', '#AddrRecent select', '#MinerCalcHsh', '#MinerCalcUnit', '#MinerCalcFld', '#AutoPayFld'];
+	var id = ['#HeadMenu select', '#TblPagBox', '#AddrField', '#AddrRecent select', '#MinerCalcHsh', '#MinerCalcUnit', '#MinerCalcFld', '#HashSelect', '#AutoPayFld'];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.matches(id[i]);
 		if(el){
@@ -337,6 +337,8 @@ document.body.addEventListener('change', function(e){
 				SaveAddr(addr, 'add');
 			}else if(id[i] === '#MinerCalcHsh' || id[i] === '#MinerCalcUnit' || id[i] === '#MinerCalcFld'){
 				Dash_calc();
+			}else if(id[i] === '#HashSelect'){
+				Dash_load('refresh');
 			}else if(id[i] === '#AutoPayFld'){
 				AutoPayCheck();
 			}
@@ -356,7 +358,7 @@ document.body.addEventListener('click', function(e){
 				TimerLoading('on');
 				setTimeout(function(){
 					TimerUpdateData();
-				}, 1500);	
+				}, 1500);
 			}else if(id[i] === '#DashPayBtn'){
 				MinerPayments();
 			}else if(id[i] === '#NetGraphClose'){
@@ -829,9 +831,14 @@ function Dash_load(typ){
 						}
 						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
 					}
-					var mh = HashConv($A[addr]['hash']);
+					var mh = HashConv($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']);
 					document.getElementById('MinerHashes').innerHTML = mh['num'] + " " + mh['unit'];
 					document.getElementById('MinerShares').innerHTML = $A[addr]['shares'];
+					document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'], 'y');
+					document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
+					api('poolstats').then(function(){
+						document.getElementById('PendingPay').innerHTML = Rnd($D['poolstats']['pending'] * $A[addr]['hash'] / $D['poolstats']['hash'], 6, 'txt');
+					});
 					
 					if(typ !== 'refresh') Dash_btn('loaded');
 					Graph_Miner_init();
@@ -842,9 +849,6 @@ function Dash_load(typ){
 							plr = (wcn === 1) ? '' : 's';
 							
 						document.getElementById('MinerWorkerCount').innerHTML = wcn+' Worker'+plr;
-						document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'], 'y');
-						document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
-						
 						Workers_init();
 					}).catch(function(err){console.log(err)});
 				}else{
@@ -1325,18 +1329,21 @@ var api = function(m, key, xid){
 		url = '',
 		start = now - (3600 * GraphLib_Duration());
 
-	if(m === 'news' && now > ($U['news'] + 3600)){
-		url = 'pool/motd';
+	if(m === 'news'){
+		if ($P[m] !== false) return $P[m];
+		if (now > ($U[m] + 3600)) url = 'pool/motd';
 	}else if(m === 'block'){
 		url = 'pool/blocks?limit=100';
 	}else if(m === 'blockhistory'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
-	}else if(m === 'netstats' && now > ($U['netstats'] + 180)){
-		url = 'network/stats';
+	}else if(m === 'netstats'){
+		if ($P[m] !== false) return $P[m];
+		if (now > ($U[m] + 180)) url = 'network/stats';
 	}else if(m === 'poolpay'){
 		url = 'pool/payments?page='+((key - 1) * xid)+'&limit='+xid;
-	}else if(m === 'poolstats' && now > ($U['poolstats'] + 180)){
-		url = 'pool/stats';
+	}else if(m === 'poolstats'){
+		if ($P[m] !== false) return $P[m];
+		if (now > ($U[m] + 180)) url = 'pool/stats';
 	}else if(m === 'account'){
 		url = 'miner/'+addr+'/stats';
 	}else if(m === 'pay'){
@@ -1364,7 +1371,7 @@ var api = function(m, key, xid){
 		url = 'user/subscribeEmail';
 	}
 
-	return new Promise(function (resolve, reject){
+	return $P[m] = new Promise(function (resolve, reject){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState !== 4) return;
@@ -1427,6 +1434,7 @@ var api = function(m, key, xid){
 							'usd_price':d['pool_statistics']['price']['usd'],
 							'eur_price':d['pool_statistics']['price']['eur'],
 							'hash':d['pool_statistics']['hashRate'],
+							'pending':d['pool_statistics']['pending'],
 							'accounts':d['pool_statistics']['miners'],
 							'roundhashes':d['pool_statistics']['roundHashes'],
 						};
@@ -1475,12 +1483,15 @@ var api = function(m, key, xid){
 							}
 						}
 					}
+					$P[m] = false;
 					resolve(key);
 				}else{
+					$P[m] = false;
 					reject('Data');
 					console.log(xhr);
 				}
 			}else{
+				$P[m] = false;
 				reject('Connection');
 				console.log(xhr);
 			}
@@ -1510,6 +1521,7 @@ var api = function(m, key, xid){
 			//console.log('Lookup: '+m+':'+url+' '+method);
 		}else{
 			//console.log('Skipped: '+m+':'+url);
+			$P[m] = false;
 			resolve(key);
 		}
 	});
@@ -1688,10 +1700,12 @@ function Graph_Miner(){
 		xR = right_x,
 		yR = 0;
 
+	var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh2" : "hsh";
+
 	i = cnt;
 	while(i--){
-		avg = avg + $H[i]['hsh'];
-		if($H[i]['hsh'] > max) max = $H[i]['hsh'];
+		avg = avg + $H[i][hshx];
+		if($H[i][hshx] > max) max = $H[i][hshx];
 		if($H[i]['tme'] < timefirst) timefirst = $H[i]['tme'];
 	}
 	if(max > 0){
@@ -1702,9 +1716,9 @@ function Graph_Miner(){
 		//Create Points
 		for(i = 0; i < cnt; i++){
 			var x = Rnd(right_x - (now - $H[i]['tme']) * (right_x / (now - timestart)), 1),
-				y = Rnd(height_pad - ($H[i]['hsh']) / max * height_pad, 1);
+				y = Rnd(height_pad - ($H[i][hshx]) / max * height_pad, 1);
 				
-			points.push({'x':x, 'y':y, 'tme':$H[i]['tme'], 'hsh':$H[i]['hsh']});
+			points.push({'x':x, 'y':y, 'tme':$H[i]['tme'], 'hsh':$H[i][hshx]});
 			if(i === 0){
 				yL = y;
 			}else if(i === (cnt - 1)){
@@ -1724,7 +1738,7 @@ function Graph_Miner(){
 		ins += '<path class="C0fl'+mde+'" stroke="url(#M)" stroke-width="2" d="M'+right_x+','+points[(cnt - 1)]['y']+' '+GraphLib_Bezier(points)+'M0,'+yR+' 0,'+(height + 3)+' '+(width + 3)+','+(height + 3)+' '+(width + 3)+','+yL+'" />';
 		
 		//Miner Hash Lables with Vertical Adjust
-		var hsh = HashConv($H[0]['hsh']), hs_y = yL + 2, lb_y = yL + 11;
+		var hsh = HashConv($H[0][hshx]), hs_y = yL + 2, lb_y = yL + 11;
 		if(yL > (height_pad * .8)){
 			hs_y = yL;
 			lb_y = yL - 17;
@@ -1758,7 +1772,7 @@ function Graph_Miner(){
 		ins += GraphLib_ToolTipSetup();
 		ins += '</svg>';
 		document.getElementById('MinerGraph').innerHTML = ins;
-		setTimeout(function(){ Dash_calc(); }, 1000);
+		Dash_calc();
 		GraphLib_ToolTipListener();
 	}else{
 		ErrAlert('MinerGraph', 'NoData');
@@ -1783,15 +1797,17 @@ function Graph_Worker(xid){
 			'<defs>'+
 				'<linearGradient id="F" gradientTransform="rotate(90)"><stop offset="0%" stop-color="#000" stop-opacity="0.07" /><stop offset="100%" stop-color="#000" stop-opacity="0.03" /></linearGradient>'+
 			'</defs>';
+
+	var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh2" : "hsh";
 		
 	for(i = 0; i < wcnt; i++){
-		if($W[i]['hsh'] > max) max = $W[i]['hsh'];
+		if($W[i][hshx] > max) max = $W[i][hshx];
 		if($W[i]['tme'] < mintime) mintime = $W[i]['tme'];
 	}
 	if(max > 0){
 		for(i = 0; i < wcnt; i++){
 			var x = Rnd(width - (now - $W[i]['tme']) * (width / (now - mintime)), 1),
-				y = Rnd(height - $W[i]['hsh'] * (height / max), 1);
+				y = Rnd(height - $W[i][hshx] * (height / max), 1);
 				
 			points.push({'x':x, 'y':y});
 			if(i === 0){
