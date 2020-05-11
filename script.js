@@ -926,9 +926,13 @@ function Dash_calc(){
 			j++;
 		}
 	}
-	var t = h_raw / difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']) * (24*60*60) / COINS[$Q['cur']['port']].time * rew / j * f.value;
-	var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats'][$Q['fiat_name'] + "_price"], 2, 'txt');
-	document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'] + " (" + fiat + ")";
+	api('netstats').then(function(){
+		api('poolstats').then(function(){
+			var t = h_raw / difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']) * (24*60*60) / COINS[$Q['cur']['port']].time * rew / j * f.value;
+			var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats'][$Q['fiat_name'] + "_price"], 2, 'txt');
+			document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'] + " (" + fiat + ")";
+		});
+	});
 }
 //Workers
 function Workers_init(){		///check this, getting called alot
@@ -1062,7 +1066,8 @@ function Workers_detail(xid){
 		api('workerdetail', xid, d['name']).then(function(){
 			var avg = 0,
 				havg = 0,
-				timestart = 99999999999999999,
+				maxtime = 99999999999999999,
+				timestart = maxtime,
 				cnt = numObj($A[addr]['wrkrs'][xid]['stats']),
 				i = cnt;
 
@@ -1076,7 +1081,7 @@ function Workers_detail(xid){
 				'<div class="BoxL center">'+havg['num']+' '+havg['unit']+'</div>'+
 				'<div class="BoxR center">'+Ago(d['last'], 'y')+'</div>'+
 				'<div class="pbar shim4"></div>'+
-				'<div class="BoxL txttny C2 center">Avg '+Ago(timestart)+'</div>'+
+				'<div class="BoxL txttny C2 center">Avg '+(timestart == maxtime ? "n/a" : Ago(timestart))+'</div>'+
 				'<div class="BoxR txttny C2 center">Last Share</div>'+
 				'<div class="shim10"></div>'+
 				'<div class="BoxL center">'+Num(d['hashes'])+'</div>'+
@@ -1503,11 +1508,12 @@ var api = function(m, key, xid){
 	});
 };
 function api_GraphFormat(d, cnt, start){
-	var interval = 5*60,
+	var interval = 15*60,
 		r = {},
 		r_key = 0,
 		r_now = now,
 		r_avg = 0,
+		r_avg2 = 0,
 		r_cnt = 0;
 	var prev_tme  = now;
 	var prev_tme2 = now;
@@ -1515,16 +1521,19 @@ function api_GraphFormat(d, cnt, start){
 		var tme = Rnd(d[i]['ts'] / 1000);
 		if (tme < start) break;
 		if (i < 200 && prev_tme - tme > interval) {
-			r[r_key++] = {'tme':prev_tme-1, 'hsh':0};
-			r[r_key++] = {'tme':tme+1, 'hsh':0};
+			r[r_key++] = {'tme':prev_tme-1, 'hsh':0, 'hsh2':0};
+			r[r_key++] = {'tme':tme+1, 'hsh':0, 'hsh2':0};
 		}
-		var hsh = (d[i] && d[i]['hs'] && d[i]['hs'] > 0) ? parseInt(d[i]['hs']) : 0;
+		var hsh  = (d[i] && d[i]['hs'] && d[i]['hs'] > 0) ? parseInt(d[i]['hs']) : 0;
+		var hsh2 = (d[i] && d[i]['hs2'] && d[i]['hs2'] > 0) ? parseInt(d[i]['hs2']) : 0;
 		if (prev_tme2 - tme < interval) {
-			r_avg += hsh;
+			r_avg  += hsh;
+			r_avg2 += hsh2;
 			++ r_cnt;
 		} else {
-			r[r_key++] = {'tme':tme, 'hsh': r_cnt ? r_avg / r_cnt : hsh};
-			r_avg = 0;
+			r[r_key++] = {'tme':tme, 'hsh': r_cnt ? r_avg / r_cnt : hsh, 'hsh2': r_cnt ? r_avg2 / r_cnt : hsh2};
+			r_avg  = 0;
+			r_avg2 = 0;
 			r_cnt = 0;
 			prev_tme2 = tme;
 		}
@@ -1532,14 +1541,17 @@ function api_GraphFormat(d, cnt, start){
 	}
         for (var i = 0; i < r_key; i++) {
 		if (r[i].hsh == 0) continue;
-		var r_avg = 0;
-		var r_cnt = 0;
+		var r_avg  = 0;
+		var r_avg2 = 0;
+		var r_cnt  = 0;
 	        for (var j = -10; j <= 10; j++) {
 			if (i+j < 0 || i+j >= r_key) continue;
-			r_avg += r[i+j].hsh;
+			r_avg  += r[i+j].hsh;
+			r_avg2 += r[i+j].hsh2;
 			++ r_cnt;
 		}
-		r[i].hsh = r_avg / r_cnt;
+		r[i].hsh  = r_avg / r_cnt;
+		r[i].hsh2 = r_avg2 / r_cnt;
 	}
 	return r;
 }
@@ -1739,7 +1751,7 @@ function Graph_Miner(){
 		ins += GraphLib_ToolTipSetup();
 		ins += '</svg>';
 		document.getElementById('MinerGraph').innerHTML = ins;
-		Dash_calc();
+		setTimeout(function(){ Dash_calc(); }, 1000);
 		GraphLib_ToolTipListener();
 	}else{
 		ErrAlert('MinerGraph', 'NoData');

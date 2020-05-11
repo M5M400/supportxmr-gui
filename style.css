@@ -119,7 +119,7 @@ input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #
 .FLDl:-webkit-autofill,.FLDl:-webkit-autofill:hover,.FLDl:-webkit-autofill:focus,.FLDl:-webkit-autofill:active{-webkit-box-shadow: 0 0 0 30px #efefef inset !important}
 .FLDd:-webkit-autofill,.FLDd:-webkit-autofill:hover,.FLDd:-webkit-autofill:focus,.FLDd:-webkit-autofill:active{-webkit-box-shadow: 0 0 0 30px #3b3b3b inset !important}
 
-.select-point{position:absolute;width:10px;height:10px;top:11px;right:-3px}
+.select-point{position:absolute;width:10px;height:10px;top:11px;right:0px}
 select,.select-point{cursor:pointer}
 #AddrRecent select,#HeadMenu select{-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;outline:none}
 
