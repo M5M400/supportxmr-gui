@@ -275,11 +275,7 @@ var addr = UrlVars()['addr'] || '',
 		'poolstats':0,
 		'news':0
 	},
-	$P = {				//Promise cache
-		'netstats':false,
-		'poolstats':false,
-		'news':false
-	},
+	$P = {},			//Promise cache
 	$L ={				//Localization
 		'perc':'9 %',
 		'thou':',',
@@ -1327,21 +1323,18 @@ var api = function(m, key, xid){
 		url = '',
 		start = now - (3600 * GraphLib_Duration());
 
-	if(m === 'news'){
-		if ($P[m] !== false) return $P[m];
-		if (now > ($U[m] + 3600)) url = 'pool/motd';
+	if(m === 'news' && now > ($U[m] + 3600)){
+		url = 'pool/motd';
 	}else if(m === 'block'){
 		url = 'pool/blocks?limit=100';
 	}else if(m === 'blockhistory'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
-	}else if(m === 'netstats'){
-		if ($P[m] !== false) return $P[m];
-		if (now > ($U[m] + 180)) url = 'network/stats';
+	}else if(m === 'netstats' && now > ($U[m] + 180)){
+		url = 'network/stats';
 	}else if(m === 'poolpay'){
 		url = 'pool/payments?page='+((key - 1) * xid)+'&limit='+xid;
-	}else if(m === 'poolstats'){
-		if ($P[m] !== false) return $P[m];
-		if (now > ($U[m] + 180)) url = 'pool/stats';
+	}else if(m === 'poolstats' && now > ($U[m] + 180)){
+		url = 'pool/stats';
 	}else if(m === 'account'){
 		url = 'miner/'+addr+'/stats';
 	}else if(m === 'pay'){
@@ -1352,8 +1345,6 @@ var api = function(m, key, xid){
 		}
 	}else if(m === 'workers' && (isEmpty($A[addr]['wrkrs']) || now > ($A[addr]['wrkrs_updt'] + 120))){
 		url = 'miner/'+addr+'/chart/hashrate/allWorkers';
-	}else if(m === 'minershash'){
-		url = 'miner/'+addr+'/chart/hashrate/';
 	}else if(m === 'workerdetail'){
 		url = 'miner/'+addr+'/stats/'+xid;
 	}else if(m === 'user' && addr){
@@ -1363,8 +1354,9 @@ var api = function(m, key, xid){
 	}else if(m === 'subscribeEmail'){
 		url = 'user/subscribeEmail';
 	}
+	if (url && typeof $P[url] !== 'undefined') return $P[url];
 
-	return $P[m] = new Promise(function (resolve, reject){
+	return $P[url] = new Promise(function (resolve, reject){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState !== 4) return;
@@ -1449,7 +1441,10 @@ var api = function(m, key, xid){
 						$A[addr]['wrkrs'] = {};
 						var i = 0;
 						for (var wname in d) {
-							if (wname === 'global') continue;
+							if (wname === 'global') {
+								$A[addr]['stats'] = api_GraphFormat(d[wname], numObj(d[wname]), start);
+								continue;
+							}
 							$A[addr]['wrkrs'][i] = {};
 							$A[addr]['wrkrs'][i]['name'] = wname;
 							$A[addr]['wrkrs'][i]['stats'] = api_GraphFormat(d[wname], numObj(d[wname]), start);
@@ -1458,8 +1453,6 @@ var api = function(m, key, xid){
 							++ i;
 						}
 						$A[addr]['wrkrs_updt'] = now;
-					}else if(m === 'minershash'){
-						$A[addr]['stats'] = api_GraphFormat(d, dcnt, start);
 					}else if(m === 'workerdetail'){
 						$A[addr]['wrkrs'][key]['last'] = d['lts'];
 						$A[addr]['wrkrs'][key]['hashes'] = d['totalHash'];
@@ -1474,15 +1467,15 @@ var api = function(m, key, xid){
 							}
 						}
 					}
-					$P[m] = false;
+					delete $P[url];
 					resolve(key);
 				}else{
-					$P[m] = false;
+					delete $P[url];
 					reject('Data');
 					console.log(xhr);
 				}
 			}else{
-				$P[m] = false;
+				delete $P[url];
 				reject('Connection');
 				console.log(xhr);
 			}
@@ -1512,7 +1505,7 @@ var api = function(m, key, xid){
 			//console.log('Lookup: '+m+':'+url+' '+method);
 		}else{
 			//console.log('Skipped: '+m+':'+url);
-			$P[m] = false;
+			delete $P[url];
 			resolve(key);
 		}
 	});
@@ -1663,7 +1656,7 @@ function Graph_Miner_init(){
 	if(m != null && addr && $A[addr]){
 		m.innerHTML = $I['load'];
 		if(isEmpty($A[addr]['stats'])){
-			api('minershash').then(function(){
+			api('workers').then(function(){
 				Graph_Miner();
 			}).catch(function(err){console.log(err)});
 		}else{
