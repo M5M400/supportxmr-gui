@@ -601,7 +601,7 @@ function TimerUpdateData(){
 			var ph = HashConv($D['poolstats']['hash']);
 			document.getElementById('PoolHash').innerHTML = ph['num'] + ' ' + ph['unit'];
 			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D['poolstats']['roundhashes'] / $D['netstats']['diff'], 2, 'txt') + "%";
-			document.getElementById('BlockCount').innerHTML = $D['poolstats']['blocks'];
+			document.getElementById('BlockCount').innerHTML = $D['poolstats']['blocks'] + $D['poolstats']['altblocks'];
 			document.getElementById('AccountCount').innerHTML = $D['poolstats']['accounts'];
 			document.getElementById('PaymentsMade').innerHTML = $D['poolstats']['payments'];
 			updateTimer = $Q['timer'];
@@ -1411,6 +1411,7 @@ var api = function(m, key, xid){
 					}else if(m === 'poolstats'){
 						$D[m] = {
 							'blocks':d['pool_statistics']['totalBlocksFound'],
+							'altblocks':d['pool_statistics']['totalAltBlocksFound'],
 							'payments':d['pool_statistics']['totalPayments'],
 							'accountspaid':d['pool_statistics']['totalMinersPaid'],
 							'usd_price':d['pool_statistics']['price']['usd'],
@@ -1502,42 +1503,43 @@ var api = function(m, key, xid){
 	});
 };
 function api_GraphFormat(d, cnt, start){
-	var interval = 300,
+	var interval = 5*60,
 		r = {},
 		r_key = 0,
 		r_now = now,
 		r_avg = 0,
 		r_cnt = 0;
-		
-	for(var i = 0; i < cnt; i++){
+	var prev_tme  = now;
+	var prev_tme2 = now;
+	for (var i = 0; i < cnt; i++) {
 		var tme = Rnd(d[i]['ts'] / 1000);
-			hsh = (d[i] && d[i]['hs'] && d[i]['hs'] > 0) ? parseInt(d[i]['hs']) : 0;
-			
-		if(tme >= start){
-			if(tme >= (r_now - interval)){
-				r_cnt++
-				r_avg = r_avg + hsh;
-			}else{
-				var avg = (r_cnt > 0 && r_avg > 0) ? Rnd((r_avg / r_cnt), 0) : 0;
-				r[r_key] = {'tme':r_now, 'hsh':avg};
-				
-				r_avg = hsh;
-				r_cnt = 1;				
-				r_now = r_now - interval;
-				r_key++;
-			}
+		if (tme < start) break;
+		if (i < 200 && prev_tme - tme > interval) {
+			r[r_key++] = {'tme':prev_tme-1, 'hsh':0};
+			r[r_key++] = {'tme':tme+1, 'hsh':0};
 		}
+		var hsh = (d[i] && d[i]['hs'] && d[i]['hs'] > 0) ? parseInt(d[i]['hs']) : 0;
+		if (prev_tme2 - tme < interval) {
+			r_avg += hsh;
+			++ r_cnt;
+		} else {
+			r[r_key++] = {'tme':tme, 'hsh': r_cnt ? r_avg / r_cnt : hsh};
+			r_avg = 0;
+			r_cnt = 0;
+			prev_tme2 = tme;
+		}
+		prev_tme = tme;
 	}
-	var d_cnt = numObj(d),
-		d_sum = 0,
-		r_cnt = numObj(r),
-		r_sum = 0;
-		
-	for(var i = 0; i < d_cnt; i++){
-		d_sum = d_sum + d[i]['hs'];
-	}
-	for(var i = 0; i < r_cnt; i++){
-		r_sum = r_sum + r[i]['hsh'];
+        for (var i = 0; i < r_key; i++) {
+		if (r[i].hsh == 0) continue;
+		var r_avg = 0;
+		var r_cnt = 0;
+	        for (var j = -10; j <= 10; j++) {
+			if (i+j < 0 || i+j >= r_key) continue;
+			r_avg += r[i+j].hsh;
+			++ r_cnt;
+		}
+		r[i].hsh = r_avg / r_cnt;
 	}
 	return r;
 }
