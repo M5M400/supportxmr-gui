@@ -68,6 +68,10 @@ var	mde = 'l',
 			'MinerShares':{'lbl':'Valid / Invalid Shares / Total Hashes: <span id="TotalHashes">--</span>', 'def':'-- / --', 'var':'shares'},
 			'MinerCalc':{'lbl':'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>'}
 		},
+		'stsw':{ // For worker
+			'MinerHashes':{'lbl':'Total Hashes', 'var':'hashes'},
+			'MinerShares':{'lbl':'Valid / Invalid Shares', 'def':'-- / --', 'var':'shares'},
+		},
 		'tbl':{
 			'poolpay':{
 				'tme':{'lbl':'Payment Sent', 'cls':'condte'},
@@ -1092,8 +1096,8 @@ function Workers_detail(xid){
 				'<div class="BoxL center">'+Num(d['hashes'])+'</div>'+
 				'<div class="BoxR center">'+Num(d['val'])+' / '+Num(d['inv'])+'</div>'+
 				'<div class="pbar shim4"></div>'+
-				'<div class="BoxL txttny C2 center">'+$$['sts']['MinerHashes']['lbl']+'</div>'+
-				'<div class="BoxR txttny C2 center">'+$$['sts']['MinerShares']['lbl']+'</div>';
+				'<div class="BoxL txttny C2 center">'+$$['stsw']['MinerHashes']['lbl']+'</div>'+
+				'<div class="BoxR txttny C2 center">'+$$['stsw']['MinerShares']['lbl']+'</div>';
 		}).catch(function(err){console.log(err)});
 	}
 }
