@@ -1354,7 +1354,10 @@ var api = function(m, key, xid){
 	}else if(m === 'subscribeEmail'){
 		url = 'user/subscribeEmail';
 	}
-	if (url && typeof $P[url] !== 'undefined') return $P[url];
+	if (url) {
+		if (typeof $P[url] !== 'undefined') return $P[url];
+		if (typeof $U[url] !== 'undefined' && now < $U[url] + 10) url = '';
+	}
 
 	return $P[url] = new Promise(function (resolve, reject){
 		var xhr = new XMLHttpRequest();
@@ -1422,20 +1425,20 @@ var api = function(m, key, xid){
 						$U['poolstats'] = now;
 					}else if(m === 'account'){
 						if(d && d['totalHashes'] && d['totalHashes'] > 0){
-							$A[addr] = {
-								'due':Rnd((d['amtDue'] / 1000000000000), 8),
-								'paid':Rnd((d['amtPaid'] / 1000000000000), 8),
-								'hashes':d['totalHashes'],
-								'hash':d['hash'],
-								'hash2':d['hash2'],
-								'last':d['lastHash'],
-								'shares':Num(d['validShares'])+' / '+Num(d['invalidShares']),
+							if (!$A[addr] || !$A[addr]['wrkrs']) $A[addr] = {
 								'stats':{},
 								'wrkrs':{},
 								'wrkrs_updt':0,
 								'email':'',
 								'threshold':''
-							}
+							};
+							$A[addr]['due']    = Rnd((d['amtDue'] / 1000000000000), 8);
+							$A[addr]['paid']   = Rnd((d['amtPaid'] / 1000000000000), 8);
+							$A[addr]['hashes'] = d['totalHashes'];
+							$A[addr]['hash']   = d['hash'];
+							$A[addr]['hash2']  = d['hash2'];
+							$A[addr]['last']   = d['lastHash'];
+							$A[addr]['shares'] = Num(d['validShares'])+' / '+Num(d['invalidShares']);
 						}
 					}else if(m === 'workers'){
 						$A[addr]['wrkrs'] = {};
@@ -1468,6 +1471,7 @@ var api = function(m, key, xid){
 						}
 					}
 					delete $P[url];
+					$U[url] = now;
 					resolve(key);
 				}else{
 					delete $P[url];
