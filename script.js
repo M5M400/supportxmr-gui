@@ -66,8 +66,8 @@ var	mde = 'l',
 		},
 		'sts':{
 			'MinerWorkerCount':{'lbl':'<span id="MinerLastHash">--</span>'},
-			'MinerHashes':{'lbl':'Total Hashes', 'var':'hashes'},
-			'MinerShares':{'lbl':'Valid / Invalid Shares', 'def':'-- / --', 'var':'shares'},
+			'MinerHashes':{'lbl':'Your <select id="HashSelect"></select> Hashrate', 'var':'hashes'},
+			'MinerShares':{'lbl':'Valid / Invalid Shares / Total Hashes: <span id="TotalHashes">--</span>', 'def':'-- / --', 'var':'shares'},
 			'MinerCalc':{'lbl':'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>'}
 		},
 		'tbl':{
@@ -781,7 +781,8 @@ function Dash_init(){
 	document.getElementById('MinerDash').innerHTML = ins;
 	var f = document.getElementById('MinerCalcFld'),
 		h = document.getElementById('MinerCalcHsh'),
-		u = document.getElementById('MinerCalcUnit');
+		u = document.getElementById('MinerCalcUnit'),
+		hs = document.getElementById('HashSelect');
 		
 	ins = '';
 	for(var k in $$['calc']){
@@ -797,6 +798,8 @@ function Dash_init(){
 	u.value = 'H';
 	u.className = 'FrmElem txttny C0'+mde+' C1bk';
 	h.className = 'FrmElem txttny C0'+mde+' C1bk';
+	hs.className = 'FrmElem txttny C0'+mde+' C1bk';
+	hs.innerHTML = '<option value="pay">Pay</option><option value="raw">Raw</option>';
 }
 function Dash_load(typ){
 	var m = document.getElementById('MinerGraph'),
@@ -826,7 +829,8 @@ function Dash_load(typ){
 						}
 						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
 					}
-					document.getElementById('MinerHashes').innerHTML = Num($A[addr]['hashes']);
+					var mh = HashConv($A[addr]['hash']);
+					document.getElementById('MinerHashes').innerHTML = mh['num'] + " " + mh['unit'];
 					document.getElementById('MinerShares').innerHTML = $A[addr]['shares'];
 					
 					if(typ !== 'refresh') Dash_btn('loaded');
@@ -839,6 +843,7 @@ function Dash_load(typ){
 							
 						document.getElementById('MinerWorkerCount').innerHTML = wcn+' Worker'+plr;
 						document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'], 'y');
+						document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
 						
 						Workers_init();
 					}).catch(function(err){console.log(err)});
@@ -1432,6 +1437,8 @@ var api = function(m, key, xid){
 								'due':Rnd((d['amtDue'] / 1000000000000), 8),
 								'paid':Rnd((d['amtPaid'] / 1000000000000), 8),
 								'hashes':d['totalHashes'],
+								'hash':d['hash'],
+								'hash2':d['hash2'],
 								'last':d['lastHash'],
 								'shares':Num(d['validShares'])+' / '+Num(d['invalidShares']),
 								'stats':{},

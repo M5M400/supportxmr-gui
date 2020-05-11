@@ -112,7 +112,7 @@ header,section,footer{margin:0;padding:0}
 input:focus,select:focus{outline-color:transparent;outline-style:none}
 input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #000}
 
-#MinerCalcFld,#MinerCalcUnit,#MinerCalcHsh{border:0;padding:2px 1px;height:18px;margin:0 1px}
+#MinerCalcFld,#MinerCalcUnit,#MinerCalcHsh,#HashSelect{border:0;padding:2px 1px;height:18px;margin:0 1px}
 
 .FLDl,.FLDd{width:calc(100% - 4px);display:inline-block;border:0;padding:8px 5px 7px 5px;background-color:#efefef}
 .FLDd{background-color:#3b3b3b}
