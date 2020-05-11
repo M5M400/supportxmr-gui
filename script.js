@@ -13,7 +13,6 @@ var	mde = 'l',
 			'nme':'Monero',						
 			'sym':'XMR',
 			'port': 18081,
-			//'blk':2,												//blocktime in minutes
 			'reg':/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
 		},
 		'api':'https://api.moneroocean.stream/',
@@ -963,7 +962,7 @@ function Workers_init(){		///check this, getting called alot
 			s = [];
 			
 		if(['A','D'].indexOf(pref.charAt(2)) >= 0) ord = pref.charAt(2);
-		
+
 		for(i = 0; i < numwrk; i++){
 			s.push([i, $A[addr]['wrkrs'][i][srt]]);
 		}
@@ -1002,20 +1001,19 @@ function Workers_init(){		///check this, getting called alot
 
 		var cnt = 0;
 		for(i = 0; i < s.length; i++){
-			api('worker', s[i][0], $A[addr]['wrkrs'][s[i][0]]['name']).then(function(k){
-				var d = $A[addr]['wrkrs'][k],
-					hsh = (d && d['stats'] && d['stats'][0] && d['stats'][0]['hsh']) ? d['stats'][0]['hsh'] : 0;
-				
-				if(hsh > 0){
-					hsh = HashConv(hsh);
-					document.getElementById('WRate-'+k).innerHTML = hsh['num']+' '+hsh['unit'];
-					if(d['stats']) Graph_Worker(k);
-				}else{
-					document.querySelector('.Worker[data-key="'+k+'"]').classList.add('C4','C4br');
-				}
-				cnt++;
-				if(numwrk > 1 && cnt === numwrk) Workers_sort(srt, ord, 'y');
-			}).catch(function(err){console.log(err)});
+			var k = s[i][0];
+			var d = $A[addr]['wrkrs'][k],
+				hsh = (d && d['stats'] && d['stats'][0] && d['stats'][0]['hsh']) ? d['stats'][0]['hsh'] : 0;
+			
+			if(hsh > 0){
+				hsh = HashConv(hsh);
+				document.getElementById('WRate-'+k).innerHTML = hsh['num']+' '+hsh['unit'];
+				if(d['stats']) Graph_Worker(k);
+			}else{
+				document.querySelector('.Worker[data-key="'+k+'"]').classList.add('C4','C4br');
+			}
+			cnt++;
+			if(numwrk > 1 && cnt === numwrk) Workers_sort(srt, ord, 'y');
 		}
 	}
 }
@@ -1353,14 +1351,9 @@ var api = function(m, key, xid){
 			url += '?page='+xid+'&limit=10';
 		}
 	}else if(m === 'workers' && (isEmpty($A[addr]['wrkrs']) || now > ($A[addr]['wrkrs_updt'] + 120))){
-		url = 'miner/'+addr+'/identifiers';
+		url = 'miner/'+addr+'/chart/hashrate/allWorkers';
 	}else if(m === 'minershash'){
 		url = 'miner/'+addr+'/chart/hashrate/';
-	}else if(m === 'worker' && $A[addr] && $A[addr]['wrkrs'][key]){
-		var kyup = ($A[addr]['wrkrs'][key] && $A[addr]['wrkrs'][key]['updt'] > 0) ? $A[addr]['wrkrs'][key]['updt'] : 0;
-		if(isEmpty($A[addr]['wrkrs'][key]['stats']) || now > (kyup + 120)){
-			url = 'miner/'+addr+'/chart/hashrate/'+xid;
-		}
 	}else if(m === 'workerdetail'){
 		url = 'miner/'+addr+'/stats/'+xid;
 	}else if(m === 'user' && addr){
@@ -1380,11 +1373,11 @@ var api = function(m, key, xid){
 				if(d){
 					var dcnt = numObj(d);
 					//Update Data Times
-					if(['netstats','poolstats','news'/*,'net','pool'*/].indexOf(m) >= 0) $U[m] = now;
+					if(['netstats','poolstats','news'].indexOf(m) >= 0) $U[m] = now;
 					//Process Data
 					if(m === 'news'){
 						$D[m] = d;
-					}else if(['block','blockhistory','pay','poolpay'/*,'net','pool'*/].indexOf(m) >= 0){
+					}else if(['block','blockhistory','pay','poolpay'].indexOf(m) >= 0){
 						$D[m] = {};
 						for(i = 0; i < dcnt; i++){
 							var v = d[i], tme = Rnd(v['ts'] / 1000);
@@ -1400,10 +1393,6 @@ var api = function(m, key, xid){
 										'val':val
 									};
 								}
-							//}else if(m === 'net'){
-							//	if(tme >= start) $D[m][i] = {'tme':tme, 'hash':Rnd(v['diff'] / 120)};
-							//}else if(m === 'pool'){
-							//	if(tme >= start) $D[m][i] = {'tme':tme, 'hash':v['hs']};
 							}else if(m === 'pay'){
 								$D[m][i] = {
 									'tme':v['ts'],
@@ -1458,17 +1447,19 @@ var api = function(m, key, xid){
 						}
 					}else if(m === 'workers'){
 						$A[addr]['wrkrs'] = {};
-						for(i = 0; i < dcnt; i++){
+						var i = 0;
+						for (var wname in d) {
+							if (wname === 'global') continue;
 							$A[addr]['wrkrs'][i] = {};
-							$A[addr]['wrkrs'][i]['name'] = d[i];
+							$A[addr]['wrkrs'][i]['name'] = wname;
+							$A[addr]['wrkrs'][i]['stats'] = api_GraphFormat(d[wname], numObj(d[wname]), start);
+							var stats0 = $A[addr]['wrkrs'][i]['stats'][0];
+							$A[addr]['wrkrs'][i]['rate'] = (stats0 && stats0['hsh']) ? stats0['hsh'] : 0;
+							++ i;
 						}
 						$A[addr]['wrkrs_updt'] = now;
 					}else if(m === 'minershash'){
 						$A[addr]['stats'] = api_GraphFormat(d, dcnt, start);
-					}else if(m === 'worker'){
-						$A[addr]['wrkrs'][key]['stats'] = api_GraphFormat(d, dcnt, start);
-						$A[addr]['wrkrs'][key]['rate'] = ($A[addr]['wrkrs'][key]['stats'][0] && $A[addr]['wrkrs'][key]['stats'][0]['hsh']) ? $A[addr]['wrkrs'][key]['stats'][0]['hsh'] : 0;
-						$A[addr]['wrkrs'][key]['updt'] = now;
 					}else if(m === 'workerdetail'){
 						$A[addr]['wrkrs'][key]['last'] = d['lts'];
 						$A[addr]['wrkrs'][key]['hashes'] = d['totalHash'];
