@@ -287,8 +287,6 @@ var addr = UrlVars()['addr'] || '',
 		'news':{},
 		'block':{},
 		'blockhistory':{},
-		//'net':{},		//Not used
-		//'pool':{},		//Not used
 		'poolstats':{},
 		'pay':{},
 		'poolpay':{},
@@ -298,7 +296,8 @@ var addr = UrlVars()['addr'] || '',
 			'MH':1000000,
 			'KH':1000,
 			'H':1
-		}
+		},
+		miner_hash_avg:0,	//Average miner graph number is stored here
 	},
 	$I = {				//Icons
 		'l':'<svg viewBox="0 0 99 99"><circle opacity=".6" cx="49.5" cy="49.5" r="31.5"/><path d="M87.6 57.1L99 49.5 87.7 42l7.5-11.3L82 27.9l2.6-13.4-13.4 2.7-2.6-13.4L57 11.4 49.5 0 42 11.3 30.6 3.8 27.9 17l-13.4-2.6 2.7 13.4-13.4 2.6L11.4 42 0 49.5 11.3 57 3.8 68.4 17 71.1l-2.6 13.4 13.4-2.7 2.6 13.4L42 87.6 49.5 99 57 87.7l11.3 7.5L71.1 82l13.4 2.6-2.7-13.4 13.4-2.6L87.6 57zM49.5 80a30.5 30.5 0 1 1 0-61 30.5 30.5 0 0 1 0 61z"/></svg>',
@@ -836,9 +835,6 @@ function Dash_load(typ){
 					document.getElementById('MinerShares').innerHTML = $A[addr]['shares'];
 					document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'], 'y');
 					document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
-					api('poolstats').then(function(){
-						document.getElementById('PendingPay').innerHTML = Rnd($D['poolstats']['pending'] * $A[addr]['hash'] / $D['poolstats']['hash'], 6, 'txt');
-					});
 					
 					if(typ !== 'refresh') Dash_btn('loaded');
 					Graph_Miner_init();
@@ -916,7 +912,7 @@ function Dash_calc(){
 	if(h_val && h_val > 0){
 		h_raw = h_val * $D['hashconv'][u_val];
 	}else{
-		h_raw = document.getElementById('MinerGraphAvg').getAttribute('data-hsh') || 0;
+		h_raw = $D['miner_hash_avg'];
 	}
 	
 	var hs = HashConv(h_raw),
@@ -1759,6 +1755,7 @@ function Graph_Miner(){
 			avg_h = HashConv(avg),
 			txt = avg_h['num']+' '+avg_h['unit']+' Avg '+Ago(timestart),
 			txt_w = txt.length * 5.4;
+		if (hshx === "hsh") $D['miner_hash_avg'] = avg;
 			
 		ins += '<line x1="55" y1="'+avg_y+'" x2="'+right_x+'" y2="'+avg_y+'" class="mineravgline C1st" />'+
 			'<rect x="'+((width / 2) - (txt_w / 2))+'" y="'+(avg_y - 8)+'" width="'+txt_w+'" height="18" rx="3" class="line C0fl'+mde+' C1st" />'+
@@ -1773,6 +1770,9 @@ function Graph_Miner(){
 		ins += '</svg>';
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
+		api('poolstats').then(function(){
+			document.getElementById('PendingPay').innerHTML = Rnd($D['poolstats']['pending'] * $D['miner_hash_avg'] / $D['poolstats']['hash'], 6, 'txt');
+		});
 		GraphLib_ToolTipListener();
 	}else{
 		ErrAlert('MinerGraph', 'NoData');
