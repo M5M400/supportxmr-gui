@@ -58,7 +58,7 @@ var	mde = 'l',
 			'help':'Help'
 		},
 		'pay':{
-			'DashPending':{'lbl':'<span id="PendingPay">--</span> '+$Q['cur']['sym']+' Pending', 'var':'due'},
+			'DashPending':{'lbl':'<span id="PendingPay"></span> '+$Q['cur']['sym']+' Pending', 'var':'due'},
 			'DashPaid':{'lbl':$Q['cur']['sym']+' Paid', 'var':'paid'}
 		},
 		'sts':{
