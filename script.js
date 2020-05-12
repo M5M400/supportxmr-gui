@@ -24,7 +24,7 @@ var	mde = 'l',
 		'graph':{
 			'hrs':72,												//max chart length in hours
 			'pplns':false,											//show pplns window on chart
-			'blockmin':25											//min number of blocks to show (blocks take their own time scale) max 100
+			'blockmin':15											//min number of blocks to show (blocks take their own time scale) max 100
 		},
 		'pay':{
 			'min_auto':0.003,										//minimum for automatic threshold
@@ -104,7 +104,7 @@ var	mde = 'l',
 			'rcnt':'Recent',
 			'set':'Update threshold',
 			'updt':'Threshold updated',
-			'vwpy':'Your Payments'
+			'vwpy':'Show Your Payments'
 		}
 	};
 
@@ -344,7 +344,7 @@ document.body.addEventListener('change', function(e){
 	}
 }, false);
 document.body.addEventListener('click', function(e){
-	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#EmailToggleBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
+	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#EmailSubscribeBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.closest(id[i]);
 		if(el){
@@ -371,8 +371,8 @@ document.body.addEventListener('click', function(e){
 				MinerPaymentHistory(1);
 			}else if(id[i] === '#PaymentHistoryBtnClose'){
 				MinerPayments('back');
-			}else if(id[i] === '#EmailToggleBtn'){
-				EmailToggle();
+			}else if(id[i] === '#EmailSubscribeBtn'){
+				EmailSubscribe();
 			}else if(id[i] === '#AddrDelete'){
 				SaveAddr($C['AddrField'].value, 'del');
 			}else if(id[i] === '#WorkerPopClose'){
@@ -1117,54 +1117,71 @@ function MinerPayments(typ){
 	}
 	
 	api('user').then(function(){
-		var eml = ($Q['email']) ? 'EmailTog' : '',
-		    ins = '';
-			
-		ins = '<div class="LR50 shimtop20 C0'+mde+' txtmed">'+
-			'<table class="C3l noborder"><tr>'+
-			'<td width="50%" class="center"><span><input type="text" id="AutoPayFld" class="center txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount..."></span><div class="pbar"></div><span class="txttny C2 noselect">Auto pay threshold (XMR)</span></td>'+
-			'<td width="50%" class="center"><div id="AutoPayBtn" class="BtnElem C1bk C2bk_hov o5">'+$$['trn']['set']+'</div><div class="pbar"></div><span id="AutoPayFeeLbl" class="txttny C2 noselect">' + fee_txt($A[addr]['threshold']) + '</span></td>'+
-			'</tr></table>'+
-	                '<div class="hbar shim10"></div></div>'+
-			'<div id="PaymentHistory"><div class="LR50">'+
-			'<div id="PaymentHistoryBtn" class="BtnElem '+eml+' C0'+mde+' txtmed C1bk C2bk_hov">'+$$['trn']['vwpy']+'</div>';
-		
-		if($Q['email']){
-			var check = $I['x'],
-				lbl = $$['trn']['eml_off'];
-			
-			if($A[addr]['email'] == '1'){
-				check = $I['check'];
-				lbl = $$['trn']['eml_on'];
-			}
-			
-			ins += '<div id="EmailToggleBtn" class="BtnElem DiscMde C1bk C2bk_hov">'+
-				'<div class="DiscIcon C0bk'+mde+' C1fl">'+check+'</div><span id="EmailToggleLbl" class="C0'+mde+' txtmed">'+lbl+'</span>'+
+	   	var ins = '';
+		ins +=	'<div class="LR50 shimtop20 C0'+mde+' txtmed center">'+
+				'<table class="C3l noborder"><tr>'+
+					'<td width="50%" class="center">'+
+						'<input type="text" id="AutoPayFld" class="center txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount...">'+
+						'<div class="pbar"></div><span class="txttny C2 noselect">Auto pay threshold (XMR)</span>'+
+					'</td>'+
+					'<td width="50%" class="center">'+
+						'<div id="AutoPayBtn" class="BtnElem txtmed C1bk C2bk_hov o5">'+$$['trn']['set']+'</div>'+
+						'<div class="pbar"></div><span id="AutoPayFeeLbl" class="txttny C2 noselect">' + fee_txt($A[addr]['threshold']) + '</span>'+
+					'</td>'+
+				'</tr></table>'+
+		                '<div class="hbar shim10"></div>'+
 			'</div>';
+		if ($Q['email']) {
+			var	email_enabled = $A[addr]['email'],
+				check = $I[email_enabled ? 'check' : 'x'],
+				lbl = $$['trn'][email_enabled ? 'eml_on' : 'eml_off'];
+			ins +=	'<div class="LR50 shimtop20 C0'+mde+' txtmed center">'+
+				'<div class="Split3L">'+
+					'<input type="text" id="EmailFROM" class="center txt C0bk'+mde+' C3'+mde+' C1br" placeholder="Change email FROM">'+
+					'<div class="pbar"></div><span class="txttny C2 noselect">Change email FROM</span>'+
+				'</div>'+
+				'<div class="Split3R">'+
+					'<input type="text" id="EmailTO" class="center txt C0bk'+mde+' C3'+mde+' C1br" placeholder="Change email TO">'+
+					'<div class="pbar"></div><span class="txttny C2 noselect">Change email TO</span>'+
+				'</div>'+
+				'<div class="Split3">'+
+					'<div id="EmailSubscribeBtn" class="BtnElem DiscMde C1bk C2bk_hov">'+
+						'<div class="DiscIcon C0bk'+mde+' C1fl">'+check+'</div>'+
+						'<span id="EmailSubscribeLbl" class="C0'+mde+' txtmed">'+lbl+'</span>'+
+					'</div>'+
+					'<div class="pbar"></div><span class="txttny C2 noselect">and change email</span>'+
+				'</div>'+
+				'<div class="hbar shim10"></div>'+
+				'</div>';
 		}
-		ins += '</div></div>';
+		ins +=	'<div id="PaymentHistory" class="center"><div class="LR50">'+
+				'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$['trn']['vwpy']+'</div>'+
+			'</div></div>';
 		
 		document.getElementById('MinerPaymentsStage').innerHTML = ins;
 		document.getElementById('AutoPayFld').value = Rnd($A[addr]['threshold'], $Q['pay']['dec_auto'], 'txt');
 	});
 }
-function EmailToggle(){
-	var ic = document.querySelector('#EmailToggleBtn .DiscIcon');
+function EmailSubscribe(){
+	var	ic  = document.querySelector('#EmailSubscribeBtn .DiscIcon'),
+		txt = document.getElementById('EmailSubscribeLbl');
 	ic.classList.add('preload');
 	ic.innerHTML = $I['load'];
-        $A[addr]['email'] = $A[addr]['email'] == '1' ? "0" : "1";
-	api('subscribeEmail', '', $A[addr]['email']).then(function(){
-		var ico = $I['x'],
-			lbl = $$['trn']['eml_off'];
-			
-		if($A[addr]['email'] == '1'){
-			ico = $I['check'];
-			lbl = $$['trn']['eml_on'];
-		}
-			
+	var status = $A[addr]['email'];
+	var new_status = status ? 0 : 1;
+	api('subscribeEmail', {'username':addr, 'enabled':new_status, 'from':document.getElementById('EmailFROM').value, 'to':document.getElementById('EmailTO').value}).then(function(){
+	        $A[addr]['email'] = new_status;
+		var 	ico = $I[new_status ? 'check' : 'x'],
+			lbl = $$['trn'][new_status ? 'eml_on' : 'eml_off'];
 		ic.classList.remove('preload');
 		ic.innerHTML = ico;
-		document.getElementById('EmailToggleLbl').innerHTML = lbl;
+		txt.innerHTML = lbl;
+	}).catch(function(err){
+		if (err != "Connection") {
+			ic.classList.remove('preload');
+			ic.innerHTML = $I[status ? 'check' : 'x'];
+			alert(err);
+		}
 	});
 }
 function AutoPay(s){
@@ -1174,7 +1191,7 @@ function AutoPay(s){
 	if(c === 'OK'){
 		b.classList.remove('C1bk','C4bk','C5bk');
 		b.innerHTML = $I['load'];
-		api('updatethreshold', '', NumInput(document.getElementById('AutoPayFld').value)).then(function(){
+		api('updateThreshold', {'username':addr, 'threshold':NumInput(document.getElementById('AutoPayFld').value)}).then(function(){
 			b.classList.add('C5bk');
 			b.innerHTML = $$['trn']['updt'];
 		});
@@ -1227,13 +1244,13 @@ function dta_Blocks(pge){
 	api('poolstats').then(function(){
 		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['blocks'])+' Blocks Found';
 		api('netstats').then(function(){
-			if(pge === 1 && numObj($D['block']) >= 25){
+			if(pge === 1 && numObj($D['block']) >= 15){
 				$D['blockhistory'] = $D['block'];
-				Tbl('PageBot', 'blockhistory', 1, 25);
+				Tbl('PageBot', 'blockhistory', 1, 15);
 			}else{
 				document.getElementById('PageBot').innerHTML = $I['load'];
-				api('blockhistory', pge, 25).then(function(){
-					Tbl('PageBot', 'blockhistory', pge, 25);
+				api('blockhistory', pge, 15).then(function(){
+					Tbl('PageBot', 'blockhistory', pge, 15);
 				}).catch(function(err){console.log(err)});
 			}
 		}).catch(function(err){console.log(err)});
@@ -1243,8 +1260,8 @@ function dta_Payments(pge){
 	document.getElementById('PageBot').innerHTML = $I['load'];
 	api('poolstats').then(function(){
 		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['payments'])+' Payments to '+Num($D['poolstats']['accountspaid'])+' Miners';
-		api('poolpay', pge, 25).then(function(){
-			Tbl('PageBot', 'poolpay', pge, 25);
+		api('poolpay', pge, 15).then(function(){
+			Tbl('PageBot', 'poolpay', pge, 15);
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
 }
@@ -1319,14 +1336,14 @@ var api = function(m, key, xid){
 	key = key || 0;
 	xid = xid || '';
 	
-	var i = 0,
+	var 	i = 0,
 		url = '',
 		start = now - (3600 * GraphLib_Duration());
 
 	if(m === 'news' && now > ($U[m] + 3600)){
 		url = 'pool/motd';
 	}else if(m === 'block'){
-		url = 'pool/blocks?limit=100';
+		url = 'pool/blocks?limit=15';
 	}else if(m === 'blockhistory'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'netstats' && now > ($U[m] + 180)){
@@ -1349,14 +1366,21 @@ var api = function(m, key, xid){
 		url = 'miner/'+addr+'/stats/'+xid;
 	}else if(m === 'user' && addr){
 		url = 'user/'+addr;
-	}else if(m === 'updatethreshold'){
+	}else if(m === 'updateThreshold'){
 		url = 'user/updateThreshold';
 	}else if(m === 'subscribeEmail'){
 		url = 'user/subscribeEmail';
 	}
+
+	var method = 'GET', params = '';
+	if (['updateThreshold','subscribeEmail'].indexOf(m) >= 0){
+		method = 'POST';
+		params = JSON.stringify(key);
+	}
+
 	if (url) {
 		if (typeof $P[url] !== 'undefined') return $P[url];
-		if (typeof $U[url] !== 'undefined' && now < $U[url] + 10) url = '';
+		if (typeof $U[url] !== 'undefined' && method != "POST" && now < $U[url] + 10) url = '';
 	}
 
 	return $P[url] = new Promise(function (resolve, reject){
@@ -1429,7 +1453,7 @@ var api = function(m, key, xid){
 								'stats':{},
 								'wrkrs':{},
 								'wrkrs_updt':0,
-								'email':'',
+								'email':0,
 								'threshold':''
 							};
 							$A[addr]['due']    = Rnd((d['amtDue'] / 1000000000000), 8);
@@ -1461,14 +1485,10 @@ var api = function(m, key, xid){
 						$A[addr]['wrkrs'][key]['hashes'] = d['totalHash'];
 						$A[addr]['wrkrs'][key]['val'] = (d['validShares'] > 0) ? d['validShares'] : 0;
 						$A[addr]['wrkrs'][key]['inv'] = (d['invalidShares'] > 0) ? d['invalidShares'] : 0;
-					}else if(['user','updatethreshold','subscribeEmail'].indexOf(m) >= 0){
-						if(d && d['msg']){
-							if(m === 'user'){
-								$A[addr]['email'] = d['msg']['email_enabled'];
-								var threshold = d['msg']['payout_threshold'];
-								$A[addr]['threshold'] = Rnd(threshold ? threshold / 1000000000000 : $Q['pay']['def_auto'], 8);
-							}
-						}
+					}else if(m === 'user' && d){
+						$A[addr]['email'] = d['email_enabled'] ? 1 : 0;
+						var threshold = d['payout_threshold'];
+						$A[addr]['threshold'] = Rnd(threshold ? threshold / 1000000000000 : $Q['pay']['def_auto'], 8);
 					}
 					delete $P[url];
 					$U[url] = now;
@@ -1480,24 +1500,16 @@ var api = function(m, key, xid){
 				}
 			}else{
 				delete $P[url];
-				reject('Connection');
+				var msg;
+				if (xhr.responseText) try {
+					var json = JSON.parse(xhr.responseText);
+					if (json.error) msg = json.error;
+				} catch(err) {}
+				reject(msg ? msg : 'Connection');
 				console.log(xhr);
 			}
 		};
 		if(url){
-			var method = 'GET', params = '';
-			if(['updatethreshold','subscribeEmail'].indexOf(m) >= 0){
-				method = 'POST';
-				if(m === 'updatethreshold'){
-					params = {'username':addr, 'threshold':xid};
-				}else if(m === 'subscribeEmail'){
-					params = {'username':addr, 'enabled':xid};
-				}else{
-					params = {'username':addr};
-				}
-				params = JSON.stringify(params);
-			}
-			
 			xhr.open(method, $Q['api']+url, true);
 			xhr.setRequestHeader('Content-Type', 'application/json');
 			

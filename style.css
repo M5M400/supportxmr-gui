@@ -100,6 +100,7 @@ header,section,footer{margin:0;padding:0}
 .hide{display:none !important}
 .clear{clear:both}
 .SplitL,.SplitR,.BoxL,.BoxR{display:inline-block;width:50%;box-sizing:border-box;padding:0 3px}
+.Split3L,.Split3R,.Split3{display:inline-block;width:33%;box-sizing:border-box;padding:0 3px}
 
 /*Text*/
 .txtbig,.txtmed{font-family:'GothamCondensed',san-serif;font-size:28px}
@@ -218,17 +219,17 @@ header{height:44px}
 #MinerDash .Spl{display:inline-block;width:50%;text-align:center}
 
 #MinerPayments{position:relative;height:0;border-bottom:1px solid rgba(0,0,0,.25);transition:height 300ms;overflow:hidden}
-#MinerPayments.Opened{height:180px}
-#MinerPayments.OpenedBig{height:480px}
+#MinerPayments.Opened{height:220px}
+#MinerPayments.OpenedBig{height:520px}
 #MinerPayments .LR85{height:calc(100% - 1px)}
 
 #MinerPaymentsStage{position:relative;height:calc(100% - 1px)}
 
-#AutoPayBtn{width:100%;height:32px}
+#AutoPayBtn{width:95%;height:32px}
 #PaymentHistoryBtn,#PaymentHistoryBtnClose{width:100%;height:32px}
-#PaymentHistoryBtn.EmailTog{width:calc(100% - 158px)}
-#EmailToggleBtn{width:140px;height:32px;margin-left:18px}
-#AutoPayFld{width:calc(50% - 9px);height:32px;border-width:1px;border-style:solid;padding:5px}
+#PaymentHistoryBtn{width:95%}
+#EmailSubscribeBtn{width:95%;height:32px}
+#AutoPayFld,#EmailFROM,#EmailTO{width:95%;height:32px;border-width:1px;border-style:solid;padding:5px}
 #AutoPayBtn .preload{display:inline-block;height:22px;width:22px}
 
 #MinerPaymentsTable{min-height:100px}
@@ -292,6 +293,11 @@ footer,#MinerGraph,#MinerPayments{-webkit-box-shadow:inset 0px 25px 16px -22px r
 	.LR50{width:60%;left:20%}
 	.LR80{width:84%;left:8%}
 	.LR85{width:87%;left:6.5%}
+	.Split3L{width:50%!important;padding:6px 0}
+	.Split3R{width:50%!important;padding:6px 0}
+	.Split3{width:100%!important;padding:6px 0}
+	#MinerPayments.Opened{height:300px}
+	#MinerPayments.OpenedBig{height:600px}
 }
 @media all and (max-width:750px){
 	.helpcontent{width:100%}
@@ -324,6 +330,10 @@ footer,#MinerGraph,#MinerPayments{-webkit-box-shadow:inset 0px 25px 16px -22px r
 	.WorkerWrap{width:100%}
 	.LR80{width:92%;left:4%}
 	.LR85{width:95%;left:2.5%}
+	.Split3L{width:100%!important;padding:6px 0}
+	.Split3R{width:100%!important;padding:6px 0}
+	#MinerPayments.Opened{height:360px}
+	#MinerPayments.OpenedBig{height:660px}
 }
 
 /*Fix svg text classes*/
