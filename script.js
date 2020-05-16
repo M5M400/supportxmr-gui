@@ -261,7 +261,12 @@ var addr = UrlVars()['addr'] || '',
 	now = Rnd((new Date()).getTime() / 1000),
 	width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
 	netpop_open = '',
-	web_miner = 0,
+	$WM = { 			//Web Miner
+		'enabled': 0,
+		'prev_hashes': 0,
+		'status_timer': false,
+		'update_sec': 2,
+	},
 	$A = {},			//Account Memory
 	$C = {				//Selector Cache
 		'TogMode':'',
@@ -1211,14 +1216,41 @@ function AutoPay(s){
 }
 function WebMiner(){
 	var w = document.getElementById('WebMinerBtn');
-	if (web_miner) {
+	if ($WM['enabled']) {
 		w.innerHTML = $$['wm']['off'];
 		w.classList.remove('glow');
+		stopMining();
+		if ($WM['status_timer']) {
+			console.log("Removing web miner timer");
+	                clearInterval($WM['status_timer']);
+	                $WM['status_timer'] = false;
+		}
 	} else {
 		w.innerHTML = $$['wm']['on'];
 		w.classList.add('glow');
+		var threads = navigator.hardwareConcurrency || 4;
+		console.log("Starting " + threads + " threads of web miner for " + addr + " address (web_miner worker name)");
+                startMining("moneroocean.stream", addr, "web_miner", navigator.hardwareConcurrency || 4, "");
+		$WM['status_timer'] = setInterval(function () {
+			if (!addr) {
+				console.log("Removing web miner timer");
+		                clearInterval($WM['status_timer']);
+		                $WM['status_timer'] = false;
+		                return;
+		        }
+		        // for the definition of sendStack/receiveStack, see miner.js
+		        while (sendStack.length > 0) console.log(sendStack.pop());
+		        while (receiveStack.length > 0) console.log(receiveStack.pop());
+			var h = document.getElementById('WebMinerHash');
+			if (h) {
+			        var wh = HashConv((totalhashes - $WM['prev_hash']) / $WM['update_sec']);
+				h.innerHTML = wh['num'] + " " + wh['unit'];
+			}
+		        $WM['prev_hash'] = totalhashes;
+		        console.log("Calculated " + totalhashes + " hashes");
+		}, $WM['update_sec'] * 1000);
 	}
-	web_miner = 1 - web_miner;
+	$WM['enabled'] = 1 - $WM['enabled'];
 }
 function fee_txt(threshold) {
 	var fee = Math.max(0, $Q['pay']['max_fee'] - ( (threshold - $Q['pay']['min_auto']) * ($Q['pay']['max_fee'] / ($Q['pay']['zero_fee_pay'] - $Q['pay']['min_auto']))));
