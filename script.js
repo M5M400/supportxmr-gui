@@ -48,7 +48,7 @@ var	mde = 'l',
 		'msg':{
 			'welcome':{'head':'Welcome to '+$Q['pool']['nme'], 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q['cur']['nme']+' address above. After you\'ve submitted a share, your stats will appear here.'},
 			'addr_invalid':{'head':'Invalid '+$Q['cur']['nme']+' Address', 'text':'Double check that your address is complete.'},
-			'addr_notfound':{'head':'Address Not Found', 'text':'If you\'ve submitted your first share, be patient, it may take a minute or two to update. If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u>'},
+			'addr_notfound':{'head':'Address Not Found', 'text':'If you\'ve submitted your first share, be patient, it may take a minute or two to update. If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u><br><br>You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0l txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div>'},
 			'addr_nodata':{'head':'No Data', 'text':''}
 		},
 		'nav':{
@@ -62,11 +62,11 @@ var	mde = 'l',
 			'DashPaid':{'lbl':$Q['cur']['sym']+' Paid', 'var':'paid'}
 		},
 		'wm':{
-			'on':  'Web miner ON: <span id="WebMinerHash">--</span>',
-			'off': 'Web miner OFF',
+			'on':  'Web minining: <span id="WebMinerHash">--</span>',
+			'off': 'Run Web Miner',
 		},
 		'sts':{
-			'MinerWorkerCount':{'lbl':'<div id="WebMinerBtn" class="BtnElem C0'+'l'+' txttny C1bk C2bk_hov">Web miner OFF</div>'},
+			'MinerWorkerCount':{'lbl':'<div id="WebMinerBtn" class="BtnElem C0l txttny C1bk C2bk_hov"></div>'},
 			'MinerHashes':{'lbl':'Your <select id="HashSelect"></select> Hashrate', 'var':'hashes'},
 			'MinerShares':{'lbl':'Shares (Hashes: <span id="TotalHashes">--</span>)', 'var':'shares'},
 			'MinerCalc':{'lbl':'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>'}
@@ -261,8 +261,10 @@ var addr = UrlVars()['addr'] || '',
 	now = Rnd((new Date()).getTime() / 1000),
 	width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
 	netpop_open = '',
+	miner_setup_open = false,
 	$WM = { 			//Web Miner
-		'enabled': 0,
+		'enabled': false,
+		'addr': '',
 		'prev_hashes': 0,
 		'status_timer': false,
 		'update_sec': 2,
@@ -357,6 +359,7 @@ document.body.addEventListener('click', function(e){
 	var id = [
 		'#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#WebMinerBtn',
 		'#PaymentHistoryBtnClose', '#EmailSubscribeBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate',
+		'#MinerSetupShowBtn', '#MinerSetupHideBtn', '#WinCmdTextArea', '#LinCmdTextArea',
 		'.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'
 	];
 	for(var i = 0; i < id.length; i++){
@@ -389,6 +392,16 @@ document.body.addEventListener('click', function(e){
 				EmailSubscribe();
 			}else if(id[i] === '#WebMinerBtn'){
 				WebMiner();
+			}else if(id[i] === '#MinerSetupShowBtn'){
+				MinerSetupScriptsBtn(true);
+			}else if(id[i] === '#MinerSetupHideBtn'){
+				MinerSetupScriptsBtn(false);
+			}else if(id[i] === '#WinCmdTextArea'){
+				document.getElementById('WinCmdTextArea').select();
+				document.execCommand("copy");
+			}else if(id[i] === '#LinCmdTextArea'){
+				document.getElementById('LinCmdTextArea').select();
+				document.execCommand("copy");
 			}else if(id[i] === '#AddrDelete'){
 				SaveAddr($C['AddrField'].value, 'del');
 			}else if(id[i] === '#WorkerPopClose'){
@@ -773,7 +786,9 @@ function Dash_init(){
 		'<div id="MinerPayments"></div>'+
 		'<div id="MinerGraph"></div>'+
 		'<div id="MinerDash" class="LR85 txtbig C3'+mde+' hide"></div>'+
-		'<div id="WorkerList" class="LR85 shimtop20"></div>';
+		'<div id="WorkerList" class="LR85 shimtop20 hide"></div>';
+
+	miner_setup_open = false;
 
 	$C['Stage'].innerHTML = ins;
 	
@@ -795,6 +810,7 @@ function Dash_init(){
 		ins += '</div>';
 	}
 	document.getElementById('MinerDash').innerHTML = ins;
+	WebMinerSetBtn();
 	var f = document.getElementById('MinerCalcFld'),
 		h = document.getElementById('MinerCalcHsh'),
 		u = document.getElementById('MinerCalcUnit'),
@@ -866,6 +882,8 @@ function Dash_load(typ){
 				}else{
 					Dash_reset();
 					m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$['msg']['addr_notfound']['head']+'</div><div class="LR80 txt shim10">'+$$['msg']['addr_notfound']['text']+'</div></div>';
+					WebMinerSetBtn();
+					MinerSetupScriptsBtn(miner_setup_open);
 				}
 			}).catch(function(err){console.log(err)});
 		}else{
@@ -999,7 +1017,8 @@ function Workers_init(){		///check this, getting called alot
 				'</div>'+
 			'</div>';
 		}
-		l.innerHTML = ins+'</div><div class="clear"></div>';
+		l.innerHTML = ins+'</div><div class="clear"></div><div class="hbar shim10"></div><div id="MinerSetupScripts" class="LR85 center"></div><div class="shim10"></div>';
+		MinerSetupScriptsBtn(miner_setup_open);
 		
 		if(numwrk > 0){
 			var bwid = document.getElementById('WName-0').clientWidth;
@@ -1028,6 +1047,7 @@ function Workers_init(){		///check this, getting called alot
 			cnt++;
 			if(numwrk > 1 && cnt === numwrk) Workers_sort(srt, ord, 'y');
 		}
+		l.classList.remove('hide');
 	}
 }
 function Workers_sort(srt, ord, sts){
@@ -1214,28 +1234,64 @@ function AutoPay(s){
 		});
 	}
 }
-function WebMiner(){
+function escapeHtml(unsafe) {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+function resize_texareas() {
+	var textareaList = document.getElementsByTagName("textarea");
+	for(var i = 0; i < textareaList.length; i++){
+		var ta = textareaList[i];
+		ta.style.height = (ta.scrollHeight + 2) + "px";
+	}
+}
+
+function MinerSetupScriptsBtn(show){
+	miner_setup_open = show;
+	var s = document.getElementById('MinerSetupScripts');
+	if (show) {
+		var lin_cmd = escapeHtml("curl -s -L https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.sh | bash -s " + addr);
+		var win_cmd = escapeHtml("powershell -Command \"$wc = New-Object System.Net.WebClient; $tempfile = [System.IO.Path]::GetTempFileName(); $tempfile += '.bat'; $wc.DownloadFile('https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.bat', $tempfile); & $tempfile " + addr + "; Remove-Item -Force $tempfile\"");
+		s.innerHTML =	'<div id="MinerSetupHideBtn" class="BtnElem C0l txtmed C1bk C2bk_hov">Hide Miner Setup Scripts</div>'+
+				'<div class="shim10"></div>' +
+				'<div class="center"><textarea id="WinCmdTextArea" wrap="soft" class="W95 txt C0bkl C3l C1br" readonly>' + win_cmd + '</textarea><div class="pbar"></div><span class="txttny C2 noselect">Windows setup command</span></div>'+
+				'<div class="shim10"></div>' +
+				'<div class="center"><textarea id="LinCmdTextArea" wrap="soft" class="W95 txt C0bkl C3l C1br" readonly>' + lin_cmd + '</textarea><div class="pbar"></div><span class="txttny C2 noselect">Linux setup command</span></div>';
+		resize_texareas();
+	} else {
+		s.innerHTML = '<div id="MinerSetupShowBtn" class="BtnElem C0l txtmed C1bk C2bk_hov">Show Miner Setup Scripts</div>';
+	}
+}
+function WebMinerSetBtn(){
 	var w = document.getElementById('WebMinerBtn');
 	if ($WM['enabled']) {
-		w.innerHTML = $$['wm']['off'];
-		w.classList.remove('glow');
-		stopMining();
-		if ($WM['status_timer']) {
-			console.log("Removing web miner timer");
-	                clearInterval($WM['status_timer']);
-	                $WM['status_timer'] = false;
-		}
-	} else {
 		w.innerHTML = $$['wm']['on'];
 		w.classList.add('glow');
+	} else {
+		w.innerHTML = $$['wm']['off'];
+		w.classList.remove('glow');
+	}
+
+}
+function WebMiner(){
+	$WM['enabled'] = !$WM['enabled'];
+	WebMinerSetBtn();
+	if ($WM['enabled'] && addr) {
 		var threads = navigator.hardwareConcurrency || 4;
 		console.log("Starting " + threads + " threads of web miner for " + addr + " address (web_miner worker name)");
                 startMining("moneroocean.stream", addr, "web_miner", navigator.hardwareConcurrency || 4, "");
+		$WM['addr'] = addr;
 		$WM['status_timer'] = setInterval(function () {
-			if (!addr) {
+			if (addr !== $WM['addr']) {
 				console.log("Removing web miner timer");
 		                clearInterval($WM['status_timer']);
 		                $WM['status_timer'] = false;
+				$WM['enabled'] = false;
+				WebMinerSetBtn();
 		                return;
 		        }
 		        // for the definition of sendStack/receiveStack, see miner.js
@@ -1249,9 +1305,16 @@ function WebMiner(){
 		        $WM['prev_hash'] = totalhashes;
 		        console.log("Calculated " + totalhashes + " hashes");
 		}, $WM['update_sec'] * 1000);
+	} else {
+		stopMining();
+		if ($WM['status_timer']) {
+			console.log("Removing web miner timer");
+	                clearInterval($WM['status_timer']);
+	                $WM['status_timer'] = false;
+		}
 	}
-	$WM['enabled'] = 1 - $WM['enabled'];
 }
+
 function fee_txt(threshold) {
 	var fee = Math.max(0, $Q['pay']['max_fee'] - ( (threshold - $Q['pay']['min_auto']) * ($Q['pay']['max_fee'] / ($Q['pay']['zero_fee_pay'] - $Q['pay']['min_auto']))));
 	var percent = 100 * (fee / threshold);
@@ -1836,7 +1899,7 @@ function Graph_Miner(){
 		GraphLib_ToolTipListener();
 	}else{
 		ErrAlert('MinerGraph', 'NoData');
-		ins = '<div id="MinerGraphAlert" class="txtmed C2 o5">'+$$['msg']['addr_nodat']['head']+'</div>';
+		ins = '<div id="MinerGraphAlert" class="txtmed C2 o5">'+$$['msg']['addr_nodata']['head']+'</div>';
 	}
 }
 function Graph_Worker(xid){
