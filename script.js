@@ -1255,12 +1255,16 @@ function MinerSetupScriptsBtn(show){
 	var s = document.getElementById('MinerSetupScripts');
 	if (show) {
 		var lin_cmd = escapeHtml("curl -s -L https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.sh | bash -s " + addr);
+		var lin_hlp = escapeHtml('Copy and execute under Linux shell. User with passwordless sudo access is recommended.');
 		var win_cmd = escapeHtml("powershell -Command \"$wc = New-Object System.Net.WebClient; $tempfile = [System.IO.Path]::GetTempFileName(); $tempfile += '.bat'; $wc.DownloadFile('https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.bat', $tempfile); & $tempfile " + addr + "; Remove-Item -Force $tempfile\"");
-		s.innerHTML =	'<div id="MinerSetupHideBtn" class="BtnElem C0l txtmed C1bk C2bk_hov">Hide Miner Setup Scripts</div>'+
+		var win_hlp = escapeHtml('Copy and execute under "Command Prompt". Run "Command Prompt" as Administrator is recommended if possible.');
+		s.innerHTML =	'<div id="MinerSetupHideBtn" class="BtnElem C0l txtmed C1bk C2bk_hov">Hide Miner Setup Scripts</div>' +
 				'<div class="shim10"></div>' +
-				'<div class="center"><textarea id="WinCmdTextArea" wrap="soft" class="W95 txt C0bkl C3l C1br" readonly>' + win_cmd + '</textarea><div class="pbar"></div><span class="txttny C2 noselect">Windows setup command</span></div>'+
+				'<div class="center"><textarea id="WinCmdTextArea" wrap="soft" class="W95 txt C0bkl C3l C1br" readonly>' + win_cmd + '</textarea>' +
+				'<div class="pbar"></div><span class="txttny C2 noselect" title="' + win_hlp + '">Windows setup command</span></div>'+
 				'<div class="shim10"></div>' +
-				'<div class="center"><textarea id="LinCmdTextArea" wrap="soft" class="W95 txt C0bkl C3l C1br" readonly>' + lin_cmd + '</textarea><div class="pbar"></div><span class="txttny C2 noselect">Linux setup command</span></div>';
+				'<div class="center"><textarea id="LinCmdTextArea" wrap="soft" class="W95 txt C0bkl C3l C1br" readonly>' + lin_cmd + '</textarea>' +
+				'<div class="pbar"></div><span class="txttny C2 noselect"title="' + lin_hlp + '">Linux setup command</span></div>';
 		resize_texareas();
 	} else {
 		s.innerHTML = '<div id="MinerSetupShowBtn" class="BtnElem C0l txtmed C1bk C2bk_hov">Show Miner Setup Scripts</div>';
