@@ -61,10 +61,14 @@ var	mde = 'l',
 			'DashPending':{'lbl':'<span id="PendingPay"></span> '+$Q['cur']['sym']+' Pending', 'var':'due'},
 			'DashPaid':{'lbl':$Q['cur']['sym']+' Paid', 'var':'paid'}
 		},
+		'wm':{
+			'on':  'Web miner ON: <span id="WebMinerHash">--</span>',
+			'off': 'Web miner OFF',
+		},
 		'sts':{
-			'MinerWorkerCount':{'lbl':'<span id="MinerLastHash">--</span>'},
+			'MinerWorkerCount':{'lbl':'<div id="WebMinerBtn" class="BtnElem C0'+'l'+' txttny C1bk C2bk_hov">Web miner OFF</div>'},
 			'MinerHashes':{'lbl':'Your <select id="HashSelect"></select> Hashrate', 'var':'hashes'},
-			'MinerShares':{'lbl':'Valid / Invalid Shares / Total Hashes: <span id="TotalHashes">--</span>', 'def':'-- / --', 'var':'shares'},
+			'MinerShares':{'lbl':'Shares (Hashes: <span id="TotalHashes">--</span>)', 'var':'shares'},
 			'MinerCalc':{'lbl':'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>'}
 		},
 		'stsw':{ // For worker
@@ -257,6 +261,7 @@ var addr = UrlVars()['addr'] || '',
 	now = Rnd((new Date()).getTime() / 1000),
 	width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
 	netpop_open = '',
+	web_miner = 0,
 	$A = {},			//Account Memory
 	$C = {				//Selector Cache
 		'TogMode':'',
@@ -344,7 +349,11 @@ document.body.addEventListener('change', function(e){
 	}
 }, false);
 document.body.addEventListener('click', function(e){
-	var id = ['#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#PaymentHistoryBtnClose', '#EmailSubscribeBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate', '.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'];
+	var id = [
+		'#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#WebMinerBtn',
+		'#PaymentHistoryBtnClose', '#EmailSubscribeBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate',
+		'.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'
+	];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.closest(id[i]);
 		if(el){
@@ -373,6 +382,8 @@ document.body.addEventListener('click', function(e){
 				MinerPayments('back');
 			}else if(id[i] === '#EmailSubscribeBtn'){
 				EmailSubscribe();
+			}else if(id[i] === '#WebMinerBtn'){
+				WebMiner();
 			}else if(id[i] === '#AddrDelete'){
 				SaveAddr($C['AddrField'].value, 'del');
 			}else if(id[i] === '#WorkerPopClose'){
@@ -830,9 +841,10 @@ function Dash_load(typ){
 						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
 					}
 					var mh = HashConv($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']);
-					document.getElementById('MinerHashes').innerHTML = mh['num'] + " " + mh['unit'];
-					document.getElementById('MinerShares').innerHTML = $A[addr]['shares'];
-					document.getElementById('MinerLastHash').innerHTML = Ago($A[addr]['last'], 'y');
+					document.getElementById('MinerHashes').innerHTML = (now - $A[addr]['last']) < 10*60
+						? '<span title="' + Ago($A[addr]['last'], 'y') + '">' + mh['num'] + " " + mh['unit'] + '</span>'
+						: Ago($A[addr]['last'], 'y');
+					document.getElementById('MinerShares').innerHTML = '<span title="Invalid shares: ' + $A[addr]['bad_shares'] + '">' + $A[addr]['shares'] + '</span>';
 					document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
 					
 					if(typ !== 'refresh') Dash_btn('loaded');
@@ -1197,6 +1209,17 @@ function AutoPay(s){
 		});
 	}
 }
+function WebMiner(){
+	var w = document.getElementById('WebMinerBtn');
+	if (web_miner) {
+		w.innerHTML = $$['wm']['off'];
+		w.classList.remove('glow');
+	} else {
+		w.innerHTML = $$['wm']['on'];
+		w.classList.add('glow');
+	}
+	web_miner = 1 - web_miner;
+}
 function fee_txt(threshold) {
 	var fee = Math.max(0, $Q['pay']['max_fee'] - ( (threshold - $Q['pay']['min_auto']) * ($Q['pay']['max_fee'] / ($Q['pay']['zero_fee_pay'] - $Q['pay']['min_auto']))));
 	var percent = 100 * (fee / threshold);
@@ -1462,7 +1485,8 @@ var api = function(m, key, xid){
 							$A[addr]['hash']   = d['hash'];
 							$A[addr]['hash2']  = d['hash2'];
 							$A[addr]['last']   = d['lastHash'];
-							$A[addr]['shares'] = Num(d['validShares'])+' / '+Num(d['invalidShares']);
+							$A[addr]['shares'] = Num(d['validShares']);
+							$A[addr]['bad_shares'] = Num(d['invalidShares']);
 						}
 					}else if(m === 'workers'){
 						$A[addr]['wrkrs'] = {};

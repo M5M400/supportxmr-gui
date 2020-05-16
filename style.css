@@ -225,6 +225,7 @@ header{height:44px}
 
 #MinerPaymentsStage{position:relative;height:calc(100% - 1px)}
 
+#WebMinerBtn{width:40%;min-width:120px;height:20px}
 #AutoPayBtn{width:95%;height:32px}
 #PaymentHistoryBtn,#PaymentHistoryBtnClose{width:100%;height:32px}
 #PaymentHistoryBtn{width:95%}
@@ -266,6 +267,37 @@ footer{height:42px}
 
 footer,#MinerGraph,#MinerPayments{-webkit-box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06);-moz-box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06);box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06)}
 #MinerGraph .chart,.Worker,#MinerPayments{background:rgba(0,0,0,.03);background:linear-gradient(90deg, rgba(0,0,0,.04) 0,rgba(0,0,0,.02) 20%,rgba(0,0,0,.01) 80%,rgba(0,0,0,.03) 100%)}
+
+@-webkit-keyframes glowing {
+  0% { background-color: #f06923; -webkit-box-shadow: 0 0 3px #f06923; }
+  50% { background-color: #f0590b; -webkit-box-shadow: 0 0 20px #f0590b; }
+  100% { background-color: #f06923; -webkit-box-shadow: 0 0 3px #f06923; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: #f06923; -moz-box-shadow: 0 0 3px #f06923; }
+  50% { background-color: #f0590b; -moz-box-shadow: 0 0 20px #f0590b; }
+  100% { background-color: #f06923; -moz-box-shadow: 0 0 3px #f06923; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: #f06923; box-shadow: 0 0 3px #f06923; }
+  50% { background-color: #f0590b; box-shadow: 0 0 20px #f0590b; }
+  100% { background-color: #f06923; box-shadow: 0 0 3px #f06923; }
+}
+
+@keyframes glowing {
+  0% { background-color: #f06923; box-shadow: 0 0 3px #f06923; }
+  50% { background-color: #f0590b; box-shadow: 0 0 20px #f0590b; }
+  100% { background-color: #f06923; box-shadow: 0 0 3px #f06923; }
+}
+
+.glow {
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+  -o-animation: glowing 1500ms infinite;
+  animation: glowing 1500ms infinite;
+}
 
 @media all and (max-width:1300px){
 	.WorkerWrap{width:25%}
