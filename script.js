@@ -613,10 +613,6 @@ function TimerLoading(sts){
 	}
 }
 function TimerUpdateData(){
-	api('block').then(function(){
-		ErrAlert('X');
-	}).catch(function(err){ErrAlert('NetStats', '')});
-	
 	var l = document.getElementById('MinerHashes');
 	if(l){
 		var typ = (l.innerHTML !== '--') ? 'refresh' : '';
@@ -625,6 +621,7 @@ function TimerUpdateData(){
 
 	api('netstats').then(function(){
 		api('poolstats').then(function(){
+			ErrAlert('X');
 			var wh = HashConv(difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']));
                         document.getElementById('WorldHash').innerHTML = wh['num'] + ' ' + wh['unit'];
 			var ph = HashConv($D['poolstats']['hash']);
@@ -940,8 +937,7 @@ function Dash_calc(){
 		h_raw = 0,
 		h_val = h.value || 0,
 		u = document.getElementById('MinerCalcUnit'),
-		u_val = u.value || 'H',
-		rew = 0;
+		u_val = u.value || 'H';
 		
 	if(h_val && h_val > 0){
 		h_raw = h_val * $D['hashconv'][u_val];
@@ -949,8 +945,7 @@ function Dash_calc(){
 		h_raw = $D['miner_hash_avg'];
 	}
 	
-	var hs = HashConv(h_raw),
-		j = 0;
+	var hs = HashConv(h_raw);
 		
 	h_val = hs['num'];
 	u_val = hs['unit'].replace('/s', '');
@@ -959,15 +954,9 @@ function Dash_calc(){
 	u.value = u_val;
 	f.value = f_val;
 	
-	for(var i = 0; i < 6; i++){
-		if($D['block'][i]){
-			rew = rew + parseFloat($D['block'][i]['reward'].replace($L['dec'], '.'));
-			j++;
-		}
-	}
 	api('netstats').then(function(){
 		api('poolstats').then(function(){
-			var t = h_raw / difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']) * (24*60*60) / COINS[$Q['cur']['port']].time * rew / j * f.value;
+			var t = h_raw / difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']) * (24*60*60) / COINS[$Q['cur']['port']].time * $D['poolstats']['min_block_reward'] * f.value;
 			var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats'][$Q['fiat_name'] + "_price"], 2, 'txt');
 			document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'] + " (" + fiat + ")";
 		});
@@ -1374,15 +1363,10 @@ function dta_Blocks(pge){
 	api('poolstats').then(function(){
 		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['blocks'])+' Blocks Found';
 		api('netstats').then(function(){
-			if(pge === 1 && numObj($D['block']) >= 15){
-				$D['blockhistory'] = $D['block'];
-				Tbl('PageBot', 'blockhistory', 1, 15);
-			}else{
-				document.getElementById('PageBot').innerHTML = $I['load'];
-				api('blockhistory', pge, 15).then(function(){
-					Tbl('PageBot', 'blockhistory', pge, 15);
-				}).catch(function(err){console.log(err)});
-			}
+			document.getElementById('PageBot').innerHTML = $I['load'];
+			api('blockhistory', pge, 15).then(function(){
+				Tbl('PageBot', 'blockhistory', pge, 15);
+			}).catch(function(err){console.log(err)});
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
 }
@@ -1472,8 +1456,6 @@ var api = function(m, key, xid){
 
 	if(m === 'news' && now > ($U[m] + 3600)){
 		url = 'pool/motd';
-	}else if(m === 'block'){
-		url = 'pool/blocks?limit=15';
 	}else if(m === 'blockhistory'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'netstats' && now > ($U[m] + 180)){
@@ -1526,11 +1508,11 @@ var api = function(m, key, xid){
 					//Process Data
 					if(m === 'news'){
 						$D[m] = d;
-					}else if(['block','blockhistory','pay','poolpay'].indexOf(m) >= 0){
+					}else if(['blockhistory','pay','poolpay'].indexOf(m) >= 0){
 						$D[m] = {};
 						for(i = 0; i < dcnt; i++){
 							var v = d[i], tme = Rnd(v['ts'] / 1000);
-							if(['block','blockhistory'].indexOf(m) >= 0){
+							if(['blockhistory'].indexOf(m) >= 0){
 								if(m === 'blockhistory' || tme >= start || i < $Q['graph']['blockmin']){
 									var val = (v['valid'] == true) ? 't' : 'f';
 									$D[m][i] = {
@@ -1575,6 +1557,7 @@ var api = function(m, key, xid){
 							'pending':d['pool_statistics']['pending'],
 							'accounts':d['pool_statistics']['miners'],
 							'roundhashes':d['pool_statistics']['roundHashes'],
+							'min_block_reward':d['pool_statistics']['minBlockRewards'][$Q['cur']['port']],
 						};
 						$U['poolstats'] = now;
 					}else if(m === 'account'){
