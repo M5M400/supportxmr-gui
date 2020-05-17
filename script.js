@@ -24,7 +24,6 @@ var	mde = 'l',
 		'graph':{
 			'hrs':72,												//max chart length in hours
 			'pplns':false,											//show pplns window on chart
-			'blockmin':15											//min number of blocks to show (blocks take their own time scale) max 100
 		},
 		'pay':{
 			'min_auto':0.003,										//minimum for automatic threshold
@@ -41,6 +40,7 @@ var	mde = 'l',
 			'30':'Per Month',
 			'365':'Per Year',
 		},
+		page_sizes: [15, 50, 100],
 		'hlp':{
 			'head':'Welcome to '+$Q['pool']['nme'],
 			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
@@ -83,7 +83,7 @@ var	mde = 'l',
 				'fee':{'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'},
 			},
-			'blockhistory':{
+			'blocks':{
 				'tme':{'lbl':'Block Mined', 'cls':'condte'},
 				'togo':{'lbl':'Maturity', 'cls':'consmall'},
 				'eff':{'lbl':'Effort', 'cls':'continy'},
@@ -262,6 +262,8 @@ var addr = UrlVars()['addr'] || '',
 	width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
 	netpop_open = '',
 	miner_setup_open = false,
+	blocks_page_size	= 15,
+	poolpay_page_size 	= 15,
 	$WM = { 			//Web Miner
 		'enabled': false,
 		'addr': '',
@@ -296,8 +298,7 @@ var addr = UrlVars()['addr'] || '',
 	},
 	$D = {				//Data Digests
 		'news':{},
-		'block':{},
-		'blockhistory':{},
+		'blocks':{},
 		'poolstats':{},
 		'pay':{},
 		'poolpay':{},
@@ -327,17 +328,19 @@ var addr = UrlVars()['addr'] || '',
 //Event Binding
 window.addEventListener('resize', function(){Resize()});
 document.body.addEventListener('change', function(e){
-	var id = ['#HeadMenu select', '#TblPagBox', '#AddrField', '#AddrRecent select', '#MinerCalcHsh', '#MinerCalcUnit', '#MinerCalcFld', '#HashSelect', '#AutoPayFld'];
+	var id = [
+		'#HeadMenu select', '#TblPagBox', '#AddrField', '#AddrRecent select', '#MinerCalcHsh', '#MinerCalcUnit', '#MinerCalcFld',
+		'#HashSelect', '#PageSize', '#AutoPayFld'
+	];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.matches(id[i]);
 		if(el){
 			if(id[i] === '#HeadMenu select'){
 				Navigate(document.querySelector(id[i]).value);
 			}else if(id[i] === '#TblPagBox'){
-				var pge = e.target.value.replace(/\D/g,''),
+				var 	pge = e.target.value.replace(/\D/g,''),
 					typ = e.target.getAttribute('data-func');
-				
-				if(typ === 'blockhistory'){
+				if(typ === 'blocks'){
 					dta_Blocks(pge);
 				}else if(typ === 'poolpay'){
 					dta_Payments(pge);
@@ -349,6 +352,17 @@ document.body.addEventListener('change', function(e){
 				Dash_calc();
 			}else if(id[i] === '#HashSelect'){
 				Dash_load('refresh');
+			}else if(id[i] === '#PageSize'){
+				var	t   = document.getElementById('TblPagBox'),
+					typ = t.getAttribute('data-func'),
+					ps  = parseInt(document.querySelector(id[i]).value);
+				if(typ === 'blocks'){
+					blocks_page_size = ps;
+					dta_Blocks(1);
+				}else if(typ === 'poolpay'){
+					poolpay_page_size = ps;
+					dta_Payments(1);
+				}
 			}else if(id[i] === '#AutoPayFld'){
 				AutoPayCheck();
 			}
@@ -415,12 +429,12 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '.nav'){
 				Navigate(el.getAttribute('data-tar'));
 			}else if(id[i] === '.PagBtn'){
-				var f = el.getAttribute('data-func'),
+				var	f = el.getAttribute('data-func'),
 					p = parseInt(el.getAttribute('data-page'));
 					
 				if(f === 'poolpay'){
 					dta_Payments(p);
-				}else if(f === 'blockhistory'){
+				}else if(f === 'blocks'){
 					dta_Blocks(p);
 				}else if(f === 'pay'){
 					MinerPaymentHistory(p);
@@ -1363,8 +1377,8 @@ function dta_Blocks(pge){
 		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['blocks'])+' Blocks Found';
 		api('netstats').then(function(){
 			document.getElementById('PageBot').innerHTML = $I['load'];
-			api('blockhistory', pge, 15).then(function(){
-				Tbl('PageBot', 'blockhistory', pge, 15);
+			api('blocks', pge, blocks_page_size).then(function(){
+				Tbl('PageBot', 'blocks', pge, blocks_page_size);
 			}).catch(function(err){console.log(err)});
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
@@ -1373,8 +1387,8 @@ function dta_Payments(pge){
 	document.getElementById('PageBot').innerHTML = $I['load'];
 	api('poolstats').then(function(){
 		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['payments'])+' Payments to '+Num($D['poolstats']['accountspaid'])+' Miners';
-		api('poolpay', pge, 15).then(function(){
-			Tbl('PageBot', 'poolpay', pge, 15);
+		api('poolpay', pge, poolpay_page_size).then(function(){
+			Tbl('PageBot', 'poolpay', pge, poolpay_page_size);
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
 }
@@ -1455,7 +1469,7 @@ var api = function(m, key, xid){
 
 	if(m === 'news' && now > ($U[m] + 3600)){
 		url = 'pool/motd';
-	}else if(m === 'blockhistory'){
+	}else if(m === 'blocks'){
 		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'netstats' && now > ($U[m] + 180)){
 		url = 'network/stats';
@@ -1507,12 +1521,12 @@ var api = function(m, key, xid){
 					//Process Data
 					if(m === 'news'){
 						$D[m] = d;
-					}else if(['blockhistory','pay','poolpay'].indexOf(m) >= 0){
+					}else if(['blocks','pay','poolpay'].indexOf(m) >= 0){
 						$D[m] = {};
 						for(i = 0; i < dcnt; i++){
 							var v = d[i], tme = Rnd(v['ts'] / 1000);
-							if(['blockhistory'].indexOf(m) >= 0){
-								if(m === 'blockhistory' || tme >= start || i < $Q['graph']['blockmin']){
+							if(m === 'blocks'){
+								if(m === 'blocks'){
 									var val = (v['valid'] == true) ? 't' : 'f';
 									$D[m][i] = {
 										'tme':tme,
@@ -1689,9 +1703,10 @@ function api_GraphFormat(d, cnt, start){
 }
 //DataTable
 function Tbl(tar, typ, pge, lim){
-	var txt = (width > 900) ? 'txt' : 'txtsmall',
+	var 	txt = (width > 900) ? 'txt' : 'txtsmall',
 		row = 'ROW0',
-		ins = '<div class="WingPanel"><table class="txt"><tr class="txttny">';
+		ins = '<div class="WingPanel"><table class="txt"><tr class="txttny">',
+		i = 0;
 	
 	for(var k in $$['tbl'][typ]){
 		ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+$$['tbl'][typ][k]['lbl']+'</td>';
@@ -1699,7 +1714,7 @@ function Tbl(tar, typ, pge, lim){
 	ins += '</tr>';
 
 	if($D[typ]){
-		for(var i = 0; i < lim; i++){
+		for(; i < lim; i++){
 			if($D[typ][i]){
 				row = (i % 2 === 0) ? 'ROW1' : 'ROW0';
 				ins += '<tr class="'+row+'">';
@@ -1736,15 +1751,28 @@ function Tbl(tar, typ, pge, lim){
 		//var tr = (typ === 'pay') ? 'tx' : '';
 		//console.log(tr);
 		if(tar === 'PageBot'){
-			var pgs = 0,
-				tot = (typ === 'poolpay') ? $D['poolstats']['payments'] : $D['poolstats']['blocks'];
-				
-			pgs = Math.ceil(tot / 25);
-			document.getElementById('PageTopR').innerHTML = '<span class="txtmed C3'+mde+'">Page</span><input id="TblPagBox" type="text" class="FrmElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'"><span class="txtmed C3'+mde+'">of '+Num(pgs)+'</span>';
+			var size, page_size;
+			if (typ === 'poolpay') {
+				size = $D['poolstats']['payments'];
+				page_size = poolpay_page_size;
+			} else if (typ === 'blocks') {
+				size = $D['poolstats']['blocks'];
+				page_size = blocks_page_size;
+			}
+			var ps_ins = "";
+			$$['page_sizes'].forEach(function(ps){
+				ps_ins += '<option value="' + ps + '"' + (ps == page_size ? " selected" : "") + '>' + ps + '</option>';
+			});
+			var pgs = Math.ceil(size / page_size);
+			document.getElementById('PageTopR').innerHTML =
+				'<span class="txtmed C3'+mde+'">Page</span>'+
+				'<input id="TblPagBox" type="text" class="FrmElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'">'+
+				'<span class="txtmed C3'+mde+'">of '+Num(pgs)+'</span> '+
+				'<span class="txtmed C3'+mde+'">(<select id="PageSize" class="FrmElem txttny C0'+mde+' C1bk" value="' + page_size + '">' + ps_ins + '</select> per page)</span>';
 			PaginationBoxWidth();
 		}
 		if(i > 0){
-			var BL = document.getElementById(tar+'-WBL'),
+			var	BL = document.getElementById(tar+'-WBL'),
 				BR = document.getElementById(tar+'-WBR');
 			
 			if(pge > 1){
