@@ -1389,7 +1389,7 @@ function dta_Payments(pge){
 }
 function dta_Help(){
 	document.getElementById('PageTopL').innerHTML = $$['hlp']['head'];
-	document.getElementById('PageTopR').innerHTML = '<span class="txttny C2">Join Us on <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a></span>';
+	document.getElementById('PageTopR').innerHTML = '<span class="txttny C2"><i>powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> & <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></span>';
 	var ins = '<p>'+$$['hlp']['text']+'</p>'+
 		'<div class="helpgroup">'+
 			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I['arrow']+'</div></div>'+

@@ -55,7 +55,7 @@ table{border-collapse:collapse;border-spacing:0;width:100%;empty-cells:show}
 td{text-align:left}
 svg{width:100%;height:100%}
 *{-webkit-tap-highlight-color:transparent} 
-header,section,footer{margin:0;padding:0}
+header,section{margin:0;padding:0}
 
 /*Common Layout*/
 .LR50{position:relative;width:50%;left:25%}
@@ -249,8 +249,8 @@ table.noborder{border-width:0 !important}
 #WorkerPop{position:absolute;z-index:2;width:calc(100% + 10px);height:95px;left:0;margin-left:-5px;top:100%;margin-top:-1px;border-radius:4px;padding:6px 1px;box-sizing:border-box}
 .WBlockFewGrid{width:50% !important}
 
-#PageTopL,#PageTopR{position:relative;display:inline-block;width:calc(100% - 180px);height:50px;padding:14px 0 10px 0;box-sizing:border-box}
-#PageTopR{width:180px}
+#PageTopL,#PageTopR{position:relative;display:inline-block;width:calc(100% - 205px);height:50px;padding:14px 0 10px 0;box-sizing:border-box}
+#PageTopR{width:200px}
 #PageBot{min-height:200px}
 .helpgroup{margin-top:20px;padding-left:25px;padding-bottom:10px}
 
@@ -260,13 +260,13 @@ table.noborder{border-width:0 !important}
 .helpteaser,.helpcontent{margin-top:5px}
 
 /*Footer*/
-footer{height:42px}
+.footer{position:relative;left:0;bottom:0;width:100%}
 #FootL,#FootR{display:inline-block;box-sizing:border-box;padding-top:4px}
-#FootL{width:160px;padding-left:10px;padding-top:6px}
-#FootR{width:calc(100% - 165px);padding-right:9px}
+#FootL{width:200px;padding-left:10px}
+#FootR{width:calc(100% - 205px);padding-right:9px;position:absolute;top:4px}
 #FootR .nav{text-transform:uppercase}
 
-footer,#MinerGraph,#MinerPayments{-webkit-box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06);-moz-box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06);box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06)}
+#MinerGraph,#MinerPayments{-webkit-box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06);-moz-box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06);box-shadow:inset 0px 25px 16px -22px rgba(0,0,0,.06)}
 #MinerGraph .chart,.Worker,#MinerPayments{background:rgba(0,0,0,.03);background:linear-gradient(90deg, rgba(0,0,0,.04) 0,rgba(0,0,0,.02) 20%,rgba(0,0,0,.01) 80%,rgba(0,0,0,.03) 100%)}
 
 @-webkit-keyframes glowing {
