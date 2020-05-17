@@ -323,7 +323,7 @@ var addr = UrlVars()['addr'] || '',
 		'delete':'<svg viewBox="0 0 99 99"><path d="M8 28L7 15h86l-2 13H8zM31 0l-1 10h39L68 0H31zM10 33l9 66h61l9-66H10zm18 56l-3-47h8l3 47h-8zm26 0h-9V42h9v47zm17 0h-8l3-47h8l-3 47z"/></svg>',
 	};
 	$I['load'] = '<div class="LoadCon C1fl o9 Loader">'+$I['loadico']+'</div>';
-	
+
 //Event Binding
 window.addEventListener('resize', function(){Resize()});
 document.body.addEventListener('change', function(e){
@@ -1270,7 +1270,15 @@ function MinerSetupScriptsBtn(show){
 		s.innerHTML = '<div id="MinerSetupShowBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Show Miner Setup Scripts</div>';
 	}
 }
+var web_miner_start = false; // one time check the first time web miner button is shown
 function WebMinerSetBtn(){
+	if (web_miner_start === false) {
+		web_miner_start = true;
+		if (addr && UrlVars()['web_miner'] && $WM['enabled'] === false) {
+			WebMiner();
+			return;
+		}
+	}
 	var w = document.getElementById('WebMinerBtn');
 	if ($WM['enabled']) {
 		w.innerHTML = $$['wm']['on'];
@@ -2215,11 +2223,10 @@ function Truncate(s, l){
 	return (s && s.length > 0 && l > 0) ? s.length > l ? s.substring(0, l - 3)+ '...' : s : s;
 }
 function UrlVars(){
-    var v = [], h, p = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    var v = {}, h, p = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
     for(var i = 0; i < p.length; i++){
         h = p[i].split('=');
-        v.push(h[0]);
-        v[h[0]] = h[1];
+        v[h[0]] = h[1] ? h[1] : true;
     }
     return v;
 }
