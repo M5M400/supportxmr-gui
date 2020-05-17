@@ -338,7 +338,7 @@ document.body.addEventListener('change', function(e){
 			if(id[i] === '#HeadMenu select'){
 				Navigate(document.querySelector(id[i]).value);
 			}else if(id[i] === '#TblPagBox'){
-				var 	pge = e.target.value.replace(/\D/g,''),
+				var 	pge = parseInt(e.target.value.replace(/\D/g,'')),
 					typ = e.target.getAttribute('data-func');
 				if(typ === 'blocks'){
 					dta_Blocks(pge);
@@ -1706,7 +1706,7 @@ function Tbl(tar, typ, pge, lim){
 	var 	txt = (width > 900) ? 'txt' : 'txtsmall',
 		row = 'ROW0',
 		ins = '<div class="WingPanel"><table class="txt"><tr class="txttny">',
-		i = 0;
+		rows = 0;
 	
 	for(var k in $$['tbl'][typ]){
 		ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+$$['tbl'][typ][k]['lbl']+'</td>';
@@ -1714,7 +1714,7 @@ function Tbl(tar, typ, pge, lim){
 	ins += '</tr>';
 
 	if($D[typ]){
-		for(; i < lim; i++){
+		for(var i = 0; i < lim; i++){
 			if($D[typ][i]){
 				row = (i % 2 === 0) ? 'ROW1' : 'ROW0';
 				ins += '<tr class="'+row+'">';
@@ -1738,6 +1738,7 @@ function Tbl(tar, typ, pge, lim){
 					ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+val+'</td>';
 				}
 				ins += '</tr>';
+				++ rows;
 			}
 		}
 	}
@@ -1750,6 +1751,7 @@ function Tbl(tar, typ, pge, lim){
 	if($D[typ]){
 		//var tr = (typ === 'pay') ? 'tx' : '';
 		//console.log(tr);
+		var pgs = 0;
 		if(tar === 'PageBot'){
 			var size, page_size;
 			if (typ === 'poolpay') {
@@ -1763,7 +1765,7 @@ function Tbl(tar, typ, pge, lim){
 			$$['page_sizes'].forEach(function(ps){
 				ps_ins += '<option value="' + ps + '"' + (ps == page_size ? " selected" : "") + '>' + ps + '</option>';
 			});
-			var pgs = Math.ceil(size / page_size);
+			pgs = Math.ceil(size / page_size);
 			document.getElementById('PageTopR').innerHTML =
 				'<span class="txtmed C3'+mde+'">Page</span>'+
 				'<input id="TblPagBox" type="text" class="FrmElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'">'+
@@ -1771,7 +1773,7 @@ function Tbl(tar, typ, pge, lim){
 				'<span class="txtmed C3'+mde+'">(<select id="PageSize" class="FrmElem txttny C0'+mde+' C1bk" value="' + page_size + '">' + ps_ins + '</select> per page)</span>';
 			PaginationBoxWidth();
 		}
-		if(i > 0){
+		if(rows > 0){
 			var	BL = document.getElementById(tar+'-WBL'),
 				BR = document.getElementById(tar+'-WBR');
 			
@@ -1780,7 +1782,7 @@ function Tbl(tar, typ, pge, lim){
 				BL.setAttribute('data-page', pge - 1);
 				BL.setAttribute('data-func', typ);
 			}
-			if(i === lim){
+			if((pgs && pge < pgs) || (!pgs && rows == lim)){
 				BR.className = 'WingBtnR PagBtn C1bk C0fl'+mde;
 				BR.setAttribute('data-page', pge + 1);
 				BR.setAttribute('data-func', typ);
