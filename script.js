@@ -80,8 +80,8 @@ var	mde = 'l',
 				'tme':{'lbl':'Payment Sent', 'cls':'condte'},
 				'payees':{'lbl':'Payees', 'cls':'consmall'},
 				'amnt':{'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
+				'fee':{'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'},
-				'fee':{'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'right'}
 			},
 			'blockhistory':{
 				'tme':{'lbl':'Block Mined', 'cls':'condte'},
@@ -660,7 +660,6 @@ function Resize(){
 		width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 		Graph_Miner_init();
 		Workers_init();
-		HashTrun();
 		var p = document.getElementById('MinerPaymentsPage');
 		if(p != null) MinerPaymentHistory(p.value);
 	}, 250);
@@ -1718,7 +1717,7 @@ function Tbl(tar, typ, pge, lim){
 						val = BlockToGo($D[typ][i]['height'], $D[typ][i]['val']);
 					}else if(k === 'hash'){
 						if($$['tbl'][typ]['hash'] && $$['tbl'][typ]['hash']['hsh'] === 'y'){
-							val = '<div class="HashTrun" data-hash="'+val+'" type="'+$$['tbl'][typ]['hash']['typ']+'" port="'+$Q['cur']['port']+'">'+val+'</div>';
+							val = hashToLink(val, $Q['cur']['port'], $$['tbl'][typ]['hash']['typ']);
 						}
 					}
 					ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+val+'</td>';
@@ -1736,7 +1735,6 @@ function Tbl(tar, typ, pge, lim){
 	if($D[typ]){
 		//var tr = (typ === 'pay') ? 'tx' : '';
 		//console.log(tr);
-		HashTrun();
 		if(tar === 'PageBot'){
 			var pgs = 0,
 				tot = (typ === 'poolpay') ? $D['poolstats']['payments'] : $D['poolstats']['blocks'];
@@ -2155,29 +2153,18 @@ function Rnd(n, dec, m){
 	}
 	return n;
 }
-function hashToLink(hash, port, fit, type) {
+function hashToLink(hash, port, type) {
 	if (hash == undefined) return 'none';
 	var url = port in COINS ? COINS[port].url : "";
-        var txt = hash;
-        if (hash.length > (fit * 2)) txt = hash.substring(0, (fit - 1)) + '&hellip;' + hash.slice((2 - fit));
 	if (port == 11898) {
-		return "<a class=\"C1 hov\" target=\"_blank\" href=\"" + url + "/block.html?hash=" + hash + "\">" + txt + "</a>";
+		return '<div class="HashTrun"><a class="C1 hov" target="_blank" href="' + url + '/block.html?hash=' + hash + '">' + hash + '</a></div>';
 	} else {
-		return "<a class=\"C1 hov\" target=\"_blank\" href=\"" + url + "/" + type + "/" + hash + "\">" + txt + "</a>";
+		return '<div class="HashTrun"><a class="C1 hov" target="_blank" href="' + url + '/' + type + '/' + hash + '">' + hash + '</a></div>';
 	}
 };
 function difficultyToHashRate(hashrate, port) {
 	return Math.floor(port in COINS ? hashrate / COINS[port].time : 0);
 };
-function HashTrun(){
-	document.querySelectorAll('.HashTrun').forEach(function(h){
-		var	hash = h.getAttribute('data-hash'),
-			type = h.getAttribute('type'),
-			port = h.getAttribute('port'),
-			fit = Math.floor(h.clientWidth / 7.02 / 2);
-		h.innerHTML = hashToLink(hash, port, fit, type);
-	});
-}
 function HashConv(h){
 	h = (h > 0) ? h : 0;
 	var u = '/s';
