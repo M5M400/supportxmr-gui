@@ -1798,7 +1798,7 @@ function Tbl(tar, typ, pge, lim){
 							val = payment_txt;
 						} else {
 							if (is_main_port) {
-								var b = ($D['netstats']['height'] - d['height']) - $Q['cur']['conf'];
+								var b = $Q['cur']['conf'] - ($D['netstats']['height'] - d['height']);
 								if (b > 0) {
 									val = (b * coin['time'] / 60) + " Mins Left";
 								} else if (b > -10) {
