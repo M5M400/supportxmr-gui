@@ -684,7 +684,7 @@ function TimerUpdateData(){
 					if(getCookie('News') == $D['news']['created']){
 						h = 'hide';
 					}else{
-						c.innerHTML = '<div class="txtmed">'+$D['news']['subject']+'<div id="NewsTime" class="txttny noselect">('+Ago($D['news']['created'], 'y')+')</div></div>'+
+						c.innerHTML = '<div class="txtmed">'+$D['news']['subject']+'<div id="NewsTime" class="txttny noselect">('+AgoTooltip($D['news']['created'], 'y')+')</div></div>'+
 							'<div id="NewsBody" class="txt">'+$D['news']['body'].replace(/^(<br>)/,'')+'</div>'+
 							'<div id="NewsClose" class="Btn32 Btn32Corner C1fl">'+$I['x']+'</div>';
 					}
@@ -901,7 +901,7 @@ function Dash_load(typ){
 					var mh = HashConv($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']);
 					document.getElementById('MinerHashes').innerHTML = (now - $A[addr]['last']) < 10*60
 						? '<span title="' + Ago($A[addr]['last'], 'y') + '">' + mh['num'] + " " + mh['unit'] + '</span>'
-						: Ago($A[addr]['last'], 'y');
+						: AgoTooltip($A[addr]['last'], 'y');
 					document.getElementById('MinerShares').innerHTML = '<span title="Invalid shares: ' + $A[addr]['bad_shares'] + '">' + $A[addr]['shares'] + '</span>';
 					document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
 					
@@ -1148,9 +1148,9 @@ function Workers_detail(xid){
 			havg = HashConv(Rnd(avg / cnt, 0));
 			p.innerHTML = '<div id="WorkerPopClose" class="C1fl Btn16 Btn16Corner">'+$I['x']+'</div>'+
 				'<div class="BoxL center">'+havg['num']+' '+havg['unit']+'</div>'+
-				'<div class="BoxR center">'+Ago(d['last'], 'y')+'</div>'+
+				'<div class="BoxR center">'+AgoTooltip(d['last'], 'y')+'</div>'+
 				'<div class="pbar shim4"></div>'+
-				'<div class="BoxL txttny C2 center">Avg '+(timestart == maxtime ? "n/a" : Ago(timestart))+'</div>'+
+				'<div class="BoxL txttny C2 center">Avg '+(timestart == maxtime ? "n/a" : AgoTooltip(timestart))+'</div>'+
 				'<div class="BoxR txttny C2 center">Last Share</div>'+
 				'<div class="shim10"></div>'+
 				'<div class="BoxL center">'+Num(d['hashes'])+'</div>'+
