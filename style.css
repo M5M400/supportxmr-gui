@@ -94,7 +94,9 @@ header,section{margin:0;padding:0}
 .center{text-align:center}
 
 .condte{width:80px;padding-left:7px}
-.consmall,.continy{width:95px;text-align:left}
+.conlong,.consmall,.continy{text-align:left}
+.conlong{width:220px}
+.consmall{width:95px}
 .continy{width:50px}
 
 .TDPadS td{padding:3px}

@@ -90,7 +90,7 @@ var	mde = 'l',
 				{'name':'coin', 'lbl':'Coin', 'cls':'continy'},
 				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
 				{'name':'reward', 'lbl':'Raw reward', 'cls':'consmall'},
-				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'left consmall'},
+				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'conlong'},
 				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
 				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'}
 			],
@@ -1753,7 +1753,7 @@ function api_GraphFormat(d, cnt, start){
 function Tbl(tar, typ, pge, lim){
 	var 	txt = (width > 900) ? 'txt' : 'txtsmall',
 		row = 'ROW0',
-		ins = '<div class="WingPanel"><table class="txt"><tr class="txttny">',
+		ins = '<div class="WingPanel"><table class="txt C3'+mde+'"><tr class="txttny">',
 		rows = 0;
 
 	var blocks_count;
@@ -1816,6 +1816,7 @@ function Tbl(tar, typ, pge, lim){
 					} else {
 						val = InvalidBlock();
 					}
+					//val = '<div class="HashTrun">' + val + '</div>';
 					break;
 				}
 				case 'height':	val = Num(d[n]); break;
