@@ -251,8 +251,10 @@ table.noborder{border-width:0 !important}
 #WorkerPop{position:absolute;z-index:2;width:calc(100% + 10px);height:95px;left:0;margin-left:-5px;top:100%;margin-top:-1px;border-radius:4px;padding:6px 1px;box-sizing:border-box}
 .WBlockFewGrid{width:50% !important}
 
+.clearfix{overflow:auto}
 #PageTopL,#PageTopR{position:relative;display:inline-block;width:calc(100% - 245px);height:50px;padding:14px 0 10px 0;box-sizing:border-box}
-#PageTopR{width:240px}
+#PageTopL{min-width:300px}
+#PageTopR{width:240px;float:right}
 #PageBot{min-height:200px}
 .helpgroup{margin-top:20px;padding-left:25px;padding-bottom:10px}
 
@@ -316,7 +318,6 @@ textarea { resize: none; }
 	.txtbig{font-size:24px}
 	.txtmed{font-size:18px}
 	#AutoPayBtn,#PaymentHistory{padding:6px}
-	#HeadMenu{width:75px;margin-left:-165px}
 	.txtsmall{font-size:12px;line-height:15px}
 	#MinerPaymentsStage{width:80%;left:10%}
 	.condte{width:75px}

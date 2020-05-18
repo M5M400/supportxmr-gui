@@ -79,18 +79,18 @@ var	mde = 'l',
 		'tbl':{
 			'poolpay':[
 				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
-				{'name':'payees', 'lbl':'Payees', 'cls':'consmall'},
+				{'name':'payees', 'lbl':'Payees', 'cls':'continy'},
 				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'},
 			],
 			'blocks':[
 				{'name':'num', 'lbl':'#', 'cls':'continy'},
-				{'name':'tme', 'lbl':'Found', 'cls':'condte'},
+				{'name':'tme', 'lbl':'Found', 'cls':'consmall'},
 				{'name':'coin', 'lbl':'Coin', 'cls':'continy'},
 				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
 				{'name':'reward', 'lbl':'Raw reward', 'cls':'consmall'},
-				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'left'},
+				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'left consmall'},
 				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
 				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'}
 			],
@@ -789,7 +789,7 @@ function Navigate(tar){
 		if(tar && ['blocks','payments','help'].indexOf(tar) >= 0){
 			n = 'short';
 			m += ' short';
-			h = '<div class="LR85"><div id="PageTopL" class="C3'+mde+' txtmed"></div><div id="PageTopR" class="right"></div></div>'+
+			h = '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div><div id="PageTopR" class="right"></div></div>'+
 				'<div class="pbar"></div>'+
 				'<div id="PageBot" class="LR80 C3'+mde+' txt shim10">'+$I['load']+'</div>';
 			d += ' hide';
@@ -1792,7 +1792,7 @@ function Tbl(tar, typ, pge, lim){
 						var port = d['port'] ? d['port'] : $Q['cur']['port'];
 						var is_main_port = (port == $Q['cur']['port']);
 						var coin = COINS[port];
-						var payment = (is_main_port ? d['value'] : d['pay_value']) / coin['divisor'];
+						var payment = (is_main_port ? d['value'] : d['pay_value']) / COINS[$Q['cur']['port']]['divisor'];
 						var payment_txt = Rnd(payment, 6, 'txt');
 						if (d['unlocked'] && payment) {
 							val = payment_txt;
