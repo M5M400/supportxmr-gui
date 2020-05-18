@@ -12,6 +12,7 @@ var	mde = 'l',
 		'cur':{
 			'nme':'Monero',						
 			'sym':'XMR',
+			'conf': 30,	// blocks needed to mature
 			'port': 18081,
 			'reg':/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
 		},
@@ -81,20 +82,22 @@ var	mde = 'l',
 				{'name':'payees', 'lbl':'Payees', 'cls':'consmall'},
 				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'},
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'},
 			],
 			'blocks':[
-				{'name':'tme', 'lbl':'Block Mined', 'cls':'condte'},
-				{'name':'togo', 'lbl':'Maturity', 'cls':'consmall'},
+				{'name':'num', 'lbl':'#', 'cls':'continy'},
+				{'name':'tme', 'lbl':'Found', 'cls':'condte'},
+				{'name':'coin', 'lbl':'Coin', 'cls':'continy'},
 				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
-				{'name':'reward', 'lbl':'Reward ('+$Q['cur']['sym']+')', 'cls':'consmall'},
+				{'name':'reward', 'lbl':'Raw reward', 'cls':'consmall'},
+				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'left'},
 				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'block'}	
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'}
 			],
 			'pay':[
-				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
+				{'name':'ts', 'lbl':'Payment Sent', 'cls':'condte'},
 				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'}
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'}
 			]
 		},
 		'trn':{
@@ -1410,9 +1413,9 @@ function dta_Blocks(pge){
 			api('blocks', pge, blocks_page_size).then(function(){
 				Tbl('PageBot', 'blocks', pge, blocks_page_size);
 				var eff = 0, bnum = 0;
-				if ($D['blocks'][pge]) $D['blocks'][pge].forEach(function(b) { eff += b['eff']; ++ bnum; });
-				var eff_avg = bnum ? Rnd(eff / bnum) : 0;
-				document.getElementById('BlockEffort').innerHTML = '(<span class="'+(eff_avg > 100 ? 'C4' : 'C5')+'">'+Perc(eff_avg)+'</span> effort on this page)'
+				if ($D['blocks'][pge]) $D['blocks'][pge].forEach(function(b) { eff += b['shares'] / b['diff']; ++ bnum; });
+				var eff_perc = bnum ? Rnd(eff / bnum * 100) : 0;
+				document.getElementById('BlockEffort').innerHTML = '(<span class="'+(eff_perc > 100 ? 'C4' : 'C5')+'">'+Perc(eff_perc)+'</span> effort on this page)'
 			}).catch(function(err){console.log(err)});
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
@@ -1564,33 +1567,35 @@ var api = function(m, key, xid){
 					}else if(['blocks','pay','poolpay'].indexOf(m) >= 0){
 						$D[m][key] = [];
 						for(i = 0; i < dcnt; i++){
-							var v = d[i], tme = Rnd(v['ts'] / 1000);
+							var v = d[i];
 							if(m === 'blocks'){
-								if(m === 'blocks'){
-									var val = (v['valid'] == true) ? 't' : 'f';
-									$D[m][key][i] = {
-										'tme':tme,
-										'hash':v['hash'],
-										'port':v['port'],
-										'height':v['height'],
-										'reward':Rnd((v['value'] / 1000000000000), 8, 'txt'),
-										'eff':Rnd(v['shares'] / v['diff'] * 100),
-										'val':val
-									};
-								}
+								$D[m][key][i] = {
+									'ts':v['ts'],
+									'valid':v['valid'],
+									'unlocked':v['unlocked'],
+									'hash':v['hash'],
+									'port':v['port'],
+									'height':v['height'],
+									'value':v['value'],
+									'pay_value':v['pay_value'],
+									'pay_stage':v['pay_stage'],
+									'pay_status':v['pay_status'],
+									'shares':v['shares'],
+									'diff':v['diff']
+								};
 							}else if(m === 'pay'){
 								$D[m][key][i] = {
-									'tme':v['ts'],
+									'ts':v['ts'],
 									'hash':v['txnHash'],
-									'amnt':Rnd((v['amount'] / 1000000000000), 8)
+									'amnt':Rnd((v['amount'] / COINS[$Q['cur']['port']].divisor), 8)
 								};
 							}else if(m === 'poolpay'){
 								$D[m][key][i] = {
-									'tme':tme,
+									'ts':v['ts'],
 									'hash':v['hash'],
 									'payees':v['payees'],
-									'amnt':Rnd((v['value'] / 1000000000000), 8, 'txt'),
-									'fee':Rnd((v['fee'] / 1000000000000), 8, 'txt')
+									'amnt':Rnd((v['value'] / COINS[$Q['cur']['port']].divisor), 8, 'txt'),
+									'fee':Rnd((v['fee'] / COINS[$Q['cur']['port']].divisor), 8, 'txt')
 								};
 							}
 						}
@@ -1625,8 +1630,8 @@ var api = function(m, key, xid){
 								'email':0,
 								'threshold':''
 							};
-							$A[addr]['due']    = Rnd((d['amtDue'] / 1000000000000), 8);
-							$A[addr]['paid']   = Rnd((d['amtPaid'] / 1000000000000), 8);
+							$A[addr]['due']    = Rnd((d['amtDue'] / COINS[$Q['cur']['port']].divisor), 8);
+							$A[addr]['paid']   = Rnd((d['amtPaid'] / COINS[$Q['cur']['port']].divisor), 8);
 							$A[addr]['hashes'] = d['totalHashes'];
 							$A[addr]['hash']   = d['hash'];
 							$A[addr]['hash2']  = d['hash2'];
@@ -1658,7 +1663,7 @@ var api = function(m, key, xid){
 					}else if(m === 'user' && d){
 						$A[addr]['email'] = d['email_enabled'] ? 1 : 0;
 						var threshold = d['payout_threshold'];
-						$A[addr]['threshold'] = Rnd(threshold ? threshold / 1000000000000 : $Q['pay']['def_auto'], 8);
+						$A[addr]['threshold'] = Rnd(threshold ? threshold / COINS[$Q['cur']['port']].divisor : $Q['pay']['def_auto'], 8);
 					}
 					delete $P[url];
 					$U[url] = now;
@@ -1750,8 +1755,19 @@ function Tbl(tar, typ, pge, lim){
 		row = 'ROW0',
 		ins = '<div class="WingPanel"><table class="txt"><tr class="txttny">',
 		rows = 0;
+
+	var blocks_count;
+	if (typ === 'blocks') blocks_count = blocks_port ? $D['poolstats']['port_blocks_found'][blocks_port] : $D['poolstats']['altblocks_found'];
+
+	var skip_col_names = [];
+	if (typ === 'blocks') {
+		if (blocks_port == $Q['cur']['port']) skip_col_names = ['coin', 'reward'];
+		else if (blocks_port) skip_col_names = ['coin'];
+	}
 	
-	$$['tbl'][typ].forEach(function(t) { ins += '<td class="'+t['cls']+'">'+t['lbl']+'</td>'; });
+	$$['tbl'][typ].forEach(function(t) {
+		if (skip_col_names.indexOf(t['name']) == -1) ins += '<td class="'+t['cls']+'">'+t['lbl']+'</td>';
+	});
 	ins += '</tr>';
 
 	if ($D[typ][pge]) $D[typ][pge].forEach(function(d) {
@@ -1759,16 +1775,52 @@ function Tbl(tar, typ, pge, lim){
 		ins += '<tr class="'+row+'">';
 		$$['tbl'][typ].forEach(function(t) {
 			var n = t['name'];
-			var val = '';
-			if (d[n]) {
-				val = d[n];
-				switch (n) {
-					case 'tme':	val = Ago(val, 'y'); break;
-					case 'height':	val = Num(val); break;
-					case 'eff': 	val = '<span class="'+(val > 100 ? 'C4' : 'C5')+'">'+Perc(val)+'</span>'; break;
-					case 'togo':	val = BlockToGo(d['height'], d['val']); break;
-					case 'hash':	val = hashToLink(val, d['port'] ? d['port'] : $Q['cur']['port'], t['typ']);
+			if (skip_col_names.indexOf(n) >= 0) return;
+			var val;
+			switch (n) {
+				case 'num':	val = blocks_count - ((pge-1)*lim + rows); break
+				case 'tme':	val = AgoTooltip(d['ts'] / 1000, 'y'); break;
+				case 'coin':	val = COINS[d['port']]['name']; break;
+				case 'eff': 	{
+					var eff = Rnd(d['shares'] / d['diff'] * 100);
+					val = '<span class="'+(eff > 100 ? 'C4' : 'C5')+'" title="'+d['shares']+' / '+d['diff']+'">'+Perc(eff)+'</span>';
+					break;
 				}
+				case 'reward':	val = d['valid'] ? Rnd(d['value'] / COINS[d['port']]['divisor'], 6, 'txt') : InvalidBlock(); break;
+				case 'payment':	{
+					if (d['valid']) {
+						var port = d['port'] ? d['port'] : $Q['cur']['port'];
+						var is_main_port = (port == $Q['cur']['port']);
+						var coin = COINS[port];
+						var payment = (is_main_port ? d['value'] : d['pay_value']) / coin['divisor'];
+						var payment_txt = Rnd(payment, 6, 'txt');
+						if (d['unlocked'] && payment) {
+							val = payment_txt;
+						} else {
+							if (is_main_port) {
+								var b = ($D['netstats']['height'] - d['height']) - $Q['cur']['conf'];
+								if (b > 0) {
+									val = (b * coin['time'] / 60) + " Mins Left";
+								} else if (b > -10) {
+									val = "Soon";
+								} else {
+									val = "Delayed";
+								}
+							} else {
+								val = escapeHtml(d['pay_stage']);
+								if (!payment) val = '<span title="' + escapeHtml(d['pay_status']) + '">' + val + '</span>';
+							}
+							if (payment) val = '<span title="Pending ' + payment_txt + ' ' + $Q['cur']['sym'] + '">' + val + '</span>';
+						}
+						if (d['unlocked']) val = '<span class="C5">' + val + '</span>';
+					} else {
+						val = InvalidBlock();
+					}
+					break;
+				}
+				case 'height':	val = Num(d[n]); break;
+				case 'hash':	val = hashToLink(d[n], d['port'] ? d['port'] : $Q['cur']['port'], t['typ']); break;
+				default:	val = d[n];
 			}
 			ins += '<td class="'+t['cls']+'">'+val+'</td>';
 		});
@@ -1789,7 +1841,7 @@ function Tbl(tar, typ, pge, lim){
 			size = $D['poolstats']['payments'];
 			page_size = poolpay_page_size;
 		} else if (typ === 'blocks') {
-			size = blocks_port ? $D['poolstats']['port_blocks_found'][blocks_port] : $D['poolstats']['altblocks_found'];
+			size = blocks_count;
 			page_size = blocks_page_size;
 		}
 		var ps_ins = "";
@@ -2164,24 +2216,25 @@ function Ago(tme, lbl){
 }
 function Time(tme){
 	var r = '';
-	if(tme > 1){
-		r = $L['tme'];
-		var date = new Date(tme * 1000),
-			hr24 = date.getHours(),
-			hr12 = hr24,
-			min = '0'+date.getMinutes(),
-			ap = 'am';
-		
-		if(hr12 >= 12){
-			hr12 = hr12 - 12;
-			ap = ' pm';
-		}
-		r = r.replace('g', hr12);
-		r = r.replace('G', hr24);
-		r = r.replace('i', min.substr(-2));
-		r = r.replace('A', ap);
+	if(tme <= 1) return r;
+	r = $L['tme'];
+	var date = new Date(tme * 1000),
+		hr24 = date.getHours(),
+		hr12 = hr24,
+		min = '0'+date.getMinutes(),
+		ap = 'am';
+	if(hr12 >= 12){
+		hr12 = hr12 - 12;
+		ap = ' pm';
 	}
-	return r;
+	r = r.replace('g', hr12);
+	r = r.replace('G', hr24);
+	r = r.replace('i', min.substr(-2));
+	r = r.replace('A', ap);
+	return [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/')+' '+r;
+}
+function AgoTooltip(tme, lbl){
+	return '<span title="'+Time(tme)+'">'+Ago(tme, lbl)+'</span>';
 }
 function Perc(n){
 	return $L['perc'].replace('9', n);
@@ -2238,13 +2291,8 @@ function HashConv(h){
 	if(h === 0) u = 'H/s'
 	return {'num':Rnd(h, 1), 'unit':u};
 }
-function BlockToGo(h, sts){
-	if(sts === 'f'){
-		return '<span class="C4">Invalid</span>';
-	}else{
-		var b = 60 - ($D['netstats']['height'] - h);
-		return (b <= 0) ? $$['trn']['conf'] : b+' To Go';
-	}
+function InvalidBlock(){
+	return '<span class="C4" title="This is orphan block so there will be no payment for it. It can happen sometimes naturally.">Invalid</span>';
 }
 function SynchTime(t){
 	if(t > now) now = t + 3;

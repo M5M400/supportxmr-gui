@@ -94,8 +94,8 @@ header,section{margin:0;padding:0}
 .center{text-align:center}
 
 .condte{width:80px;padding-left:7px}
-.consmall,.continy{width:95px;text-align:center}
-.continy{width:75px}
+.consmall,.continy{width:95px;text-align:left}
+.continy{width:50px}
 
 .TDPadS td{padding:3px}
 .hide{display:none !important}
@@ -321,7 +321,7 @@ textarea { resize: none; }
 	#MinerPaymentsStage{width:80%;left:10%}
 	.condte{width:75px}
 	.consmall,.continy{width:90px}
-	.continy{width:70px}
+	.continy{width:50px}
 	.WorkerWrap{width:33.33%}
 	#MinerGraph{height:175px}
 	#DashPending,#DashPaid{width:80px}
@@ -354,7 +354,7 @@ textarea { resize: none; }
 	#MinerPaymentsStage{width:90%;left:5%}
 	.condte{width:70px}
 	.consmall,.continy{width:85px}
-	.continy{width:65px}
+	.continy{width:50px}
 	.WBlockFewGrid{width:100%!important}
 	.LR50{width:80%;left:10%}
 	.LR80{width:88%;left:6%}
