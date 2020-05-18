@@ -95,7 +95,7 @@ var	mde = 'l',
 				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'}
 			],
 			'pay':[
-				{'name':'ts', 'lbl':'Payment Sent', 'cls':'condte'},
+				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
 				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
 				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'}
 			]
@@ -1394,7 +1394,7 @@ function MinerPaymentHistory(pge){
 		'<div id="MinerPaymentsTable" class="C3'+mde+'">'+$I['load']+'</div></div>'+
 		'<input type="hidden" id="MinerPaymentsPage" value="'+pge+'">';
 		
-	api('pay', addr, pge).then(function(){
+	api('pay', pge, 10).then(function(){
 		Tbl('MinerPaymentsTable', 'pay', pge, 10);
 	}).catch(function(err){console.log(err)});
 }
@@ -1523,11 +1523,7 @@ var api = function(m, key, xid){
 	}else if(m === 'account'){
 		url = 'miner/'+addr+'/stats';
 	}else if(m === 'pay'){
-		url = 'miner/'+key+'/payments';
-		if(xid){
-			xid = (xid > 1) ? (xid - 1) * 10 : 0;
-			url += '?page='+xid+'&limit=10';
-		}
+		url = 'miner/'+addr+'/payments?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'workers' && (isEmpty($A[addr]['wrkrs']) || now > ($A[addr]['wrkrs_updt'] + 120))){
 		url = 'miner/'+addr+'/chart/hashrate/allWorkers';
 	}else if(m === 'workerdetail'){
@@ -1585,7 +1581,7 @@ var api = function(m, key, xid){
 								};
 							}else if(m === 'pay'){
 								$D[m][key][i] = {
-									'ts':v['ts'],
+									'ts':v['ts'] * 1000,
 									'hash':v['txnHash'],
 									'amnt':Rnd((v['amount'] / COINS[$Q['cur']['port']].divisor), 8)
 								};
