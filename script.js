@@ -76,26 +76,26 @@ var	mde = 'l',
 			'MinerShares':{'lbl':'Valid / Invalid Shares', 'def':'-- / --', 'var':'shares'},
 		},
 		'tbl':{
-			'poolpay':{
-				'tme':{'lbl':'Payment Sent', 'cls':'condte'},
-				'payees':{'lbl':'Payees', 'cls':'consmall'},
-				'amnt':{'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
-				'fee':{'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
-				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'},
-			},
-			'blocks':{
-				'tme':{'lbl':'Block Mined', 'cls':'condte'},
-				'togo':{'lbl':'Maturity', 'cls':'consmall'},
-				'eff':{'lbl':'Effort', 'cls':'continy'},
-				'reward':{'lbl':'Reward ('+$Q['cur']['sym']+')', 'cls':'consmall'},
-				'height':{'lbl':'Height', 'cls':'consmall'},
-				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'block'}	
-			},
-			'pay':{
-				'tme':{'lbl':'Payment Sent', 'cls':'condte'},
-				'amnt':{'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
-				'hash':{'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'}
-			}
+			'poolpay':[
+				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
+				{'name':'payees', 'lbl':'Payees', 'cls':'consmall'},
+				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
+				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'},
+			],
+			'blocks':[
+				{'name':'tme', 'lbl':'Block Mined', 'cls':'condte'},
+				{'name':'togo', 'lbl':'Maturity', 'cls':'consmall'},
+				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
+				{'name':'reward', 'lbl':'Reward ('+$Q['cur']['sym']+')', 'cls':'consmall'},
+				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'block'}	
+			],
+			'pay':[
+				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
+				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'hsh':'y', 'typ':'tx'}
+			]
 		},
 		'trn':{
 			'avgeff':'Avg Effort',
@@ -264,6 +264,7 @@ var addr = UrlVars()['addr'] || '',
 	miner_setup_open = false,
 	blocks_page_size	= 15,
 	poolpay_page_size 	= 15,
+	blocks_port		= $Q['cur']['port'],
 	$WM = { 			//Web Miner
 		'enabled': false,
 		'addr': '',
@@ -298,10 +299,10 @@ var addr = UrlVars()['addr'] || '',
 	},
 	$D = {				//Data Digests
 		'news':{},
-		'blocks':{},
+		'blocks':[],
+		'poolpay':[],
 		'poolstats':{},
 		'pay':{},
-		'poolpay':{},
 		'netstats':{},
 		'hashconv':{
 			'GH':1000000000,
@@ -327,10 +328,11 @@ var addr = UrlVars()['addr'] || '',
 
 //Event Binding
 window.addEventListener('resize', function(){Resize()});
+
 document.body.addEventListener('change', function(e){
 	var id = [
 		'#HeadMenu select', '#TblPagBox', '#AddrField', '#AddrRecent select', '#MinerCalcHsh', '#MinerCalcUnit', '#MinerCalcFld',
-		'#HashSelect', '#PageSize', '#AutoPayFld'
+		'#HashSelect', '#PageSize', '#BlockType', '#AutoPayFld'
 	];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.matches(id[i]);
@@ -363,6 +365,10 @@ document.body.addEventListener('change', function(e){
 					poolpay_page_size = ps;
 					dta_Payments(1);
 				}
+			}else if(id[i] === '#BlockType'){
+				var port = parseInt(document.querySelector(id[i]).value);
+				blocks_port = port;
+				dta_Blocks(1);
 			}else if(id[i] === '#AutoPayFld'){
 				AutoPayCheck();
 			}
@@ -627,10 +633,25 @@ function TimerLoading(sts){
 	}
 }
 function TimerUpdateData(){
-	var l = document.getElementById('MinerHashes');
-	if(l){
-		var typ = (l.innerHTML !== '--') ? 'refresh' : '';
-		Dash_load(typ);
+	switch (document.querySelector('#HeadMenu select').value) {
+		case 'home': {
+			var l = document.getElementById('MinerHashes');
+			if (l) {
+				var typ = (l.innerHTML !== '--') ? 'refresh' : '';
+				Dash_load(typ);
+			}
+		} break;
+
+		case 'blocks': {
+			var 	t = document.getElementById('TblPagBox'),	
+				pge = parseInt(t.value.replace(/\D/g,''));
+			dta_Blocks(pge);
+		} break;
+		case 'payments': {
+			var 	t = document.getElementById('TblPagBox'),	
+				pge = parseInt(t.value.replace(/\D/g,''));
+			dta_Payments(pge);
+		} break;
 	}
 
 	api('netstats').then(function(){
@@ -641,7 +662,9 @@ function TimerUpdateData(){
 			var ph = HashConv($D['poolstats']['hash']);
 			document.getElementById('PoolHash').innerHTML = ph['num'] + ' ' + ph['unit'];
 			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D['poolstats']['roundhashes'] / $D['netstats']['diff'], 2, 'txt') + "%";
-			document.getElementById('BlockCount').innerHTML = $D['poolstats']['blocks'] + $D['poolstats']['altblocks'];
+			document.getElementById('BlockCount').innerHTML =
+				'<span title="' + $D['poolstats']['blocks_found'] + ' ' + $Q['cur']['nme'] + ' blocks and ' + $D['poolstats']['altblocks_found'] + ' altcoin blocks">' +
+				($D['poolstats']['blocks_found'] + $D['poolstats']['altblocks_found']) + '</span>';
 			document.getElementById('AccountCount').innerHTML = $D['poolstats']['accounts'];
 			document.getElementById('PaymentsMade').innerHTML = $D['poolstats']['payments'];
 			updateTimer = $Q['timer'];
@@ -667,6 +690,7 @@ function TimerUpdateData(){
 			});
 		}
 	}
+
 }
 function Resize(){
 	clearTimeout(resizeTimer);
@@ -1374,11 +1398,21 @@ function MinerPaymentHistory(pge){
 //Other Pages
 function dta_Blocks(pge){
 	api('poolstats').then(function(){
-		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['blocks'])+' Blocks Found';
+		var bins = '<option value="0"' + (blocks_port == 0 ? " selected" : "") + '>Altcoins</option>';
+		Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
+			var coin = COINS[port];
+			bins += '<option value="' + port + '"' + (port == blocks_port ? " selected" : "") + '>' + coin.name + '</option>';
+		});
+		var blocks_found = blocks_port ? $D['poolstats']['port_blocks_found'][blocks_port] : $D['poolstats']['altblocks_found'];
+		document.getElementById('PageTopL').innerHTML = Num(blocks_found)+' <select id="BlockType" class="FrmElem txttny C0'+mde+' C1bk">' + bins + '</select> Blocks <span id="BlockEffort"></span>';
 		api('netstats').then(function(){
 			document.getElementById('PageBot').innerHTML = $I['load'];
 			api('blocks', pge, blocks_page_size).then(function(){
 				Tbl('PageBot', 'blocks', pge, blocks_page_size);
+				var eff = 0, bnum = 0;
+				if ($D['blocks'][pge]) $D['blocks'][pge].forEach(function(b) { eff += b['eff']; ++ bnum; });
+				var eff_avg = bnum ? Rnd(eff / bnum) : 0;
+				document.getElementById('BlockEffort').innerHTML = '(<span class="'+(eff_avg > 100 ? 'C4' : 'C5')+'">'+Perc(eff_avg)+'</span> effort on this page)'
 			}).catch(function(err){console.log(err)});
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
@@ -1470,7 +1504,13 @@ var api = function(m, key, xid){
 	if(m === 'news' && now > ($U[m] + 3600)){
 		url = 'pool/motd';
 	}else if(m === 'blocks'){
-		url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
+		if (blocks_port == $Q['cur']['port']) {
+			url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
+		} else if (blocks_port) {
+			url = 'pool/coin_altblocks/' + blocks_port + '?page='+(key - 1)+'&limit='+xid;
+		} else {
+			url = 'pool/altblocks?page='+(key - 1)+'&limit='+xid;
+		}
 	}else if(m === 'netstats' && now > ($U[m] + 180)){
 		url = 'network/stats';
 	}else if(m === 'poolpay'){
@@ -1522,15 +1562,16 @@ var api = function(m, key, xid){
 					if(m === 'news'){
 						$D[m] = d;
 					}else if(['blocks','pay','poolpay'].indexOf(m) >= 0){
-						$D[m] = {};
+						$D[m][key] = [];
 						for(i = 0; i < dcnt; i++){
 							var v = d[i], tme = Rnd(v['ts'] / 1000);
 							if(m === 'blocks'){
 								if(m === 'blocks'){
 									var val = (v['valid'] == true) ? 't' : 'f';
-									$D[m][i] = {
+									$D[m][key][i] = {
 										'tme':tme,
 										'hash':v['hash'],
+										'port':v['port'],
 										'height':v['height'],
 										'reward':Rnd((v['value'] / 1000000000000), 8, 'txt'),
 										'eff':Rnd(v['shares'] / v['diff'] * 100),
@@ -1538,13 +1579,13 @@ var api = function(m, key, xid){
 									};
 								}
 							}else if(m === 'pay'){
-								$D[m][i] = {
+								$D[m][key][i] = {
 									'tme':v['ts'],
 									'hash':v['txnHash'],
 									'amnt':Rnd((v['amount'] / 1000000000000), 8)
 								};
 							}else if(m === 'poolpay'){
-								$D[m][i] = {
+								$D[m][key][i] = {
 									'tme':tme,
 									'hash':v['hash'],
 									'payees':v['payees'],
@@ -1560,8 +1601,9 @@ var api = function(m, key, xid){
 						};
 					}else if(m === 'poolstats'){
 						$D[m] = {
-							'blocks':d['pool_statistics']['totalBlocksFound'],
-							'altblocks':d['pool_statistics']['totalAltBlocksFound'],
+							'port_blocks_found': d['pool_statistics']['altBlocksFound'],
+							'blocks_found': d['pool_statistics']['totalBlocksFound'],
+							'altblocks_found':d['pool_statistics']['totalAltBlocksFound'],
 							'payments':d['pool_statistics']['totalPayments'],
 							'accountspaid':d['pool_statistics']['totalMinersPaid'],
 							'usd_price':d['pool_statistics']['price']['usd'],
@@ -1572,6 +1614,7 @@ var api = function(m, key, xid){
 							'roundhashes':d['pool_statistics']['roundHashes'],
 							'min_block_reward':d['pool_statistics']['minBlockRewards'][$Q['cur']['port']],
 						};
+						$D[m]['port_blocks_found'][$Q['cur']['port']] = d['pool_statistics']['totalBlocksFound'];
 						$U['poolstats'] = now;
 					}else if(m === 'account'){
 						if(d && d['totalHashes'] && d['totalHashes'] > 0){
@@ -1708,85 +1751,72 @@ function Tbl(tar, typ, pge, lim){
 		ins = '<div class="WingPanel"><table class="txt"><tr class="txttny">',
 		rows = 0;
 	
-	for(var k in $$['tbl'][typ]){
-		ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+$$['tbl'][typ][k]['lbl']+'</td>';
-	}
+	$$['tbl'][typ].forEach(function(t) { ins += '<td class="'+t['cls']+'">'+t['lbl']+'</td>'; });
 	ins += '</tr>';
 
-	if($D[typ]){
-		for(var i = 0; i < lim; i++){
-			if($D[typ][i]){
-				row = (i % 2 === 0) ? 'ROW1' : 'ROW0';
-				ins += '<tr class="'+row+'">';
-				for(var k in $$['tbl'][typ]){
-					var val = '';
-					if($D[typ] && $D[typ][i] && $D[typ][i][k]) val = $D[typ][i][k];
-					if(k === 'tme'){
-						val = Ago(val, 'y');
-					}else if(k === 'height'){
-						val = Num(val);
-					}else if(k === 'eff'){
-						var clr = (val > 100) ? 'C4' : 'C5';
-						val = '<span class="'+clr+'">'+Perc(val)+'</span>';
-					}else if(k === 'togo'){
-						val = BlockToGo($D[typ][i]['height'], $D[typ][i]['val']);
-					}else if(k === 'hash'){
-						if($$['tbl'][typ]['hash'] && $$['tbl'][typ]['hash']['hsh'] === 'y'){
-							val = hashToLink(val, $Q['cur']['port'], $$['tbl'][typ]['hash']['typ']);
-						}
-					}
-					ins += '<td class="'+$$['tbl'][typ][k]['cls']+'">'+val+'</td>';
+	if ($D[typ][pge]) $D[typ][pge].forEach(function(d) {
+		row = (rows % 2 === 0) ? 'ROW1' : 'ROW0';
+		ins += '<tr class="'+row+'">';
+		$$['tbl'][typ].forEach(function(t) {
+			var n = t['name'];
+			var val = '';
+			if (d[n]) {
+				val = d[n];
+				switch (n) {
+					case 'tme':	val = Ago(val, 'y'); break;
+					case 'height':	val = Num(val); break;
+					case 'eff': 	val = '<span class="'+(val > 100 ? 'C4' : 'C5')+'">'+Perc(val)+'</span>'; break;
+					case 'togo':	val = BlockToGo(d['height'], d['val']); break;
+					case 'hash':	val = hashToLink(val, d['port'] ? d['port'] : $Q['cur']['port'], t['typ']);
 				}
-				ins += '</tr>';
-				++ rows;
 			}
-		}
-	}
+			ins += '<td class="'+t['cls']+'">'+val+'</td>';
+		});
+		ins += '</tr>';
+		++ rows;
+	});
 	ins += '</table>'+
 		'<div id="'+tar+'-WBL" class="WingBtnL rot180 o3 nopoint C2bk C0fl'+mde+'">'+$I['arrow']+'</div>'+
 		'<div id="'+tar+'-WBR" class="WingBtnR o3 nopoint C2bk C0fl'+mde+'">'+$I['arrow']+'</div>'+
 		'</div>';
 		
 	document.getElementById(tar).innerHTML = ins;
-	if($D[typ]){
-		//var tr = (typ === 'pay') ? 'tx' : '';
-		//console.log(tr);
-		var pgs = 0;
-		if(tar === 'PageBot'){
-			var size, page_size;
-			if (typ === 'poolpay') {
-				size = $D['poolstats']['payments'];
-				page_size = poolpay_page_size;
-			} else if (typ === 'blocks') {
-				size = $D['poolstats']['blocks'];
-				page_size = blocks_page_size;
-			}
-			var ps_ins = "";
-			$$['page_sizes'].forEach(function(ps){
-				ps_ins += '<option value="' + ps + '"' + (ps == page_size ? " selected" : "") + '>' + ps + '</option>';
-			});
-			pgs = Math.ceil(size / page_size);
-			document.getElementById('PageTopR').innerHTML =
-				'<span class="txtmed C3'+mde+'">Page</span>'+
-				'<input id="TblPagBox" type="text" class="FrmElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'">'+
-				'<span class="txtmed C3'+mde+'">of '+Num(pgs)+'</span> '+
-				'<span class="txtmed C3'+mde+'">(<select id="PageSize" class="FrmElem txttny C0'+mde+' C1bk" value="' + page_size + '">' + ps_ins + '</select> per page)</span>';
-			PaginationBoxWidth();
+	if (!$D[typ][pge]) return;
+	var pgs = 0;
+	if(tar === 'PageBot'){
+		var size, page_size;
+		if (typ === 'poolpay') {
+			size = $D['poolstats']['payments'];
+			page_size = poolpay_page_size;
+		} else if (typ === 'blocks') {
+			size = blocks_port ? $D['poolstats']['port_blocks_found'][blocks_port] : $D['poolstats']['altblocks_found'];
+			page_size = blocks_page_size;
 		}
-		if(rows > 0){
-			var	BL = document.getElementById(tar+'-WBL'),
-				BR = document.getElementById(tar+'-WBR');
-			
-			if(pge > 1){
-				BL.className = 'WingBtnL PagBtn rot180 C1bk C0fl'+mde;
-				BL.setAttribute('data-page', pge - 1);
-				BL.setAttribute('data-func', typ);
-			}
-			if((pgs && pge < pgs) || (!pgs && rows == lim)){
-				BR.className = 'WingBtnR PagBtn C1bk C0fl'+mde;
-				BR.setAttribute('data-page', pge + 1);
-				BR.setAttribute('data-func', typ);
-			}
+		var ps_ins = "";
+		$$['page_sizes'].forEach(function(ps){
+			ps_ins += '<option value="' + ps + '"' + (ps == page_size ? " selected" : "") + '>' + ps + '</option>';
+		});
+		pgs = Math.ceil(size / page_size);
+		document.getElementById('PageTopR').innerHTML =
+			'<span class="txtmed C3'+mde+'">Page</span>'+
+			'<input id="TblPagBox" type="text" class="FrmElem txttny C1bk C0'+mde+'" value="'+pge+'" data-func="'+typ+'" autocomplete="off" data-tot="'+pgs+'">'+
+			'<span class="txtmed C3'+mde+'">of '+Num(pgs)+'</span> '+
+			'<span class="txtmed C3'+mde+'">(<select id="PageSize" class="FrmElem txttny C0'+mde+' C1bk">' + ps_ins + '</select> per page)</span>';
+		PaginationBoxWidth();
+	}
+	if(rows > 0){
+		var	BL = document.getElementById(tar+'-WBL'),
+			BR = document.getElementById(tar+'-WBR');
+		
+		if(pge > 1){
+			BL.className = 'WingBtnL PagBtn rot180 C1bk C0fl'+mde;
+			BL.setAttribute('data-page', pge - 1);
+			BL.setAttribute('data-func', typ);
+		}
+		if((pgs && pge < pgs) || (!pgs && rows == lim)){
+			BR.className = 'WingBtnR PagBtn C1bk C0fl'+mde;
+			BR.setAttribute('data-page', pge + 1);
+			BR.setAttribute('data-func', typ);
 		}
 	}
 }
