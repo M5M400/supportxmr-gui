@@ -1414,11 +1414,11 @@ function dta_Coins(){
 				'poolhashrate':		'<span title="' + Rnd(port_hashrate / $D.netstats[port].difficulty * 100 * coin.time, 2, 'txt') +
 							'% of coin world hashrate">' + HashConvStr(port_hashrate * hash_factor, coin.unit) + '</span>',
 				'worldhashrate':	HashConvStr($D.netstats[port].difficulty / coin.time * hash_factor, coin.unit),
-				'height':		$D.netstats[port].height,
+				'height':		'<a class="C1 hov" target="_blank" href="' + COINS[port].url + '">' + $D.netstats[port].height + '</a>',
 				'pplns':		Rnd(($D.poolstats.pplnsPortShares[port] ? $D.poolstats.pplnsPortShares[port] : 0) * 100, 2, 'txt') + '%',
 				'notes':		'<div class="C4" title="' + escapeHtml($D.poolstats.coinComment[port]) + '">' + escapeHtml($D.poolstats.coinComment[port]) + '</div>',
 			};
-			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'height', 'pplns'].forEach(function(key) {
+			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'pplns'].forEach(function(key) {
 				table_coin[key] = '<span class="C4">' + table_coin[key] + '</span>';
 			});
 			$D.coins[0].push(table_coin);
