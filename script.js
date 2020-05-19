@@ -784,9 +784,12 @@ function Navigate(tar){
 		if(tar && ['coins','blocks','payments','help'].indexOf(tar) >= 0){
 			n = 'short';
 			m += ' short';
-			h = '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div><div id="PageTopR" class="right"></div></div>'+
-				'<div class="pbar"></div>'+
-				'<div id="PageBot" class="LR80 C3'+mde+' txt shim10">'+$I['load']+'</div>';
+			if (tar != 'coins') {
+				h += '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div><div id="PageTopR" class="right"></div></div>';
+			} else {
+				h += '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div></div>';
+			}
+			h += '<div class="pbar"></div><div id="PageBot" class="LR80 C3'+mde+' txt shim10">'+$I['load']+'</div>';
 			d += ' hide';
 		}else{
 			tar = 'home';
@@ -1408,13 +1411,14 @@ function dta_Coins(){
 				'worldhashrate':	HashConvStr($D['netstats'][port]['difficulty'] / coin['time'] * (coin.factor ? coin.factor : 1), coin.unit),
 				'height':		$D['netstats'][port]['height'],
 				'pplns':		Rnd($D['poolstats']['pplnsPortShares'][port] ? $D['poolstats']['pplnsPortShares'][port] * 100 : 0, 2, 'txt') + '%',
-				'notes':		'<div class="C4 HashTrun">' + $D['poolstats']['coinComment'][port] + '</div>',
+				'notes':		'<div class="C4" title="' + escapeHtml($D['poolstats']['coinComment'][port]) + '">' + escapeHtml($D['poolstats']['coinComment'][port]) + '</div>',
 			};
 			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'height', 'pplns'].forEach(function(key) {
 				table_coin[key] = '<span class="C4">' + table_coin[key] + '</span>';
 			});
 			$D['coins'][0].push(table_coin);
 		});
+		document.getElementById('PageTopL').innerHTML = 'Current PPLNS window length: ' + Rnd($D['poolstats']['pplnsWindowTime'] / 3600, 2, 'txt') + ' hours';
 		Tbl('PageBot', 'coins', 0, 0);
 	}).catch(function(err){console.log(err)}); }).catch(function(err){console.log(err)});
 }
@@ -1751,7 +1755,7 @@ function api_GraphFormat(d, cnt, start){
 function Tbl(tar, typ, pge, lim){
 	var 	txt = (width > 900) ? 'txt' : 'txtsmall',
 		row = 'ROW0',
-		ins = (lim ? '<div class="WingPanel">' : '') + '<table class="txt C3'+mde+'"><tr class="txttny">',
+		ins = (lim ? '<div class="WingPanel">' : '') + '<table class="txt C3'+mde+' scroll"><tr class="txttny">',
 		rows = 0;
 
 	var blocks_count;
@@ -2267,9 +2271,9 @@ function hashToLink(hash, port, type) {
 	if (hash == undefined) return 'none';
 	var url = port in COINS ? COINS[port].url : "";
 	if (port == 11898) {
-		return '<div class="HashTrun"><a class="C1 hov" target="_blank" href="' + url + '/block.html?hash=' + hash + '">' + hash + '</a></div>';
+		return '<a class="C1 hov" target="_blank" href="' + url + '/block.html?hash=' + hash + '">' + hash + '</a>';
 	} else {
-		return '<div class="HashTrun"><a class="C1 hov" target="_blank" href="' + url + '/' + type + '/' + hash + '">' + hash + '</a></div>';
+		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '/' + hash + '">' + hash + '</a>';
 	}
 };
 function difficultyToHashRate(hashrate, port) {
