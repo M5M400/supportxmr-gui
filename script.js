@@ -1186,7 +1186,7 @@ function MinerPayments(typ){
 				'<table class="C3l noborder"><tr>'+
 					'<td width="50%" class="center">'+
 						'<input type="text" id="AutoPayFld" class="center txt C0bk'+mde+' C3'+mde+' C1br" autocomplete="off" placeholder="Auto Pay Amount...">'+
-						'<div class="pbar"></div><span class="txttny C2 noselect">Auto pay threshold (XMR)</span>'+
+						'<div class="pbar"></div><span class="txttny C2 noselect">Auto pay ' + $Q.cur.sym + ' threshold</span>'+
 					'</td>'+
 					'<td width="50%" class="center">'+
 						'<div id="AutoPayBtn" class="BtnElem txtmed C1bk C2bk_hov o5">'+$$.trn.set+'</div>'+
@@ -1354,7 +1354,7 @@ function WebMiner(){
 function fee_txt(threshold) {
 	var fee = Math.max(0, $Q.pay.max_fee - ( (threshold - $Q.pay.min_auto) * ($Q.pay.max_fee / ($Q.pay.zero_fee_pay - $Q.pay.min_auto))));
 	var percent = 100 * (fee / threshold);
-	return "With " + Rnd(fee, 6, 'txt') + " (" + Rnd(percent, 2, 'txt') + "%) XMR tx fee";
+	return '+' + Rnd(fee, 4, 'txt') + ' (' + Rnd(percent, 2, 'txt') + '%) ' + $Q.cur.sym + ' tx fee';
 }
 
 function AutoPayCheck(){

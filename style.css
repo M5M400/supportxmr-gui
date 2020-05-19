@@ -231,7 +231,7 @@ header{height:44px}
 #AutoPayBtn{width:95%;height:32px}
 #PaymentHistoryBtn,#PaymentHistoryBtnClose{width:95%;height:32px}
 #EmailSubscribeBtn{width:95%;height:32px}
-#AutoPayFld,#EmailFROM,#EmailTO{width:95%;height:32px;border-width:1px;border-style:solid;padding:5px}
+#AutoPayFld,#EmailFROM,#EmailTO{width:90%;height:22px;border-width:1px;border-style:solid;padding:3px}
 #AutoPayBtn .preload{display:inline-block;height:22px;width:22px}
 
 #MinerPaymentsTable{min-height:100px}
@@ -309,13 +309,13 @@ textarea { resize: none; }
 }
 @media all and (max-width:1100px){
 	.LR80{width:82%;left:9%}
-	#AutoPayFld{padding:6px}
+/*	#AutoPayFld,#EmailFROM,#EmailTO{padding:6px}*/
 	.txt{font-size:14px}
 }
 @media all and (max-width:900px){
 	.txtbig{font-size:24px}
 	.txtmed{font-size:18px}
-	#AutoPayBtn,#PaymentHistory{padding:6px}
+/*	#AutoPayBtn,#PaymentHistory{padding:6px}*/
 	.txtsmall{font-size:12px;line-height:15px}
 	#MinerPaymentsStage{width:80%;left:10%}
 	.condte{width:75px}
@@ -332,8 +332,8 @@ textarea { resize: none; }
 	.Split3L{width:50%!important;padding:6px 0}
 	.Split3R{width:50%!important;padding:6px 0}
 	.Split3{width:100%!important;padding:6px 0}
-	#MinerPayments.Opened{height:300px}
-	#MinerPayments.OpenedBig{height:600px}
+	#MinerPayments.Opened{height:320px}
+	#MinerPayments.OpenedBig{height:620px}
 }
 @media all and (max-width:750px){
 	.helpcontent{width:100%}
@@ -368,8 +368,8 @@ textarea { resize: none; }
 	.LR85{width:95%;left:2.5%}
 	.Split3L{width:100%!important;padding:6px 0}
 	.Split3R{width:100%!important;padding:6px 0}
-	#MinerPayments.Opened{height:360px}
-	#MinerPayments.OpenedBig{height:660px}
+	#MinerPayments.Opened{height:400px}
+	#MinerPayments.OpenedBig{height:700px}
 }
 
 /*Fix svg text classes*/
