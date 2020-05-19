@@ -658,15 +658,15 @@ function TimerUpdateData(){
 		api('poolstats').then(function(){
 			ErrAlert('X');
                         document.getElementById('WorldHash').innerHTML  = HashConvStr(difficultyToHashRate($D.netstats.difficulty, mport));
-			document.getElementById('PoolHash').innerHTML   = HashConvStr($D.poolstats.hashRate);
+			document.getElementById('PoolHash').innerHTML   = '<span class="nav" data-tar="coins">' + HashConvStr($D.poolstats.hashRate) + '</span>';
 			document.getElementById('CurrEffort').innerHTML =
-				'<span title="' + $D.poolstats.roundHashes  + ' / ' + $D.netstats.difficulty + '">' +
+				'<span title="' + $D.poolstats.roundHashes  + ' / ' + $D.netstats.difficulty + '" class="nav" data-tar="coins">' +
 				Rnd(100 * $D.poolstats.roundHashes / $D.netstats.difficulty, 2, 'txt') + "%</span>";
 			document.getElementById('BlockCount').innerHTML =
-				'<span title="' + $D.poolstats.totalBlocksFound + ' ' + $Q.cur.nme + ' blocks and ' + $D.poolstats.totalAltBlocksFound + ' altcoin blocks">' +
+				'<span title="' + $D.poolstats.totalBlocksFound + ' ' + $Q.cur.nme + ' blocks and ' + $D.poolstats.totalAltBlocksFound + ' altcoin blocks" class="nav" data-tar="blocks">' +
 				($D.poolstats.totalBlocksFound + $D.poolstats.totalAltBlocksFound) + '</span>';
 			document.getElementById('AccountCount').innerHTML = $D.poolstats.miners;
-			document.getElementById('PaymentsMade').innerHTML = $D.poolstats.totalPayments;
+			document.getElementById('PaymentsMade').innerHTML = '<span class="nav" data-tar="payments">' + $D.poolstats.totalPayments + '</span>';
 			updateTimer = $Q.timer;
 			$C.TimerText.innerHTML = updateTimer;
 			LoadTimer();
