@@ -880,6 +880,7 @@ function Dash_load(typ){
 				l.innerHTML = $I.load;
 			}
 			api('account').then(function(){
+				if (!is_home_page()) return;
 				if($A[addr] && $A[addr].hashes){
 					g.classList.remove('hide');
 					for(var k in $$.pay){
@@ -906,6 +907,7 @@ function Dash_load(typ){
 					MultipleAddress();
 					
 					api('workers', addr).then(function(){
+						if (!is_home_page()) return;
 						var wcn = ($A[addr].wrkrs && numObj($A[addr].wrkrs) > 0) ? numObj($A[addr].wrkrs) : 0,
 							plr = (wcn === 1) ? '' : 's';
 							
@@ -1399,6 +1401,8 @@ function dta_Coins(){
 		$D.poolstats.activePorts.forEach(function(port) { active_ports[port] = 1; });
 		Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
 			var coin = COINS[port];
+			var port_hashrate = $D.poolstats.portHash[port] ? $D.poolstats.portHash[port] : 0;
+			var hash_factor   = coin.factor ? coin.factor : 1;
 			var table_coin = {
 				'name':			coin.name,
 				'algo':			$D.poolstats.portCoinAlgo[port],
@@ -1407,10 +1411,11 @@ function dta_Coins(){
 				'diff':			$D.netstats[port].difficulty,
 				'reward_perc':		Rnd($D.poolstats.minBlockRewards[port] / $D.poolstats.minBlockRewards[mport] * 100, 2, 'txt') + '%',
 				'accounts':		$D.poolstats.portMinerCount[port] ? $D.poolstats.portMinerCount[port] : 0,
-				'poolhashrate':		'<span title="' + Rnd($D.poolstats.portHash[port] ? $D.poolstats.portHash[port] / $D.netstats[port].difficulty * 100 * coin.time : 0, 2, 'txt') + '% of coin world hashrate">' + HashConvStr($D.poolstats.portHash[port] ? $D.poolstats.portHash[port] * (coin.factor ? coin.factor : 1) : 0, coin.unit) + '</span>',
-				'worldhashrate':	HashConvStr($D.netstats[port].difficulty / coin.time * (coin.factor ? coin.factor : 1), coin.unit),
+				'poolhashrate':		'<span title="' + Rnd(port_hashrate / $D.netstats[port].difficulty * 100 * coin.time, 2, 'txt') +
+							'% of coin world hashrate">' + HashConvStr(port_hashrate * hash_factor, coin.unit) + '</span>',
+				'worldhashrate':	HashConvStr($D.netstats[port].difficulty / coin.time * hash_factor, coin.unit),
 				'height':		$D.netstats[port].height,
-				'pplns':		Rnd($D.poolstats.pplnsPortShares[port] ? $D.poolstats.pplnsPortShares[port] * 100 : 0, 2, 'txt') + '%',
+				'pplns':		Rnd(($D.poolstats.pplnsPortShares[port] ? $D.poolstats.pplnsPortShares[port] : 0) * 100, 2, 'txt') + '%',
 				'notes':		'<div class="C4" title="' + escapeHtml($D.poolstats.coinComment[port]) + '">' + escapeHtml($D.poolstats.coinComment[port]) + '</div>',
 			};
 			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'height', 'pplns'].forEach(function(key) {
@@ -1895,13 +1900,16 @@ function PaginationBoxWidth(){
 	b.value = val;
 }
 //Graphing
+function is_home_page() {
+	return document.querySelector('#HeadMenu select').value == 'home';
+}
 function Graph_Miner_init(){
 	var m = document.getElementById('MinerGraph');
 	if(m != null && addr && $A[addr]){
 		m.innerHTML = $I.load;
 		if(isEmpty($A[addr].stats)){
 			api('workers').then(function(){
-				Graph_Miner();
+				if (is_home_page()) Graph_Miner();
 			}).catch(function(err){console.log(err)});
 		}else{
 			Graph_Miner();
