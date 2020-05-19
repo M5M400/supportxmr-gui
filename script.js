@@ -820,7 +820,7 @@ function Dash_init(){
 	var $S = ['SplitL', 'SplitR'],
 		ins = '<div id="News" class="hide"><div id="NewsCard" class="LR85 C0bk'+mde+' C3'+mde+' shimtop20"></div></div>'+
 		'<div id="MinerPayments"></div>'+
-		'<div id="MinerGraph"></div>'+
+		'<div id="MinerGraph" class="clearfix"></div>'+
 		'<div id="MinerDash" class="LR85 txtbig C3'+mde+' hide"></div>'+
 		'<div id="WorkerList" class="LR85 shimtop20 hide"></div>';
 
@@ -914,11 +914,13 @@ function Dash_load(typ){
 							plr = (wcn === 1) ? '' : 's';
 							
 						document.getElementById('MinerWorkerCount').innerHTML = wcn+' Worker'+plr;
+						l.classList.remove('hide');
 						Workers_init();
 					}).catch(function(err){console.log(err)});
 				}else{
 					Dash_reset();
 					m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$.msg.addr_notfound.head+'</div><div class="LR80 txt shim10">'+$$.msg.addr_notfound.text+'</div></div>';
+					l.classList.add('hide');
 					WebMinerSetBtn();
 					MinerSetupScriptsBtn(miner_setup_open);
 				}
@@ -1075,7 +1077,6 @@ function Workers_init(){		///check this, getting called alot
 			cnt++;
 			if(numwrk > 1 && cnt === numwrk) Workers_sort(srt, ord, 'y');
 		}
-		l.classList.remove('hide');
 	}
 }
 function Workers_sort(srt, ord, sts){
@@ -1907,7 +1908,7 @@ function is_home_page() {
 }
 function Graph_Miner_init(){
 	var m = document.getElementById('MinerGraph');
-	if(m != null && addr && $A[addr]){
+	if(m != null && addr && $A[addr] && $A[addr].hashes){
 		m.innerHTML = $I.load;
 		if(isEmpty($A[addr].stats)){
 			api('workers').then(function(){
@@ -1964,7 +1965,7 @@ function Graph_Miner(){
 			}
 		}	
 
-		ins = '<svg viewBox="0 0 '+width+' '+height+'" class="chart">'+
+		ins = '<svg viewBox="0 0 '+width+' '+height+'" class="chart mchart">'+
 			'<defs>'+
 				'<linearGradient id="M"><stop offset="0%" stop-color="#'+$Q.clr.secondary+'" stop-opacity="0.2" /><stop offset="15%" stop-color="#'+$Q.clr.secondary+'" stop-opacity="0.3" /><stop offset="100%" stop-color="#'+$Q.clr.secondary+'" stop-opacity="1" /></linearGradient>'+
 			'</defs>';

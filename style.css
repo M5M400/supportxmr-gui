@@ -166,13 +166,14 @@ select,.select-point{cursor:pointer}
 #MinerGraph .ToolTip{fill:transparent;cursor:default}
 
 .GAlert,#GPop{position:absolute;z-index:9999;top:50%;border-radius:5px;border-width:1px;border-style:solid;box-sizing:border-box}
-.GAlert{width:450px;left:50%;margin-left:-225px;margin-top:-23px;padding:4px}
+.GAlert{width:50%;margin-left:25%;margin-right:25%;margin-top:-23px;padding:4px}
 
 #GPop{width:40%;height:53px;left:5%;margin-top:-27px;padding:4px}
 #GPop.pright{left:55%}
 #GPop table td{width:33%;text-align:center}
 
-#MinerGraph{position:relative;height:150px}
+#MinerGraph{position:relative}
+#MinerGraph .mchart{height:150px}
 #MinerGraph .MinerMsg{padding-top:25px;text-align:center}
 
 /*Header*/
@@ -322,7 +323,7 @@ textarea { resize: none; }
 	.consmall,.continy{width:90px}
 	.continy{width:50px}
 	.WorkerWrap{width:33.33%}
-	#MinerGraph{height:175px}
+	#MinerGraph .mchart{height:175px}
 	#DashPending,#DashPaid{width:80px}
 	#GPop{width:50%}
 	#GPop.pright{left:45%}
@@ -338,7 +339,7 @@ textarea { resize: none; }
 @media all and (max-width:750px){
 	.helpcontent{width:100%}
 	.WorkerWrap{width:50%}
-	#MinerGraph{height:150px}
+	#MinerGraph .mchart{height:150px}
 	#GPop{width:60%}
 	#GPop.pright{left:35%}
 	.LR80{width:86%;left:7%}
