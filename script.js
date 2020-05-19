@@ -54,6 +54,7 @@ var	mde = 'l',
 		},
 		'nav':{
 			'home':'Home',
+			'coins':'Coins',
 			'blocks':'Blocks',
 			'payments':'Payments',
 			'help':'Help'
@@ -77,6 +78,29 @@ var	mde = 'l',
 			'MinerShares':{'lbl':'Valid / Invalid Shares', 'def':'-- / --', 'var':'shares'},
 		},
 		'tbl':{
+			'coins':[
+				{'name':'name', 'lbl':'Name', 'cls':'continy'},
+				{'name':'algo', 'lbl':'Algo', 'cls':'consmall'},
+				{'name':'profit', 'lbl':'Profit', 'tooltip':'Profit per hash in percent', 'cls':'consmall'},
+				{'name':'eff', 'lbl':'Effort', 'tooltip':'Current block effort in percent', 'cls':'continy'},
+				{'name':'reward_perc', 'lbl':'Reward', 'tooltip':'Block reward in percent', 'cls':'consmall'},
+				{'name':'accounts', 'lbl':'Accounts', 'tooltip':'Account (Wallet) Count', 'cls':'continy'},
+				{'name':'poolhashrate', 'lbl':'Hashrate', 'tooltip':'Pool hashrate', 'cls':'consmall'},
+				{'name':'worldhashrate', 'lbl':'World Hash', 'tooltip':'Coin world hashrate', 'cls':'consmall'},
+				{'name':'height', 'lbl':'Top Height', 'cls':'consmall'},
+				{'name':'pplns', 'lbl':'PPLNS', 'tooltip':'Share in last block PPLNS window in percent', 'cls':'continy'},
+				{'name':'notes', 'lbl':'Notes', 'cls':'right'},
+			],
+			'blocks':[
+				{'name':'num', 'lbl':'#', 'cls':'continy'},
+				{'name':'tme', 'lbl':'Found', 'cls':'consmall'},
+				{'name':'coin', 'lbl':'Coin', 'cls':'continy'},
+				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
+				{'name':'reward', 'lbl':'Raw reward', 'tooltip':'Raw block reward in native coin units', 'cls':'consmall'},
+				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'conlong'},
+				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'},
+			],
 			'poolpay':[
 				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
 				{'name':'payees', 'lbl':'Payees', 'cls':'continy'},
@@ -84,20 +108,10 @@ var	mde = 'l',
 				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
 				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'},
 			],
-			'blocks':[
-				{'name':'num', 'lbl':'#', 'cls':'continy'},
-				{'name':'tme', 'lbl':'Found', 'cls':'consmall'},
-				{'name':'coin', 'lbl':'Coin', 'cls':'continy'},
-				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
-				{'name':'reward', 'lbl':'Raw reward', 'cls':'consmall'},
-				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'conlong'},
-				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'}
-			],
 			'pay':[
 				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
 				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'}
+				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'},
 			]
 		},
 		'trn':{
@@ -256,6 +270,7 @@ var COINS = {
 
 var addr = UrlVars()['addr'] || '',
 	pref = 'LNA',
+	mport = $Q['cur']['port'], // shortcut
 	cookieprefix = $Q['pool']['nme'].replace(/[ ,;]/g, ''),
 	resizeTimer,
 	updateTimer = $Q['timer'],
@@ -267,7 +282,7 @@ var addr = UrlVars()['addr'] || '',
 	miner_setup_open = false,
 	blocks_page_size	= 15,
 	poolpay_page_size 	= 15,
-	blocks_port		= $Q['cur']['port'],
+	blocks_port		= mport,
 	$WM = { 			//Web Miner
 		'enabled': false,
 		'addr': '',
@@ -302,12 +317,14 @@ var addr = UrlVars()['addr'] || '',
 	},
 	$D = {				//Data Digests
 		'news':{},
+		'coins':[[]],
 		'blocks':[],
 		'poolpay':[],
 		'poolstats':{},
 		'pay':{},
 		'netstats':{},
 		'hashconv':{
+			'TH':1000000000000,
 			'GH':1000000000,
 			'MH':1000000,
 			'KH':1000,
@@ -343,12 +360,10 @@ document.body.addEventListener('change', function(e){
 			if(id[i] === '#HeadMenu select'){
 				Navigate(document.querySelector(id[i]).value);
 			}else if(id[i] === '#TblPagBox'){
-				var 	pge = parseInt(e.target.value.replace(/\D/g,'')),
-					typ = e.target.getAttribute('data-func');
-				if(typ === 'blocks'){
-					dta_Blocks(pge);
-				}else if(typ === 'poolpay'){
-					dta_Payments(pge);
+				var pge = parseInt(e.target.value.replace(/\D/g,''));
+				switch (e.target.getAttribute('data-func')) {
+					case 'blocks':  dta_Blocks(pge);   break;
+					case 'poolpay': dta_Payments(pge); break;
 				}
 			}else if(id[i] === '#AddrField' || id[i] === '#AddrRecent select'){	
 				addr = document.querySelector(id[i]).value;
@@ -358,19 +373,13 @@ document.body.addEventListener('change', function(e){
 			}else if(id[i] === '#HashSelect'){
 				Dash_load('refresh');
 			}else if(id[i] === '#PageSize'){
-				var	t   = document.getElementById('TblPagBox'),
-					typ = t.getAttribute('data-func'),
-					ps  = parseInt(document.querySelector(id[i]).value);
-				if(typ === 'blocks'){
-					blocks_page_size = ps;
-					dta_Blocks(1);
-				}else if(typ === 'poolpay'){
-					poolpay_page_size = ps;
-					dta_Payments(1);
+				var ps = parseInt(document.querySelector(id[i]).value);
+				switch (document.getElementById('TblPagBox').getAttribute('data-func')) {
+					case 'blocks':  blocks_page_size  = ps; dta_Blocks(1);   break;
+					case 'poolpay': poolpay_page_size = ps; dta_Payments(1); break;
 				}
 			}else if(id[i] === '#BlockType'){
-				var port = parseInt(document.querySelector(id[i]).value);
-				blocks_port = port;
+				blocks_port = parseInt(document.querySelector(id[i]).value);
 				dta_Blocks(1);
 			}else if(id[i] === '#AutoPayFld'){
 				AutoPayCheck();
@@ -438,15 +447,11 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '.nav'){
 				Navigate(el.getAttribute('data-tar'));
 			}else if(id[i] === '.PagBtn'){
-				var	f = el.getAttribute('data-func'),
-					p = parseInt(el.getAttribute('data-page'));
-					
-				if(f === 'poolpay'){
-					dta_Payments(p);
-				}else if(f === 'blocks'){
-					dta_Blocks(p);
-				}else if(f === 'pay'){
-					MinerPaymentHistory(p);
+				var p = parseInt(el.getAttribute('data-page'));
+				switch (el.getAttribute('data-func')) {
+					case 'blocks':  dta_Blocks(p);  break;
+					case 'poolpay': dta_Payments(p); break;
+					case 'pay':     MinerPaymentHistory(p); break;
 				}
 			}else if(id[i] === '.Worker'){
 				Workers_detail(el.getAttribute('data-key'));
@@ -644,32 +649,22 @@ function TimerUpdateData(){
 				Dash_load(typ);
 			}
 		} break;
-
-		case 'blocks': {
-			var 	t = document.getElementById('TblPagBox'),	
-				pge = parseInt(t.value.replace(/\D/g,''));
-			dta_Blocks(pge);
-		} break;
-		case 'payments': {
-			var 	t = document.getElementById('TblPagBox'),	
-				pge = parseInt(t.value.replace(/\D/g,''));
-			dta_Payments(pge);
-		} break;
+		case 'coins':    dta_Coins(); break;
+		case 'blocks':   dta_Blocks(parseInt(document.getElementById('TblPagBox').value.replace(/\D/g,''))); break;
+		case 'payments': dta_Payments(parseInt(document.getElementById('TblPagBox').value.replace(/\D/g,''))); break;
 	}
 
 	api('netstats').then(function(){
 		api('poolstats').then(function(){
 			ErrAlert('X');
-			var wh = HashConv(difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']));
-                        document.getElementById('WorldHash').innerHTML = wh['num'] + ' ' + wh['unit'];
-			var ph = HashConv($D['poolstats']['hash']);
-			document.getElementById('PoolHash').innerHTML = ph['num'] + ' ' + ph['unit'];
-			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D['poolstats']['roundhashes'] / $D['netstats']['diff'], 2, 'txt') + "%";
+                        document.getElementById('WorldHash').innerHTML  = HashConvStr(difficultyToHashRate($D['netstats']['difficulty'], mport));
+			document.getElementById('PoolHash').innerHTML   = HashConvStr($D['poolstats']['hashRate']);
+			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D['poolstats']['roundHashes'] / $D['netstats']['difficulty'], 2, 'txt') + "%";
 			document.getElementById('BlockCount').innerHTML =
-				'<span title="' + $D['poolstats']['blocks_found'] + ' ' + $Q['cur']['nme'] + ' blocks and ' + $D['poolstats']['altblocks_found'] + ' altcoin blocks">' +
-				($D['poolstats']['blocks_found'] + $D['poolstats']['altblocks_found']) + '</span>';
-			document.getElementById('AccountCount').innerHTML = $D['poolstats']['accounts'];
-			document.getElementById('PaymentsMade').innerHTML = $D['poolstats']['payments'];
+				'<span title="' + $D['poolstats']['totalBlocksFound'] + ' ' + $Q['cur']['nme'] + ' blocks and ' + $D['poolstats']['totalAltBlocksFound'] + ' altcoin blocks">' +
+				($D['poolstats']['totalBlocksFound'] + $D['poolstats']['totalAltBlocksFound']) + '</span>';
+			document.getElementById('AccountCount').innerHTML = $D['poolstats']['miners'];
+			document.getElementById('PaymentsMade').innerHTML = $D['poolstats']['totalPayments'];
 			updateTimer = $Q['timer'];
 			$C['TimerText'].innerHTML = updateTimer;
 			LoadTimer();
@@ -786,7 +781,7 @@ function Navigate(tar){
 	});
 	setTimeout(function(){
 		var n = '', m = 'StageFade', h = '', d = 'LR85 C3l';
-		if(tar && ['blocks','payments','help'].indexOf(tar) >= 0){
+		if(tar && ['coins','blocks','payments','help'].indexOf(tar) >= 0){
 			n = 'short';
 			m += ' short';
 			h = '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div><div id="PageTopR" class="right"></div></div>'+
@@ -800,16 +795,15 @@ function Navigate(tar){
 		$C['Stage'].className = m;
 		$C['Stage'].innerHTML = h;
 		$C['Addr'].className = d;
-		
-		if(tar === 'blocks'){
-			dta_Blocks(1);
-		}else if(tar === 'payments'){
-			dta_Payments(1);
-		}else if(tar === 'help'){
-			dta_Help();
-		}else{
-			Dash_init();
-			Dash_load();
+
+		switch (tar) {
+			case 'coins':    dta_Coins();     break;
+			case 'blocks':   dta_Blocks(1);   break;
+			case 'payments': dta_Payments(1); break;
+			case 'help':     dta_Help();      break;
+			default:
+				Dash_init();
+				Dash_load();
 		}
 
 		document.querySelector('#HeadMenu select').value = tar;
@@ -898,9 +892,8 @@ function Dash_load(typ){
 						}
 						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
 					}
-					var mh = HashConv($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']);
 					document.getElementById('MinerHashes').innerHTML = (now - $A[addr]['last']) < 10*60
-						? '<span title="' + Ago($A[addr]['last'], 'y') + '">' + mh['num'] + " " + mh['unit'] + '</span>'
+						? '<span title="' + Ago($A[addr]['last'], 'y') + '">' + HashConvStr($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']) + '</span>'
 						: AgoTooltip($A[addr]['last'], 'y');
 					document.getElementById('MinerShares').innerHTML = '<span title="Invalid shares: ' + $A[addr]['bad_shares'] + '">' + $A[addr]['shares'] + '</span>';
 					document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
@@ -996,8 +989,8 @@ function Dash_calc(){
 	
 	api('netstats').then(function(){
 		api('poolstats').then(function(){
-			var t = h_raw / difficultyToHashRate($D['netstats']['diff'], $Q['cur']['port']) * (24*60*60) / COINS[$Q['cur']['port']].time * $D['poolstats']['min_block_reward'] * f.value;
-			var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats'][$Q['fiat_name'] + "_price"], 2, 'txt');
+			var t = h_raw / difficultyToHashRate($D['netstats']['difficulty'], mport) * (24*60*60) / COINS[mport].time * $D['poolstats']['minBlockRewards'][mport] * f.value;
+			var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats']['price'][$Q['fiat_name']], 2, 'txt');
 			document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'] + " (" + fiat + ")";
 		});
 	});
@@ -1062,13 +1055,12 @@ function Workers_init(){		///check this, getting called alot
 
 		var cnt = 0;
 		for(i = 0; i < s.length; i++){
-			var k = s[i][0];
-			var d = $A[addr]['wrkrs'][k],
+			var 	k = s[i][0],
+				d = $A[addr]['wrkrs'][k],
 				hsh = (d && d['stats'] && d['stats'][0] && d['stats'][0]['hsh']) ? d['stats'][0]['hsh'] : 0;
 			
 			if(hsh > 0){
-				hsh = HashConv(hsh);
-				document.getElementById('WRate-'+k).innerHTML = hsh['num']+' '+hsh['unit'];
+				document.getElementById('WRate-'+k).innerHTML = HashConvStr(hsh);
 				if(d['stats']) Graph_Worker(k);
 			}else{
 				document.querySelector('.Worker[data-key="'+k+'"]').classList.add('C4','C4br');
@@ -1145,9 +1137,8 @@ function Workers_detail(xid){
 				SynchTime($A[addr]['wrkrs'][xid]['stats'][i]['tme']);
 				if($A[addr]['wrkrs'][xid]['stats'][i]['tme'] < timestart) timestart = $A[addr]['wrkrs'][xid]['stats'][i]['tme'];
 			}
-			havg = HashConv(Rnd(avg / cnt, 0));
 			p.innerHTML = '<div id="WorkerPopClose" class="C1fl Btn16 Btn16Corner">'+$I['x']+'</div>'+
-				'<div class="BoxL center">'+havg['num']+' '+havg['unit']+'</div>'+
+				'<div class="BoxL center">' + HashConvStr(Rnd(avg / cnt, 0)) + '</div>'+
 				'<div class="BoxR center">'+AgoTooltip(d['last'], 'y')+'</div>'+
 				'<div class="pbar shim4"></div>'+
 				'<div class="BoxL txttny C2 center">Avg '+(timestart == maxtime ? "n/a" : AgoTooltip(timestart))+'</div>'+
@@ -1339,10 +1330,7 @@ function WebMiner(){
 		        while (sendStack.length > 0) console.log(sendStack.pop());
 		        while (receiveStack.length > 0) console.log(receiveStack.pop());
 			var h = document.getElementById('WebMinerHash');
-			if (h) {
-			        var wh = HashConv((totalhashes - $WM['prev_hash']) / $WM['update_sec']);
-				h.innerHTML = wh['num'] + " " + wh['unit'];
-			}
+			if (h) h.innerHTML = HashConvStr((totalhashes - $WM['prev_hash']) / $WM['update_sec']);
 		        $WM['prev_hash'] = totalhashes;
 		        console.log("Calculated " + totalhashes + " hashes");
 		}, $WM['update_sec'] * 1000);
@@ -1398,17 +1386,48 @@ function MinerPaymentHistory(pge){
 		Tbl('MinerPaymentsTable', 'pay', pge, 10);
 	}).catch(function(err){console.log(err)});
 }
+
 //Other Pages
-function dta_Blocks(pge){
-	api('poolstats').then(function(){
-		var bins = '<option value="0"' + (blocks_port == 0 ? " selected" : "") + '>Altcoins</option>';
+
+function dta_Coins(){
+	api('poolstats').then(function(){ api('netstats').then(function(){
+		$D['coins'][0] = [];
+		var active_ports = {};
+		$D['poolstats']['activePorts'].forEach(function(port) { active_ports[port] = 1; });
 		Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
 			var coin = COINS[port];
-			bins += '<option value="' + port + '"' + (port == blocks_port ? " selected" : "") + '>' + coin.name + '</option>';
+			var table_coin = {
+				'name':			coin['name'],
+				'algo':			$D['poolstats']['portCoinAlgo'][port],
+				'profit':		Number.parseFloat($D['poolstats']['coinProfit'][port] / $D['poolstats']['coinProfit'][mport] * 100).toPrecision(3) + '%',
+				'shares':		$D['poolstats']['currentEfforts'][port],
+				'diff':			$D['netstats'][port]['difficulty'],
+				'reward_perc':		Rnd($D['poolstats']['minBlockRewards'][port] / $D['poolstats']['minBlockRewards'][mport] * 100, 2, 'txt') + '%',
+				'accounts':		$D['poolstats']['portMinerCount'][port] ? $D['poolstats']['portMinerCount'][port] : 0,
+				'poolhashrate':		'<span title="' + Rnd($D['poolstats']['portHash'][port] ? $D['poolstats']['portHash'][port] / $D['netstats'][port]['difficulty'] * 100 * coin['time'] : 0, 2, 'txt') + '% of coin world hashrate">' + HashConvStr($D['poolstats']['portHash'][port] ? $D['poolstats']['portHash'][port] * (coin.factor ? coin.factor : 1) : 0, coin.unit) + '</span>',
+				'worldhashrate':	HashConvStr($D['netstats'][port]['difficulty'] / coin['time'] * (coin.factor ? coin.factor : 1), coin.unit),
+				'height':		$D['netstats'][port]['height'],
+				'pplns':		Rnd($D['poolstats']['pplnsPortShares'][port] ? $D['poolstats']['pplnsPortShares'][port] * 100 : 0, 2, 'txt') + '%',
+				'notes':		'<div class="C4 HashTrun">' + $D['poolstats']['coinComment'][port] + '</div>',
+			};
+			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'height', 'pplns'].forEach(function(key) {
+				table_coin[key] = '<span class="C4">' + table_coin[key] + '</span>';
+			});
+			$D['coins'][0].push(table_coin);
 		});
-		var blocks_found = blocks_port ? $D['poolstats']['port_blocks_found'][blocks_port] : $D['poolstats']['altblocks_found'];
-		document.getElementById('PageTopL').innerHTML = Num(blocks_found)+' <select id="BlockType" class="FrmElem txttny C0'+mde+' C1bk">' + bins + '</select> Blocks <span id="BlockEffort"></span>';
-		api('netstats').then(function(){
+		Tbl('PageBot', 'coins', 0, 0);
+	}).catch(function(err){console.log(err)}); }).catch(function(err){console.log(err)});
+}
+
+function dta_Blocks(pge){
+	api('poolstats').then(function(){ api('netstats').then(function(){
+			var bins = '<option value="0"' + (blocks_port == 0 ? " selected" : "") + '>Altcoins</option>';
+			Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
+				var coin = COINS[port];
+				bins += '<option value="' + port + '"' + (port == blocks_port ? " selected" : "") + '>' + coin.name + '</option>';
+			});
+			var blocks_found = blocks_port ? $D['poolstats']['altBlocksFound'][blocks_port] : $D['poolstats']['totalAltBlocksFound'];
+			document.getElementById('PageTopL').innerHTML = Num(blocks_found)+' <select id="BlockType" class="FrmElem txttny C0'+mde+' C1bk">' + bins + '</select> Blocks <span id="BlockEffort"></span>';
 			document.getElementById('PageBot').innerHTML = $I['load'];
 			api('blocks', pge, blocks_page_size).then(function(){
 				Tbl('PageBot', 'blocks', pge, blocks_page_size);
@@ -1417,13 +1436,12 @@ function dta_Blocks(pge){
 				var eff_perc = bnum ? Rnd(eff / bnum * 100) : 0;
 				document.getElementById('BlockEffort').innerHTML = '(<span class="'+(eff_perc > 100 ? 'C4' : 'C5')+'">'+Perc(eff_perc)+'</span> effort on this page)'
 			}).catch(function(err){console.log(err)});
-		}).catch(function(err){console.log(err)});
-	}).catch(function(err){console.log(err)});
+	}).catch(function(err){console.log(err)}); }).catch(function(err){console.log(err)});
 }
 function dta_Payments(pge){
 	document.getElementById('PageBot').innerHTML = $I['load'];
 	api('poolstats').then(function(){
-		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['payments'])+' Payments to '+Num($D['poolstats']['accountspaid'])+' Miners';
+		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['totalPayments'])+' Payments to '+Num($D['poolstats']['totalMinersPaid'])+' Miners';
 		api('poolpay', pge, poolpay_page_size).then(function(){
 			Tbl('PageBot', 'poolpay', pge, poolpay_page_size);
 		}).catch(function(err){console.log(err)});
@@ -1507,7 +1525,7 @@ var api = function(m, key, xid){
 	if(m === 'news' && now > ($U[m] + 3600)){
 		url = 'pool/motd';
 	}else if(m === 'blocks'){
-		if (blocks_port == $Q['cur']['port']) {
+		if (blocks_port == mport) {
 			url = 'pool/blocks?page='+(key - 1)+'&limit='+xid;
 		} else if (blocks_port) {
 			url = 'pool/coin_altblocks/' + blocks_port + '?page='+(key - 1)+'&limit='+xid;
@@ -1583,40 +1601,24 @@ var api = function(m, key, xid){
 								$D[m][key][i] = {
 									'ts':v['ts'] * 1000,
 									'hash':v['txnHash'],
-									'amnt':Rnd((v['amount'] / COINS[$Q['cur']['port']].divisor), 8)
+									'amnt':Rnd((v['amount'] / COINS[mport].divisor), 8)
 								};
 							}else if(m === 'poolpay'){
 								$D[m][key][i] = {
 									'ts':v['ts'],
 									'hash':v['hash'],
 									'payees':v['payees'],
-									'amnt':Rnd((v['value'] / COINS[$Q['cur']['port']].divisor), 8, 'txt'),
-									'fee':Rnd((v['fee'] / COINS[$Q['cur']['port']].divisor), 8, 'txt')
+									'amnt':Rnd((v['value'] / COINS[mport].divisor), 8, 'txt'),
+									'fee':Rnd((v['fee'] / COINS[mport].divisor), 8, 'txt')
 								};
 							}
 						}
 					}else if(m === 'netstats'){
-						$D[m] = {
-							'height': d['height'],
-							'diff': d['difficulty'],
-						};
+						$D[m] = d;
 					}else if(m === 'poolstats'){
-						$D[m] = {
-							'port_blocks_found': d['pool_statistics']['altBlocksFound'],
-							'blocks_found': d['pool_statistics']['totalBlocksFound'],
-							'altblocks_found':d['pool_statistics']['totalAltBlocksFound'],
-							'payments':d['pool_statistics']['totalPayments'],
-							'accountspaid':d['pool_statistics']['totalMinersPaid'],
-							'usd_price':d['pool_statistics']['price']['usd'],
-							'eur_price':d['pool_statistics']['price']['eur'],
-							'hash':d['pool_statistics']['hashRate'],
-							'pending':d['pool_statistics']['pending'],
-							'accounts':d['pool_statistics']['miners'],
-							'roundhashes':d['pool_statistics']['roundHashes'],
-							'min_block_reward':d['pool_statistics']['minBlockRewards'][$Q['cur']['port']],
-						};
-						$D[m]['port_blocks_found'][$Q['cur']['port']] = d['pool_statistics']['totalBlocksFound'];
-						$U['poolstats'] = now;
+						$D[m] = d['pool_statistics'];
+						// unify processing of altBlocksFound later
+						$D[m]['altBlocksFound'][mport] = d['pool_statistics']['totalBlocksFound'];
 					}else if(m === 'account'){
 						if(d && d['totalHashes'] && d['totalHashes'] > 0){
 							if (!$A[addr] || !$A[addr]['wrkrs']) $A[addr] = {
@@ -1626,8 +1628,8 @@ var api = function(m, key, xid){
 								'email':0,
 								'threshold':''
 							};
-							$A[addr]['due']    = Rnd((d['amtDue'] / COINS[$Q['cur']['port']].divisor), 8);
-							$A[addr]['paid']   = Rnd((d['amtPaid'] / COINS[$Q['cur']['port']].divisor), 8);
+							$A[addr]['due']    = Rnd((d['amtDue'] / COINS[mport].divisor), 8);
+							$A[addr]['paid']   = Rnd((d['amtPaid'] / COINS[mport].divisor), 8);
 							$A[addr]['hashes'] = d['totalHashes'];
 							$A[addr]['hash']   = d['hash'];
 							$A[addr]['hash2']  = d['hash2'];
@@ -1659,7 +1661,7 @@ var api = function(m, key, xid){
 					}else if(m === 'user' && d){
 						$A[addr]['email'] = d['email_enabled'] ? 1 : 0;
 						var threshold = d['payout_threshold'];
-						$A[addr]['threshold'] = Rnd(threshold ? threshold / COINS[$Q['cur']['port']].divisor : $Q['pay']['def_auto'], 8);
+						$A[addr]['threshold'] = Rnd(threshold ? threshold / COINS[mport].divisor : $Q['pay']['def_auto'], 8);
 					}
 					delete $P[url];
 					$U[url] = now;
@@ -1749,20 +1751,21 @@ function api_GraphFormat(d, cnt, start){
 function Tbl(tar, typ, pge, lim){
 	var 	txt = (width > 900) ? 'txt' : 'txtsmall',
 		row = 'ROW0',
-		ins = '<div class="WingPanel"><table class="txt C3'+mde+'"><tr class="txttny">',
+		ins = (lim ? '<div class="WingPanel">' : '') + '<table class="txt C3'+mde+'"><tr class="txttny">',
 		rows = 0;
 
 	var blocks_count;
-	if (typ === 'blocks') blocks_count = blocks_port ? $D['poolstats']['port_blocks_found'][blocks_port] : $D['poolstats']['altblocks_found'];
+	if (typ === 'blocks') blocks_count = blocks_port ? $D['poolstats']['altBlocksFound'][blocks_port] : $D['poolstats']['totalAltBlocksFound'];
 
 	var skip_col_names = [];
 	if (typ === 'blocks') {
-		if (blocks_port == $Q['cur']['port']) skip_col_names = ['coin', 'reward'];
+		if (blocks_port == mport) skip_col_names = ['coin', 'reward'];
 		else if (blocks_port) skip_col_names = ['coin'];
 	}
 	
 	$$['tbl'][typ].forEach(function(t) {
-		if (skip_col_names.indexOf(t['name']) == -1) ins += '<td class="'+t['cls']+'">'+t['lbl']+'</td>';
+		if (skip_col_names.indexOf(t['name']) != -1) return;
+		ins += '<td class="' + t['cls'] + '"' + (t['tooltip'] ? ' title="' + escapeHtml(t['tooltip']) + '"' : '')  + '>' + t['lbl'] + '</td>';
 	});
 	ins += '</tr>';
 
@@ -1785,10 +1788,10 @@ function Tbl(tar, typ, pge, lim){
 				case 'reward':	val = d['valid'] ? Rnd(d['value'] / COINS[d['port']]['divisor'], 6, 'txt') : InvalidBlock(); break;
 				case 'payment':	{
 					if (d['valid']) {
-						var port = d['port'] ? d['port'] : $Q['cur']['port'];
-						var is_main_port = (port == $Q['cur']['port']);
+						var port = d['port'] ? d['port'] : mport;
+						var is_main_port = (port == mport);
 						var coin = COINS[port];
-						var payment = (is_main_port ? d['value'] : d['pay_value']) / COINS[$Q['cur']['port']]['divisor'];
+						var payment = (is_main_port ? d['value'] : d['pay_value']) / COINS[mport]['divisor'];
 						var payment_txt = Rnd(payment, 6, 'txt');
 						if (d['unlocked'] && payment) {
 							val = payment_txt;
@@ -1812,11 +1815,11 @@ function Tbl(tar, typ, pge, lim){
 					} else {
 						val = InvalidBlock();
 					}
-					//val = '<div class="HashTrun">' + val + '</div>';
+					val = '<div class="HashTrun">' + val + '</div>';
 					break;
 				}
 				case 'height':	val = Num(d[n]); break;
-				case 'hash':	val = hashToLink(d[n], d['port'] ? d['port'] : $Q['cur']['port'], t['typ']); break;
+				case 'hash':	val = hashToLink(d[n], d['port'] ? d['port'] : mport, t['typ']); break;
 				default:	val = d[n];
 			}
 			ins += '<td class="'+t['cls']+'">'+val+'</td>';
@@ -1824,18 +1827,19 @@ function Tbl(tar, typ, pge, lim){
 		ins += '</tr>';
 		++ rows;
 	});
-	ins += '</table>'+
+	ins += '</table>';
+	if (lim) ins +=
 		'<div id="'+tar+'-WBL" class="WingBtnL rot180 o3 nopoint C2bk C0fl'+mde+'">'+$I['arrow']+'</div>'+
 		'<div id="'+tar+'-WBR" class="WingBtnR o3 nopoint C2bk C0fl'+mde+'">'+$I['arrow']+'</div>'+
 		'</div>';
 		
 	document.getElementById(tar).innerHTML = ins;
-	if (!$D[typ][pge]) return;
+	if (!$D[typ][pge] || !lim) return;
 	var pgs = 0;
 	if(tar === 'PageBot'){
 		var size, page_size;
 		if (typ === 'poolpay') {
-			size = $D['poolstats']['payments'];
+			size = $D['poolstats']['totalPayments'];
 			page_size = poolpay_page_size;
 		} else if (typ === 'blocks') {
 			size = blocks_count;
@@ -1976,9 +1980,8 @@ function Graph_Miner(){
 		}
 
 		//MinerHash Avg
-		var avg_y = Rnd(height_pad - avg / max * height_pad, 2),
-			avg_h = HashConv(avg),
-			txt = avg_h['num']+' '+avg_h['unit']+' Avg '+Ago(timestart),
+		var	avg_y = Rnd(height_pad - avg / max * height_pad, 2),
+			txt = HashConvStr(avg) + ' Avg ' + Ago(timestart),
 			txt_w = txt.length * 5.4;
 		if (hshx === "hsh") $D['miner_hash_avg'] = avg;
 			
@@ -1996,7 +1999,7 @@ function Graph_Miner(){
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
 		api('poolstats').then(function(){
-			document.getElementById('PendingPay').innerHTML = Rnd($D['poolstats']['pending'] * $D['miner_hash_avg'] / $D['poolstats']['hash'], 6, 'txt');
+			document.getElementById('PendingPay').innerHTML = Rnd($D['poolstats']['pending'] * $D['miner_hash_avg'] / $D['poolstats']['hashRate'], 6, 'txt');
 		});
 		GraphLib_ToolTipListener();
 	}else{
@@ -2065,8 +2068,7 @@ function GraphLib_Grid(m, num, max, min, h, w, cls){
 			if(m === 'line'){
 				r += '<line x1="50" y1="'+ylc+'" x2="'+w+'" y2="'+ylc+'" class="line '+cls+'st'+clss+' o8" />';
 			}else if(m === 'lbl'){
-				var yln = HashConv(yrt * y);
-				r += '<text x="5" y="'+(ylc + 3)+'" class="'+cls+'fl'+clss+' txttny">'+yln['num']+' '+yln['unit']+'</text>';
+				r += '<text x="5" y="'+(ylc + 3)+'" class="'+cls+'fl'+clss+' txttny">' + HashConvStr(yrt * y) + '</text>';
 			}
 		}
 	}
@@ -2086,8 +2088,7 @@ function GraphLib_ToolTip(el, sts){
 			t_v = el.getAttribute('data-eff')+'%';
 			offset = 9;
 		}else if(el.getAttribute('data-hsh')){
-			var tv = HashConv(el.getAttribute('data-hsh'));
-			t_v = tv['num']+' '+tv['unit'];
+			t_v = HashConvStr(el.getAttribute('data-hsh'));
 		}
 
 		var tmeago = Ago(tme, 'y')+' '+Time(tme),
@@ -2287,6 +2288,10 @@ function HashConv(h){
 	}
 	if(h === 0) u = 'H/s'
 	return {'num':Rnd(h, 1), 'unit':u};
+}
+function HashConvStr(h, unit){
+	var h = HashConv(h);
+	return h.num + ' ' + (unit ? h.unit.replace(/H\//, unit + '/') : h.unit);
 }
 function InvalidBlock(){
 	return '<span class="C4" title="This is orphan block so there will be no payment for it. It can happen sometimes naturally.">Invalid</span>';
