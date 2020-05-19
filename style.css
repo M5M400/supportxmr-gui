@@ -51,7 +51,7 @@ body{overflow-y:auto;-webkit-overflow-scrolling:touch}
 p{margin:0;padding:0;padding-top:10px}
 a:focus{outline:0}
 b,.bold{font-weight:bold}
-table{border-collapse:collapse;border-spacing:0;width:100%;empty-cells:show;table-layout:fixed}
+table{border-collapse:collapse;border-spacing:0;width:100%;max-width:1000px;margin-left:auto;margin-right:auto;empty-cells:show}
 td{text-align:left}
 svg{width:100%;height:100%}
 *{-webkit-tap-highlight-color:transparent} 
@@ -92,12 +92,8 @@ header,section{margin:0;padding:0}
 
 .right{text-align:right}
 .center{text-align:center}
-
-.condte{width:80px;padding-left:7px}
-.conlong,.consmall,.continy{text-align:left}
-.conlong{width:95px}
-.consmall{width:95px}
-.continy{width:50px}
+.min{text-align:left;white-space:nowrap;padding-left:10px;width:1px}
+.trunc{text-align:left;white-space:nowrap;padding-left:10px;max-width:100px}
 
 .TDPadS td{padding:3px}
 .hide{display:none !important}
@@ -240,7 +236,7 @@ header{height:44px}
 #MinerPaymentsTable{min-height:100px}
 #MinerPaymentsStage table{height:1;border-style:solid;border-width:0 1px;border-color:rgba(0,0,0,.1);padding:3px}
 table.noborder{border-width:0 !important}
-.HashTrun{min-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.HashTrun{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 #WorkerList{min-height:100px}
 .WorkerWrap{float:left;position:relative;width:20%;height:65px;padding:5px 4px;box-sizing:border-box}

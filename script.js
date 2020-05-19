@@ -79,39 +79,39 @@ var	mde = 'l',
 		},
 		'tbl':{
 			'coins':[
-				{'name':'name', 'lbl':'Name', 'cls':'continy'},
-				{'name':'algo', 'lbl':'Algo', 'cls':'consmall'},
-				{'name':'profit', 'lbl':'Profit', 'tooltip':'Profit per hash in percent', 'cls':'consmall'},
-				{'name':'eff', 'lbl':'Effort', 'tooltip':'Current block effort in percent', 'cls':'continy'},
-				{'name':'reward_perc', 'lbl':'Reward', 'tooltip':'Block reward in percent', 'cls':'consmall'},
-				{'name':'accounts', 'lbl':'Accounts', 'tooltip':'Account (Wallet) Count', 'cls':'continy'},
-				{'name':'poolhashrate', 'lbl':'Hashrate', 'tooltip':'Pool hashrate', 'cls':'consmall'},
-				{'name':'worldhashrate', 'lbl':'World Hash', 'tooltip':'Coin world hashrate', 'cls':'consmall'},
-				{'name':'height', 'lbl':'Top Height', 'cls':'consmall'},
-				{'name':'pplns', 'lbl':'PPLNS', 'tooltip':'Share in last block PPLNS window in percent', 'cls':'continy'},
-				{'name':'notes', 'lbl':'Notes', 'cls':'right'},
+				{'name':'name', 'lbl':'Name', 'cls':'min'},
+				{'name':'algo', 'lbl':'Algo', 'cls':'min'},
+				{'name':'profit', 'lbl':'Profit', 'tooltip':'Profit per hash in percent', 'cls':'min'},
+				{'name':'eff', 'lbl':'Effort', 'tooltip':'Current block effort in percent', 'cls':'min'},
+				{'name':'reward_perc', 'lbl':'Reward', 'tooltip':'Block reward in percent', 'cls':'min'},
+				{'name':'accounts', 'lbl':'Accounts', 'tooltip':'Account (Wallet) Count', 'cls':'min'},
+				{'name':'poolhashrate', 'lbl':'Hashrate', 'tooltip':'Pool hashrate', 'cls':'min'},
+				{'name':'worldhashrate', 'lbl':'World Hash', 'tooltip':'Coin world hashrate', 'cls':'min'},
+				{'name':'height', 'lbl':'Top Height', 'cls':'min'},
+				{'name':'pplns', 'lbl':'PPLNS', 'tooltip':'Share in last block PPLNS window in percent', 'cls':'min'},
+				{'name':'notes', 'lbl':'Notes', 'cls':'trunc'},
 			],
 			'blocks':[
-				{'name':'num', 'lbl':'#', 'cls':'continy'},
-				{'name':'tme', 'lbl':'Found', 'cls':'consmall'},
-				{'name':'coin', 'lbl':'Coin', 'cls':'continy'},
-				{'name':'eff', 'lbl':'Effort', 'cls':'continy'},
-				{'name':'reward', 'lbl':'Raw reward', 'tooltip':'Raw block reward in native coin units', 'cls':'consmall'},
-				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'conlong'},
-				{'name':'height', 'lbl':'Height', 'cls':'consmall'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'block'},
+				{'name':'num', 'lbl':'#', 'cls':'min'},
+				{'name':'tme', 'lbl':'Found', 'cls':'min'},
+				{'name':'coin', 'lbl':'Coin', 'cls':'min'},
+				{'name':'eff', 'lbl':'Effort', 'cls':'min'},
+				{'name':'reward', 'lbl':'Raw reward', 'tooltip':'Raw block reward in native coin units', 'cls':'min'},
+				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'height', 'lbl':'Height', 'cls':'min'},
+				{'name':'hash', 'lbl':'Transaction', 'typ':'block', 'cls':'trunc'},
 			],
 			'poolpay':[
-				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
-				{'name':'payees', 'lbl':'Payees', 'cls':'continy'},
-				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'consmall'},
-				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'consmall'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'},
+				{'name':'tme', 'lbl':'Payment Sent', 'cls':'min'},
+				{'name':'payees', 'lbl':'Payees', 'cls':'min'},
+				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'hash', 'lbl':'Transaction', 'typ':'tx', 'cls':'trunc'},
 			],
 			'pay':[
-				{'name':'tme', 'lbl':'Payment Sent', 'cls':'condte'},
-				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'center'},
-				{'name':'hash', 'lbl':'Transaction', 'cls':'right', 'typ':'tx'},
+				{'name':'tme', 'lbl':'Payment Sent', 'cls':'min'},
+				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'hash', 'lbl':'Transaction', 'typ':'tx', 'cls':'trunc'},
 			]
 		},
 		'trn':{
@@ -1815,7 +1815,6 @@ function Tbl(tar, typ, pge, lim){
 					} else {
 						val = InvalidBlock();
 					}
-					val = '<div class="HashTrun">' + val + '</div>';
 					break;
 				}
 				case 'height':	val = Num(d[n]); break;
