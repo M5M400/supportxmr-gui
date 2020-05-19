@@ -43,12 +43,12 @@ var	mde = 'l',
 		},
 		page_sizes: [15, 50, 100],
 		'hlp':{
-			'head':'Welcome to '+$Q['pool']['nme'],
+			'head':'Welcome to '+$Q.pool.nme,
 			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
 		},
 		'msg':{
-			'welcome':{'head':'Welcome to '+$Q['pool']['nme'], 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q['cur']['nme']+' address above. After you\'ve submitted a share, your stats will appear here.'},
-			'addr_invalid':{'head':'Invalid '+$Q['cur']['nme']+' Address', 'text':'Double check that your address is complete.'},
+			'welcome':{'head':'Welcome to '+$Q.pool.nme, 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q.cur.nme+' address above. After you\'ve submitted a share, your stats will appear here.'},
+			'addr_invalid':{'head':'Invalid '+$Q.cur.nme+' Address', 'text':'Double check that your address is complete.'},
 			'addr_notfound':{'head':'Address Not Found', 'text':'If you\'ve submitted your first share, be patient, it may take a minute or two to update. If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u><br><br>You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div>'},
 			'addr_nodata':{'head':'No Data', 'text':''}
 		},
@@ -60,8 +60,8 @@ var	mde = 'l',
 			'help':'Help'
 		},
 		'pay':{
-			'DashPending':{'lbl':'<span id="PendingPay"></span> '+$Q['cur']['sym']+' Pending', 'var':'due'},
-			'DashPaid':{'lbl':$Q['cur']['sym']+' Paid', 'var':'paid'}
+			'DashPending':{'lbl':'<span id="PendingPay"></span> '+$Q.cur.sym+' Pending', 'var':'due'},
+			'DashPaid':{'lbl':$Q.cur.sym+' Paid', 'var':'paid'}
 		},
 		'wm':{
 			'on':  'Web minining: <span id="WebMinerHash">--</span>',
@@ -97,20 +97,20 @@ var	mde = 'l',
 				{'name':'coin', 'lbl':'Coin', 'cls':'min'},
 				{'name':'eff', 'lbl':'Effort', 'cls':'min'},
 				{'name':'reward', 'lbl':'Raw reward', 'tooltip':'Raw block reward in native coin units', 'cls':'min'},
-				{'name':'payment', 'lbl':'Payment ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'payment', 'lbl':'Payment ('+$Q.cur.sym+')', 'cls':'min'},
 				{'name':'height', 'lbl':'Height', 'cls':'min'},
 				{'name':'hash', 'lbl':'Transaction', 'typ':'block', 'cls':'trunc'},
 			],
 			'poolpay':[
 				{'name':'tme', 'lbl':'Payment Sent', 'cls':'min'},
 				{'name':'payees', 'lbl':'Payees', 'cls':'min'},
-				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'min'},
-				{'name':'fee', 'lbl':'Fee ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'amnt', 'lbl':'Amount ('+$Q.cur.sym+')', 'cls':'min'},
+				{'name':'fee', 'lbl':'Fee ('+$Q.cur.sym+')', 'cls':'min'},
 				{'name':'hash', 'lbl':'Transaction', 'typ':'tx', 'cls':'trunc'},
 			],
 			'pay':[
 				{'name':'tme', 'lbl':'Payment Sent', 'cls':'min'},
-				{'name':'amnt', 'lbl':'Amount ('+$Q['cur']['sym']+')', 'cls':'min'},
+				{'name':'amnt', 'lbl':'Amount ('+$Q.cur.sym+')', 'cls':'min'},
 				{'name':'hash', 'lbl':'Transaction', 'typ':'tx', 'cls':'trunc'},
 			]
 		},
@@ -268,12 +268,12 @@ var COINS = {
 /*-----End of Customization Section------- (You can customize the rest, but shouldn't need to) */
 /*--------------------------------------*/
 
-var addr = UrlVars()['addr'] || '',
+var addr = UrlVars().addr || '',
 	pref = 'LNA',
-	mport = $Q['cur']['port'], // shortcut
-	cookieprefix = $Q['pool']['nme'].replace(/[ ,;]/g, ''),
+	mport = $Q.cur.port, // shortcut
+	cookieprefix = $Q.pool.nme.replace(/[ ,;]/g, ''),
 	resizeTimer,
-	updateTimer = $Q['timer'],
+	updateTimer = $Q.timer,
 	updateCounter,
 	outoffocus = 0,
 	now = Rnd((new Date()).getTime() / 1000),
@@ -344,7 +344,7 @@ var addr = UrlVars()['addr'] || '',
 		'x':'<svg viewBox="0 0 99 99"><path d="M99 77L71 50l28-28L77 0 50 28 22 0 0 22l28 28L0 77l22 22 28-28 27 28"/></svg>',
 		'delete':'<svg viewBox="0 0 99 99"><path d="M8 28L7 15h86l-2 13H8zM31 0l-1 10h39L68 0H31zM10 33l9 66h61l9-66H10zm18 56l-3-47h8l3 47h-8zm26 0h-9V42h9v47zm17 0h-8l3-47h8l-3 47z"/></svg>',
 	};
-	$I['load'] = '<div class="LoadCon C1fl o9 Loader">'+$I['loadico']+'</div>';
+	$I.load = '<div class="LoadCon C1fl o9 Loader">'+$I.loadico+'</div>';
 
 //Event Binding
 window.addEventListener('resize', function(){Resize()});
@@ -413,7 +413,7 @@ document.body.addEventListener('click', function(e){
 				document.getElementById('GPop').classList.add('hide');
 			}else if(id[i] === '#NewsClose'){
 				document.getElementById('News').className = 'hide';
-				setCookie('News', $D['news']['created']);
+				setCookie('News', $D.news.created);
 			}else if(id[i] === '#AutoPayBtn'){
 				AutoPay();
 			}else if(id[i] === '#PaymentHistoryBtn'){
@@ -435,7 +435,7 @@ document.body.addEventListener('click', function(e){
 				document.getElementById('LinCmdTextArea').select();
 				document.execCommand("copy");
 			}else if(id[i] === '#AddrDelete'){
-				SaveAddr($C['AddrField'].value, 'del');
+				SaveAddr($C.AddrField.value, 'del');
 			}else if(id[i] === '#WorkerPopClose'){
 				Workers_detail();
 			}else if(id[i] === '#WorkerSortName'){
@@ -480,10 +480,10 @@ document.body.addEventListener('keyup', function(e){
 	}
 });
 document.getElementById('Timer').onmouseover = function(e){
-	$C['TimerRefresh'].classList.remove('hide');
+	$C.TimerRefresh.classList.remove('hide');
 };
 document.getElementById('Timer').onmouseout = function(e){
-	$C['TimerRefresh'].classList.add('hide');
+	$C.TimerRefresh.classList.add('hide');
 };
 
 function init(){
@@ -496,23 +496,23 @@ function init(){
 	}
 	
 	//Populate Icons
-	$C['TogMode'].innerHTML = $I['d'];
-	$C['TimerRefresh'].innerHTML = $I['refresh'];
-	document.getElementById('TimerLoader').innerHTML = $I['load'];
-	document.querySelector('#HeadMenu .select-point').innerHTML = $I['arrow'];
-	document.getElementById('AddrDelete').innerHTML = $I['delete'];
-	document.querySelector('#AddrRecent .select-point').innerHTML = $I['arrow'];
-	document.getElementById('DashPendingLbl').innerHTML = $$['pay']['DashPending']['lbl'];
-	document.getElementById('DashPaidLbl').innerHTML = $$['pay']['DashPaid']['lbl'];
+	$C.TogMode.innerHTML = $I.d;
+	$C.TimerRefresh.innerHTML = $I.refresh;
+	document.getElementById('TimerLoader').innerHTML = $I.load;
+	document.querySelector('#HeadMenu .select-point').innerHTML = $I.arrow;
+	document.getElementById('AddrDelete').innerHTML = $I.delete;
+	document.querySelector('#AddrRecent .select-point').innerHTML = $I.arrow;
+	document.getElementById('DashPendingLbl').innerHTML = $$.pay.DashPending.lbl;
+	document.getElementById('DashPaidLbl').innerHTML = $$.pay.DashPaid.lbl;
 	Dash_btn('loading');
 	TimerLoading('on');
 
 	//Load Menu
 	var i = 0, mn = '', ft = '';
-	for(var m in $$['nav']){
-		mn += '<option value="'+m+'">'+$$['nav'][m]+'</option>';
+	for(var m in $$.nav){
+		mn += '<option value="'+m+'">'+$$.nav[m]+'</option>';
 		if(i !== 0) ft += ' &middot; ';
-		ft += '<span class="nav" data-tar="'+m+'">'+$$['nav'][m]+'</span>';
+		ft += '<span class="nav" data-tar="'+m+'">'+$$.nav[m]+'</span>';
 		i++;
 	}
 	document.querySelector('#HeadMenu select').innerHTML = mn;
@@ -544,10 +544,10 @@ function init(){
 		addr = cookie_addr;
 	}
 	if(addr){
-		$C['AddrField'].value = addr;
-		$C['AddrField'].blur();
+		$C.AddrField.value = addr;
+		$C.AddrField.blur();
 	}else{
-		$C['AddrField'].setAttribute('placeholder', 'Your '+$Q['cur']['nme']+' Address...');
+		$C.AddrField.setAttribute('placeholder', 'Your '+$Q.cur.nme+' Address...');
 	}
 	
 	if(mde === 'l' && pref && pref.charAt(0) === 'D'){
@@ -564,7 +564,7 @@ function ErrAlert(tar, err){
 		a = document.querySelectorAll('.GAlert');
 		
 	if(tar === 'X'){
-		$C['TimerText'].innerHTML = updateTimer;
+		$C.TimerText.innerHTML = updateTimer;
 		if(n != null) n.classList.remove('o3');
 		if(m != null) m.classList.remove('o3');
 		if(w != null) w.classList.remove('o3');
@@ -592,8 +592,8 @@ function ErrAlert(tar, err){
 			return false;
 		}
 		if(iserr === 'C4'){
-			$C['TimerText'].innerHTML = '<div class="C4fl">'+$I['x']+'</div>';
-			$C['TimerRefresh'].classList.add('hide');
+			$C.TimerText.innerHTML = '<div class="C4fl">'+$I.x+'</div>';
+			$C.TimerRefresh.classList.add('hide');
 		}
 		if(msg){
 			var t = document.getElementById(tar);
@@ -623,12 +623,12 @@ function LoadTimer(){
 				TimerUpdateData();
 			}, 1500);
 		}else{
-			var clr = (mde === 'd') ? $Q['clr']['back-d'] : $Q['clr']['back-l'],
-				grd = 'linear-gradient('+(-90 + (360 * updateTimer / $Q['timer']))+'deg, transparent 50%, #F06A25';
+			var clr = (mde === 'd') ? $Q.clr['back-d'] : $Q.clr['back-l'],
+				grd = 'linear-gradient('+(-90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #F06A25';
 				
-			if(updateTimer < ($Q['timer'] / 2)) grd = 'linear-gradient('+(90 + (360 * updateTimer / $Q['timer']))+'deg, transparent 50%, #'+clr;
-			$C['TimerPie'].style.backgroundImage = grd+' 50%),linear-gradient(90deg, #'+clr+' 50%, transparent 50%)';
-			$C['TimerText'].innerHTML = updateTimer;
+			if(updateTimer < ($Q.timer / 2)) grd = 'linear-gradient('+(90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #'+clr;
+			$C.TimerPie.style.backgroundImage = grd+' 50%),linear-gradient(90deg, #'+clr+' 50%, transparent 50%)';
+			$C.TimerText.innerHTML = updateTimer;
 		}
 	}, 1000);
 }
@@ -657,31 +657,31 @@ function TimerUpdateData(){
 	api('netstats').then(function(){
 		api('poolstats').then(function(){
 			ErrAlert('X');
-                        document.getElementById('WorldHash').innerHTML  = HashConvStr(difficultyToHashRate($D['netstats']['difficulty'], mport));
-			document.getElementById('PoolHash').innerHTML   = HashConvStr($D['poolstats']['hashRate']);
-			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D['poolstats']['roundHashes'] / $D['netstats']['difficulty'], 2, 'txt') + "%";
+                        document.getElementById('WorldHash').innerHTML  = HashConvStr(difficultyToHashRate($D.netstats.difficulty, mport));
+			document.getElementById('PoolHash').innerHTML   = HashConvStr($D.poolstats.hashRate);
+			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D.poolstats.roundHashes / $D.netstats.difficulty, 2, 'txt') + "%";
 			document.getElementById('BlockCount').innerHTML =
-				'<span title="' + $D['poolstats']['totalBlocksFound'] + ' ' + $Q['cur']['nme'] + ' blocks and ' + $D['poolstats']['totalAltBlocksFound'] + ' altcoin blocks">' +
-				($D['poolstats']['totalBlocksFound'] + $D['poolstats']['totalAltBlocksFound']) + '</span>';
-			document.getElementById('AccountCount').innerHTML = $D['poolstats']['miners'];
-			document.getElementById('PaymentsMade').innerHTML = $D['poolstats']['totalPayments'];
-			updateTimer = $Q['timer'];
-			$C['TimerText'].innerHTML = updateTimer;
+				'<span title="' + $D.poolstats.totalBlocksFound + ' ' + $Q.cur.nme + ' blocks and ' + $D.poolstats.totalAltBlocksFound + ' altcoin blocks">' +
+				($D.poolstats.totalBlocksFound + $D.poolstats.totalAltBlocksFound) + '</span>';
+			document.getElementById('AccountCount').innerHTML = $D.poolstats.miners;
+			document.getElementById('PaymentsMade').innerHTML = $D.poolstats.totalPayments;
+			updateTimer = $Q.timer;
+			$C.TimerText.innerHTML = updateTimer;
 			LoadTimer();
 		}).catch(function(err){ErrAlert('NetStats', '')});
 	}).catch(function(err){ErrAlert('NetStats', '')});
 
-	if($Q['news']){
+	if($Q.news){
 		var n = document.getElementById('News'), c = document.getElementById('NewsCard'), h = '';
 		if(n != null && c.innerHTML === ''){
 			api('news').then(function(){
-				if($D['news'] && $D['news']['created']){
-					if(getCookie('News') == $D['news']['created']){
+				if($D.news && $D.news.created){
+					if(getCookie('News') == $D.news.created){
 						h = 'hide';
 					}else{
-						c.innerHTML = '<div class="txtmed">'+$D['news']['subject']+'<div id="NewsTime" class="txttny noselect">('+AgoTooltip($D['news']['created'], 'y')+')</div></div>'+
-							'<div id="NewsBody" class="txt">'+$D['news']['body'].replace(/^(<br>)/,'')+'</div>'+
-							'<div id="NewsClose" class="Btn32 Btn32Corner C1fl">'+$I['x']+'</div>';
+						c.innerHTML = '<div class="txtmed">'+$D.news.subject+'<div id="NewsTime" class="txttny noselect">('+AgoTooltip($D.news.created, 'y')+')</div></div>'+
+							'<div id="NewsBody" class="txt">'+$D.news.body.replace(/^(<br>)/,'')+'</div>'+
+							'<div id="NewsClose" class="Btn32 Btn32Corner C1fl">'+$I.x+'</div>';
 					}
 					n.className = h;
 				}
@@ -706,14 +706,14 @@ function SwitchMode(){
 		bt = (mde === 'd') ? 'l' : 'd',
 		i = $CL.length;
 		
-	$C['TogMode'].innerHTML = $I[bt];
+	$C.TogMode.innerHTML = $I[bt];
 	while(i--){
 		document.querySelectorAll('.'+$CL[i]+bt).forEach(function(x){
 			x.classList.add($CL[i]+mde);
 			x.classList.remove($CL[i]+bt);
 		});
 	}
-	document.querySelector('meta[name=theme-color]').setAttribute('content', '#'+$clr[mde]['b']);
+	document.querySelector('meta[name=theme-color]').setAttribute('content', '#'+$clr[mde].b);
 }
 function SaveAddr(adr, m){
 	var fin = '', fst = '', j = 0, val = '';
@@ -737,7 +737,7 @@ function SaveAddr(adr, m){
 		}
 	}
 	setCookie('Addr', fin);
-	$C['AddrField'].value = (m === 'del') ? fst : adr;
+	$C.AddrField.value = (m === 'del') ? fst : adr;
 	Dash_init();
 	Dash_load();
 	MultipleAddress();
@@ -762,7 +762,7 @@ function MultipleAddress(){
 		h = 'hide';
 		
 	if(numadr > 1){
-		ins = '<option value="">'+$$['trn']['rcnt']+'</option>';
+		ins = '<option value="">'+$$.trn.rcnt+'</option>';
 		for(var k in $A){
 			if($A.hasOwnProperty(k) && k !== addr){
 				ins += '<option value="'+k+'">'+k.substring(0, 3)+'...'+k.substr(k.length - 4)+'</option>';
@@ -775,7 +775,7 @@ function MultipleAddress(){
 	document.getElementById('AddrDelete').parentNode.className = h;
 }
 function Navigate(tar){
-	$C['Stage'].className = '';
+	$C.Stage.className = '';
 	document.querySelectorAll('.nav').forEach(function(x){
 		x.classList.remove('o5');
 	});
@@ -789,15 +789,15 @@ function Navigate(tar){
 			} else {
 				h += '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div></div>';
 			}
-			h += '<div class="pbar"></div><div id="PageBot" class="LR80 C3'+mde+' txt shim10">'+$I['load']+'</div>';
+			h += '<div class="pbar"></div><div id="PageBot" class="LR80 C3'+mde+' txt shim10">'+$I.load+'</div>';
 			d += ' hide';
 		}else{
 			tar = 'home';
 		}
 		
-		$C['Stage'].className = m;
-		$C['Stage'].innerHTML = h;
-		$C['Addr'].className = d;
+		$C.Stage.className = m;
+		$C.Stage.innerHTML = h;
+		$C.Addr.className = d;
 
 		switch (tar) {
 			case 'coins':    dta_Coins();     break;
@@ -824,19 +824,19 @@ function Dash_init(){
 
 	miner_setup_open = false;
 
-	$C['Stage'].innerHTML = ins;
+	$C.Stage.innerHTML = ins;
 	
 	ins = '';	
 	for(var j = 0; j < 2; j++){
 		ins += '<div class="'+$S[j]+'">';
 		var i = 0;
-		for(var k in $$['sts']){
+		for(var k in $$.sts){
 			if((j === 0 && i < 2) || (j === 1 && i >= 2)){
-				var d = $$['sts'][k]['def'] || '--';
+				var d = $$.sts[k].def || '--';
 				ins += '<div class="Spl">'+
 					'<div id="'+k+'">'+d+'</div>'+
 					'<div class="hbar shim4 o8"></div>'+
-					'<div class="C2 txttny">'+$$['sts'][k]['lbl']+'</div>'+
+					'<div class="C2 txttny">'+$$.sts[k].lbl+'</div>'+
 				'</div>';
 			}
 			i++;
@@ -851,13 +851,13 @@ function Dash_init(){
 		hs = document.getElementById('HashSelect');
 		
 	ins = '';
-	for(var k in $$['calc']){
-		ins += '<option value="'+k+'">'+$$['calc'][k]+'</option>';
+	for(var k in $$.calc){
+		ins += '<option value="'+k+'">'+$$.calc[k]+'</option>';
 	}
 	f.innerHTML = ins;
 	f.className = 'FrmElem txttny C0'+mde+' C1bk';
 	ins = '';
-	for(var k in $D['hashconv']){
+	for(var k in $D.hashconv){
 		ins += '<option value="'+k+'">'+k+'/s</option>';
 	}
 	u.innerHTML = ins;
@@ -873,17 +873,17 @@ function Dash_load(typ){
 		g = document.getElementById('MinerDash');
 	
 	if(addr){
-		if($Q['cur']['reg'].test(addr)){
-			$C['AddrField'].classList.remove('C4');
+		if($Q.cur.reg.test(addr)){
+			$C.AddrField.classList.remove('C4');
 			if(typ !== 'refresh'){
 				Dash_btn('loading');
-				l.innerHTML = $I['load'];
+				l.innerHTML = $I.load;
 			}
 			api('account').then(function(){
-				if($A[addr] && $A[addr]['hashes']){
+				if($A[addr] && $A[addr].hashes){
 					g.classList.remove('hide');
-					for(var k in $$['pay']){
-						var val = $A[addr][$$['pay'][k]['var']], dec = 8;
+					for(var k in $$.pay){
+						var val = $A[addr][$$.pay[k].var], dec = 8;
 						if(val > 99999){
 							dec = 4;
 						}else if(val > 9999){
@@ -895,18 +895,18 @@ function Dash_load(typ){
 						}
 						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
 					}
-					document.getElementById('MinerHashes').innerHTML = (now - $A[addr]['last']) < 10*60
-						? '<span title="' + Ago($A[addr]['last'], 'y') + '">' + HashConvStr($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']) + '</span>'
-						: AgoTooltip($A[addr]['last'], 'y');
-					document.getElementById('MinerShares').innerHTML = '<span title="Invalid shares: ' + $A[addr]['bad_shares'] + '">' + $A[addr]['shares'] + '</span>';
-					document.getElementById('TotalHashes').innerHTML = Num($A[addr]['hashes']);
+					document.getElementById('MinerHashes').innerHTML = (now - $A[addr].last) < 10*60
+						? '<span title="' + Ago($A[addr].last, 'y') + '">' + HashConvStr($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']) + '</span>'
+						: AgoTooltip($A[addr].last, 'y');
+					document.getElementById('MinerShares').innerHTML = '<span title="Invalid shares: ' + $A[addr].bad_shares + '">' + $A[addr].shares + '</span>';
+					document.getElementById('TotalHashes').innerHTML = Num($A[addr].hashes);
 					
 					if(typ !== 'refresh') Dash_btn('loaded');
 					Graph_Miner_init();
 					MultipleAddress();
 					
 					api('workers', addr).then(function(){
-						var wcn = ($A[addr]['wrkrs'] && numObj($A[addr]['wrkrs']) > 0) ? numObj($A[addr]['wrkrs']) : 0,
+						var wcn = ($A[addr].wrkrs && numObj($A[addr].wrkrs) > 0) ? numObj($A[addr].wrkrs) : 0,
 							plr = (wcn === 1) ? '' : 's';
 							
 						document.getElementById('MinerWorkerCount').innerHTML = wcn+' Worker'+plr;
@@ -914,19 +914,19 @@ function Dash_load(typ){
 					}).catch(function(err){console.log(err)});
 				}else{
 					Dash_reset();
-					m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$['msg']['addr_notfound']['head']+'</div><div class="LR80 txt shim10">'+$$['msg']['addr_notfound']['text']+'</div></div>';
+					m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$.msg.addr_notfound.head+'</div><div class="LR80 txt shim10">'+$$.msg.addr_notfound.text+'</div></div>';
 					WebMinerSetBtn();
 					MinerSetupScriptsBtn(miner_setup_open);
 				}
 			}).catch(function(err){console.log(err)});
 		}else{
 			Dash_reset();
-			$C['AddrField'].classList.add('C4');
-			m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$['msg']['addr_invalid']['head']+'</div><div class="LR80 txt shim10">'+$$['msg']['addr_invalid']['text']+'</div></div>';
+			$C.AddrField.classList.add('C4');
+			m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$.msg.addr_invalid.head+'</div><div class="LR80 txt shim10">'+$$.msg.addr_invalid.text+'</div></div>';
 		}
 	}else{
 		Dash_reset();
-		m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$['msg']['welcome']['head']+'</div><div class="LR80 txt shim10">'+$$['msg']['welcome']['text']+'</div></div>';
+		m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$.msg.welcome.head+'</div><div class="LR80 txt shim10">'+$$.msg.welcome.text+'</div></div>';
 	}
 }
 function Dash_reset(){
@@ -939,29 +939,29 @@ function Dash_reset(){
 	k = Object.keys($R);
 	for(var i = 0; i < k.length; i++){
 		var id = k[i], el = document.getElementById(id);
-		el.innerHTML = $R[id]['v'];
-		if($R[id]['r']) el.classList.remove($R[id]['r']);
+		el.innerHTML = $R[id].v;
+		if($R[id].r) el.classList.remove($R[id].r);
 	}
-	for(var k in $$['pay']){
+	for(var k in $$.pay){
 		var e = document.getElementById(k);
-		if(e) e.innerHTML = $$['pay'][k]['def'] || '--';
+		if(e) e.innerHTML = $$.pay[k].def || '--';
 	}
-	for(var k in $$['sts']){
+	for(var k in $$.sts){
 		var e = document.getElementById(k);
-		if(e) e.innerHTML = $$['sts'][k]['def'] || '--';
+		if(e) e.innerHTML = $$.sts[k].def || '--';
 	}
 
 }
 function Dash_btn(m){
-	var b = $C['DashPayBtn'], c = 'nopoint C2fl o5', h = $I['settings'];
+	var b = $C.DashPayBtn, c = 'nopoint C2fl o5', h = $I.settings;
 	if(m === 'loading'){
 		c = 'nopoint';
-		h = $I['load'];	
+		h = $I.load;	
 	}else if(m === 'loaded'){
 		c = 'C1fl hov';
 	}else if(m === 'closer'){
 		c = 'C1fl';
-		h = '<div class="Closer hov">'+$I['x']+'</div>';
+		h = '<div class="Closer hov">'+$I.x+'</div>';
 	}
 	b.className = c;
 	b.innerHTML = h;
@@ -976,15 +976,15 @@ function Dash_calc(){
 		u_val = u.value || 'H';
 		
 	if(h_val && h_val > 0){
-		h_raw = h_val * $D['hashconv'][u_val];
+		h_raw = h_val * $D.hashconv[u_val];
 	}else{
-		h_raw = $D['miner_hash_avg'];
+		h_raw = $D.miner_hash_avg;
 	}
 	
 	var hs = HashConv(h_raw);
 		
-	h_val = hs['num'];
-	u_val = hs['unit'].replace('/s', '');
+	h_val = hs.num;
+	u_val = hs.unit.replace('/s', '');
 	
 	h.value = h_val;
 	u.value = u_val;
@@ -992,24 +992,24 @@ function Dash_calc(){
 	
 	api('netstats').then(function(){
 		api('poolstats').then(function(){
-			var t = h_raw / difficultyToHashRate($D['netstats']['difficulty'], mport) * (24*60*60) / COINS[mport].time * $D['poolstats']['minBlockRewards'][mport] * f.value;
-			var fiat = $Q['fiat_symbol'] + Rnd(t * $D['poolstats']['price'][$Q['fiat_name']], 2, 'txt');
-			document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q['cur']['sym'] + " (" + fiat + ")";
+			var t = h_raw / difficultyToHashRate($D.netstats.difficulty, mport) * (24*60*60) / COINS[mport].time * $D.poolstats.minBlockRewards[mport] * f.value;
+			var fiat = $Q.fiat_symbol + Rnd(t * $D.poolstats.price[$Q.fiat_name], 2, 'txt');
+			document.getElementById('MinerCalc').innerHTML = Rnd(t, 4, 'txt')+' '+$Q.cur.sym + " (" + fiat + ")";
 		});
 	});
 }
 //Workers
 function Workers_init(){		///check this, getting called alot
 	var l = document.getElementById('WorkerList');
-	if($A[addr] && $A[addr]['wrkrs'] && l){
-		var numwrk = numObj($A[addr]['wrkrs']),
+	if($A[addr] && $A[addr].wrkrs && l){
+		var numwrk = numObj($A[addr].wrkrs),
 			i = 0,
 			d = '',
 			ky = '',
 			blkclss = '',
 			ins = '<div id="WorkerSortGroup" class="hide txttny C2">'+
-				'<div id="WorkerSortName" class="C2bk C0fl'+mde+'" data-ord="D">'+$I['sort']+'</div>'+
-				'<div id="WorkerSortRate" class="C2bk C0fl'+mde+'" data-ord="D">'+$I['sort']+'</div>'+
+				'<div id="WorkerSortName" class="C2bk C0fl'+mde+'" data-ord="D">'+$I.sort+'</div>'+
+				'<div id="WorkerSortRate" class="C2bk C0fl'+mde+'" data-ord="D">'+$I.sort+'</div>'+
 			'</div>'+
 			'<div class="WingPanel">';
 		
@@ -1020,7 +1020,7 @@ function Workers_init(){		///check this, getting called alot
 		if(['A','D'].indexOf(pref.charAt(2)) >= 0) ord = pref.charAt(2);
 
 		for(i = 0; i < numwrk; i++){
-			s.push([i, $A[addr]['wrkrs'][i][srt]]);
+			s.push([i, $A[addr].wrkrs[i][srt]]);
 		}
 		if(srt === 'name'){
 			s.sort(function(a, b){return a[1].toLowerCase().localeCompare(b[1].toLowerCase())});
@@ -1048,7 +1048,7 @@ function Workers_init(){		///check this, getting called alot
 		if(numwrk > 0){
 			var bwid = document.getElementById('WName-0').clientWidth;
 			for(i = 0; i < numwrk; i++){
-				document.getElementById('WName-'+s[i][0]).innerHTML = Truncate($A[addr]['wrkrs'][s[i][0]]['name'], Rnd(bwid / 6.25));
+				document.getElementById('WName-'+s[i][0]).innerHTML = Truncate($A[addr].wrkrs[s[i][0]].name, Rnd(bwid / 6.25));
 			}
 		}
 		if(numwrk > 1){
@@ -1059,12 +1059,12 @@ function Workers_init(){		///check this, getting called alot
 		var cnt = 0;
 		for(i = 0; i < s.length; i++){
 			var 	k = s[i][0],
-				d = $A[addr]['wrkrs'][k],
-				hsh = (d && d['stats'] && d['stats'][0] && d['stats'][0]['hsh']) ? d['stats'][0]['hsh'] : 0;
+				d = $A[addr].wrkrs[k],
+				hsh = (d && d.stats && d.stats[0] && d.stats[0].hsh) ? d.stats[0].hsh : 0;
 			
 			if(hsh > 0){
 				document.getElementById('WRate-'+k).innerHTML = HashConvStr(hsh);
-				if(d['stats']) Graph_Worker(k);
+				if(d.stats) Graph_Worker(k);
 			}else{
 				document.querySelector('.Worker[data-key="'+k+'"]').classList.add('C4','C4br');
 			}
@@ -1077,19 +1077,19 @@ function Workers_init(){		///check this, getting called alot
 function Workers_sort(srt, ord, sts){
 	var n = document.getElementById('WorkerSortName'),
 		n_cl = 'C2bk C0fl'+mde+' hov',
-		n_in = $I['sort'],
+		n_in = $I.sort,
 		r = document.getElementById('WorkerSortRate'),
 		r_cl = 'C2bk C0fl'+mde+' hov',
-		r_in = $I['load'],
+		r_in = $I.load,
 		ordV = (ord === 'D') ? 'A' : 'D',
 		orot = (ord === 'D') ? 'rot90' : 'rot270';
 		
 	if(sts === 'y'){
 		if(srt === 'rate'){
 			r_cl = 'C1bk C0fl'+mde+' hov '+orot;
-			r_in = $I['arrow'];
+			r_in = $I.arrow;
 		}else if(srt === 'name'){
-			r_in = $I['sort'];
+			r_in = $I.sort;
 		}
 	}else{
 		if(srt === 'rate') r_cl = 'C1bk C0fl'+mde+' nopoint';
@@ -1099,7 +1099,7 @@ function Workers_sort(srt, ord, sts){
 	}else if(srt === 'name'){
 		n.setAttribute('data-ord', ordV);
 		n_cl = 'C1bk C0fl'+mde+' hov '+orot;
-		n_in = $I['arrow'];
+		n_in = $I.arrow;
 	}
 	n.className = n_cl;
 	n.innerHTML = n_in;
@@ -1123,42 +1123,42 @@ function Workers_detail(xid){
 		w.classList.remove('C3'+mde);
 		w.innerHTML += '<div id="WorkerPop" class="C0bk'+mde+' C1br C3'+mde+' txtsmall"></div>';
 
-		var d = $A[addr]['wrkrs'][xid],
+		var d = $A[addr].wrkrs[xid],
 			p = document.getElementById('WorkerPop');
 		
-		p.innerHTML = $I['load'];
-		api('workerdetail', xid, d['name']).then(function(){
+		p.innerHTML = $I.load;
+		api('workerdetail', xid, d.name).then(function(){
 			var avg = 0,
 				havg = 0,
 				maxtime = 99999999999999999,
 				timestart = maxtime,
-				cnt = numObj($A[addr]['wrkrs'][xid]['stats']),
+				cnt = numObj($A[addr].wrkrs[xid].stats),
 				i = cnt;
 
 			while(i--){
-				avg = avg + parseInt($A[addr]['wrkrs'][xid]['stats'][i]['hsh']);
-				SynchTime($A[addr]['wrkrs'][xid]['stats'][i]['tme']);
-				if($A[addr]['wrkrs'][xid]['stats'][i]['tme'] < timestart) timestart = $A[addr]['wrkrs'][xid]['stats'][i]['tme'];
+				avg = avg + parseInt($A[addr].wrkrs[xid].stats[i].hsh);
+				SynchTime($A[addr].wrkrs[xid].stats[i].tme);
+				if($A[addr].wrkrs[xid].stats[i].tme < timestart) timestart = $A[addr].wrkrs[xid].stats[i].tme;
 			}
-			p.innerHTML = '<div id="WorkerPopClose" class="C1fl Btn16 Btn16Corner">'+$I['x']+'</div>'+
+			p.innerHTML = '<div id="WorkerPopClose" class="C1fl Btn16 Btn16Corner">'+$I.x+'</div>'+
 				'<div class="BoxL center">' + HashConvStr(Rnd(avg / cnt, 0)) + '</div>'+
-				'<div class="BoxR center">'+AgoTooltip(d['last'], 'y')+'</div>'+
+				'<div class="BoxR center">'+AgoTooltip(d.last, 'y')+'</div>'+
 				'<div class="pbar shim4"></div>'+
 				'<div class="BoxL txttny C2 center">Avg '+(timestart == maxtime ? "n/a" : AgoTooltip(timestart))+'</div>'+
 				'<div class="BoxR txttny C2 center">Last Share</div>'+
 				'<div class="shim10"></div>'+
-				'<div class="BoxL center">'+Num(d['hashes'])+'</div>'+
-				'<div class="BoxR center">'+Num(d['val'])+' / '+Num(d['inv'])+'</div>'+
+				'<div class="BoxL center">'+Num(d.hashes)+'</div>'+
+				'<div class="BoxR center">'+Num(d.val)+' / '+Num(d.inv)+'</div>'+
 				'<div class="pbar shim4"></div>'+
-				'<div class="BoxL txttny C2 center">'+$$['stsw']['MinerHashes']['lbl']+'</div>'+
-				'<div class="BoxR txttny C2 center">'+$$['stsw']['MinerShares']['lbl']+'</div>';
+				'<div class="BoxL txttny C2 center">'+$$.stsw.MinerHashes.lbl+'</div>'+
+				'<div class="BoxR txttny C2 center">'+$$.stsw.MinerShares.lbl+'</div>';
 		}).catch(function(err){console.log(err)});
 	}
 }
 //Miner Payments
 function MinerPayments(typ){
 	typ = typ || '';
-	if(addr && $A[addr] && $A[addr]['hashes'] && $A[addr]['hashes'] > 0){
+	if(addr && $A[addr] && $A[addr].hashes && $A[addr].hashes > 0){
 		var m = document.getElementById('MinerPayments'), n = document.getElementById('NewsBody');
 		if(typ !== 'back' && (m.classList.contains('Opened') || m.classList.contains('OpenedBig'))){
 			if(n) n.classList.remove('hide');
@@ -1169,7 +1169,7 @@ function MinerPayments(typ){
 		}else{
 			if(n) n.classList.add('hide');
 			m.className = 'Opened';
-			m.innerHTML = '<div class="hbar"></div><div id="MinerPaymentsStage">'+$I['load']+'</div>';
+			m.innerHTML = '<div class="hbar"></div><div id="MinerPaymentsStage">'+$I.load+'</div>';
 			Dash_btn('closer');
 		}
 	}else{
@@ -1185,16 +1185,16 @@ function MinerPayments(typ){
 						'<div class="pbar"></div><span class="txttny C2 noselect">Auto pay threshold (XMR)</span>'+
 					'</td>'+
 					'<td width="50%" class="center">'+
-						'<div id="AutoPayBtn" class="BtnElem txtmed C1bk C2bk_hov o5">'+$$['trn']['set']+'</div>'+
-						'<div class="pbar"></div><span id="AutoPayFeeLbl" class="txttny C2 noselect">' + fee_txt($A[addr]['threshold']) + '</span>'+
+						'<div id="AutoPayBtn" class="BtnElem txtmed C1bk C2bk_hov o5">'+$$.trn.set+'</div>'+
+						'<div class="pbar"></div><span id="AutoPayFeeLbl" class="txttny C2 noselect">' + fee_txt($A[addr].threshold) + '</span>'+
 					'</td>'+
 				'</tr></table>'+
 		                '<div class="hbar shim10"></div>'+
 			'</div>';
-		if ($Q['email']) {
-			var	email_enabled = $A[addr]['email'],
+		if ($Q.email) {
+			var	email_enabled = $A[addr].email,
 				check = $I[email_enabled ? 'check' : 'x'],
-				lbl = $$['trn'][email_enabled ? 'eml_on' : 'eml_off'];
+				lbl = $$.trn[email_enabled ? 'eml_on' : 'eml_off'];
 			ins +=	'<div class="LR50 shimtop20 C0'+mde+' txtmed center">'+
 				'<div class="Split3L">'+
 					'<input type="text" id="EmailFROM" class="center txt C0bk'+mde+' C3'+mde+' C1br" placeholder="Change email FROM">'+
@@ -1215,24 +1215,24 @@ function MinerPayments(typ){
 				'</div>';
 		}
 		ins +=	'<div id="PaymentHistory" class="center"><div class="LR50">'+
-				'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$['trn']['vwpy']+'</div>'+
+				'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy+'</div>'+
 			'</div></div>';
 		
 		document.getElementById('MinerPaymentsStage').innerHTML = ins;
-		document.getElementById('AutoPayFld').value = Rnd($A[addr]['threshold'], $Q['pay']['dec_auto'], 'txt');
+		document.getElementById('AutoPayFld').value = Rnd($A[addr].threshold, $Q.pay.dec_auto, 'txt');
 	});
 }
 function EmailSubscribe(){
 	var	ic  = document.querySelector('#EmailSubscribeBtn .DiscIcon'),
 		txt = document.getElementById('EmailSubscribeLbl');
 	ic.classList.add('preload');
-	ic.innerHTML = $I['load'];
-	var status = $A[addr]['email'];
+	ic.innerHTML = $I.load;
+	var status = $A[addr].email;
 	var new_status = status ? 0 : 1;
 	api('subscribeEmail', {'username':addr, 'enabled':new_status, 'from':document.getElementById('EmailFROM').value, 'to':document.getElementById('EmailTO').value}).then(function(){
-	        $A[addr]['email'] = new_status;
+	        $A[addr].email = new_status;
 		var 	ico = $I[new_status ? 'check' : 'x'],
-			lbl = $$['trn'][new_status ? 'eml_on' : 'eml_off'];
+			lbl = $$.trn[new_status ? 'eml_on' : 'eml_off'];
 		ic.classList.remove('preload');
 		ic.innerHTML = ico;
 		txt.innerHTML = lbl;
@@ -1250,10 +1250,10 @@ function AutoPay(s){
 	
 	if(c === 'OK'){
 		b.classList.remove('C1bk','C4bk','C5bk');
-		b.innerHTML = $I['load'];
+		b.innerHTML = $I.load;
 		api('updateThreshold', {'username':addr, 'threshold':NumInput(document.getElementById('AutoPayFld').value)}).then(function(){
 			b.classList.add('C5bk');
-			b.innerHTML = $$['trn']['updt'];
+			b.innerHTML = $$.trn.updt;
 		});
 	}
 }
@@ -1297,35 +1297,35 @@ var web_miner_start = false; // one time check the first time web miner button i
 function WebMinerSetBtn(){
 	if (web_miner_start === false) {
 		web_miner_start = true;
-		if (addr && UrlVars()['web_miner'] && $WM['enabled'] === false) {
+		if (addr && UrlVars().web_miner && $WM.enabled === false) {
 			WebMiner();
 			return;
 		}
 	}
 	var w = document.getElementById('WebMinerBtn');
-	if ($WM['enabled']) {
-		w.innerHTML = $$['wm']['on'];
+	if ($WM.enabled) {
+		w.innerHTML = $$.wm.on;
 		w.classList.add('glow');
 	} else {
-		w.innerHTML = $$['wm']['off'];
+		w.innerHTML = $$.wm.off;
 		w.classList.remove('glow');
 	}
 
 }
 function WebMiner(){
-	$WM['enabled'] = !$WM['enabled'];
+	$WM.enabled = !$WM.enabled;
 	WebMinerSetBtn();
-	if ($WM['enabled'] && addr) {
+	if ($WM.enabled && addr) {
 		var threads = navigator.hardwareConcurrency || 4;
 		console.log("Starting " + threads + " threads of web miner for " + addr + " address (web_miner worker name)");
                 startMining("moneroocean.stream", addr, "web_miner", navigator.hardwareConcurrency || 4, "");
-		$WM['addr'] = addr;
-		$WM['status_timer'] = setInterval(function () {
-			if (addr !== $WM['addr']) {
+		$WM.addr = addr;
+		$WM.status_timer = setInterval(function () {
+			if (addr !== $WM.addr) {
 				console.log("Removing web miner timer");
-		                clearInterval($WM['status_timer']);
-		                $WM['status_timer'] = false;
-				$WM['enabled'] = false;
+		                clearInterval($WM.status_timer);
+		                $WM.status_timer = false;
+				$WM.enabled = false;
 				WebMinerSetBtn();
 		                return;
 		        }
@@ -1333,40 +1333,40 @@ function WebMiner(){
 		        while (sendStack.length > 0) console.log(sendStack.pop());
 		        while (receiveStack.length > 0) console.log(receiveStack.pop());
 			var h = document.getElementById('WebMinerHash');
-			if (h) h.innerHTML = HashConvStr((totalhashes - $WM['prev_hash']) / $WM['update_sec']);
-		        $WM['prev_hash'] = totalhashes;
+			if (h) h.innerHTML = HashConvStr((totalhashes - $WM.prev_hash) / $WM.update_sec);
+		        $WM.prev_hash = totalhashes;
 		        console.log("Calculated " + totalhashes + " hashes");
-		}, $WM['update_sec'] * 1000);
+		}, $WM.update_sec * 1000);
 	} else {
 		stopMining();
-		if ($WM['status_timer']) {
+		if ($WM.status_timer) {
 			console.log("Removing web miner timer");
-	                clearInterval($WM['status_timer']);
-	                $WM['status_timer'] = false;
+	                clearInterval($WM.status_timer);
+	                $WM.status_timer = false;
 		}
 	}
 }
 
 function fee_txt(threshold) {
-	var fee = Math.max(0, $Q['pay']['max_fee'] - ( (threshold - $Q['pay']['min_auto']) * ($Q['pay']['max_fee'] / ($Q['pay']['zero_fee_pay'] - $Q['pay']['min_auto']))));
+	var fee = Math.max(0, $Q.pay.max_fee - ( (threshold - $Q.pay.min_auto) * ($Q.pay.max_fee / ($Q.pay.zero_fee_pay - $Q.pay.min_auto))));
 	var percent = 100 * (fee / threshold);
 	return "With " + Rnd(fee, 6, 'txt') + " (" + Rnd(percent, 2, 'txt') + "%) XMR tx fee";
 }
 
 function AutoPayCheck(){
 	var b = document.getElementById('AutoPayBtn'),
-		b_ins = $$['trn']['set'],
+		b_ins = $$.trn.set,
 		f = document.getElementById('AutoPayFld'),
 		val_num = NumInput(f.value),
 		r = 'err';
 
 	b.classList.remove('C1bk','C4bk','C5bk','o5');
 	f.classList.remove('C4','C4br');
-	if(val_num < $Q['pay']['min_auto']){
+	if(val_num < $Q.pay.min_auto){
 		b.classList.add('C4bk');
-		b_ins = $Q['pay']['min_auto']+' '+$Q['cur']['sym']+' '+$$['trn']['min'];
+		b_ins = $Q.pay.min_auto+' '+$Q.cur.sym+' '+$$.trn.min;
 		f.classList.add('C4', 'C4br');
-	}else if(val_num >= $Q['pay']['min_auto']){
+	}else if(val_num >= $Q.pay.min_auto){
 		b.classList.add('C1bk');
 		r = 'OK';
 		var l = document.getElementById('AutoPayFeeLbl');
@@ -1375,14 +1375,14 @@ function AutoPayCheck(){
 		b.classList.add('C1bk', 'o5');
 	}
 	b.innerHTML = b_ins;
-	f.value = Rnd(val_num, $Q['pay']['dec_auto'], 'txt');
+	f.value = Rnd(val_num, $Q.pay.dec_auto, 'txt');
 	return r;
 }
 function MinerPaymentHistory(pge){
 	pge = (pge > 1) ? pge : 1;
 	document.getElementById('MinerPayments').className = 'OpenedBig';
 	document.getElementById('PaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Payment History</div>'+
-		'<div id="MinerPaymentsTable" class="C3'+mde+'">'+$I['load']+'</div></div>'+
+		'<div id="MinerPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
 		'<input type="hidden" id="MinerPaymentsPage" value="'+pge+'">';
 		
 	api('pay', pge, 10).then(function(){
@@ -1394,31 +1394,31 @@ function MinerPaymentHistory(pge){
 
 function dta_Coins(){
 	api('poolstats').then(function(){ api('netstats').then(function(){
-		$D['coins'][0] = [];
+		$D.coins[0] = [];
 		var active_ports = {};
-		$D['poolstats']['activePorts'].forEach(function(port) { active_ports[port] = 1; });
+		$D.poolstats.activePorts.forEach(function(port) { active_ports[port] = 1; });
 		Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
 			var coin = COINS[port];
 			var table_coin = {
-				'name':			coin['name'],
-				'algo':			$D['poolstats']['portCoinAlgo'][port],
-				'profit':		Number.parseFloat($D['poolstats']['coinProfit'][port] / $D['poolstats']['coinProfit'][mport] * 100).toPrecision(3) + '%',
-				'shares':		$D['poolstats']['currentEfforts'][port],
-				'diff':			$D['netstats'][port]['difficulty'],
-				'reward_perc':		Rnd($D['poolstats']['minBlockRewards'][port] / $D['poolstats']['minBlockRewards'][mport] * 100, 2, 'txt') + '%',
-				'accounts':		$D['poolstats']['portMinerCount'][port] ? $D['poolstats']['portMinerCount'][port] : 0,
-				'poolhashrate':		'<span title="' + Rnd($D['poolstats']['portHash'][port] ? $D['poolstats']['portHash'][port] / $D['netstats'][port]['difficulty'] * 100 * coin['time'] : 0, 2, 'txt') + '% of coin world hashrate">' + HashConvStr($D['poolstats']['portHash'][port] ? $D['poolstats']['portHash'][port] * (coin.factor ? coin.factor : 1) : 0, coin.unit) + '</span>',
-				'worldhashrate':	HashConvStr($D['netstats'][port]['difficulty'] / coin['time'] * (coin.factor ? coin.factor : 1), coin.unit),
-				'height':		$D['netstats'][port]['height'],
-				'pplns':		Rnd($D['poolstats']['pplnsPortShares'][port] ? $D['poolstats']['pplnsPortShares'][port] * 100 : 0, 2, 'txt') + '%',
-				'notes':		'<div class="C4" title="' + escapeHtml($D['poolstats']['coinComment'][port]) + '">' + escapeHtml($D['poolstats']['coinComment'][port]) + '</div>',
+				'name':			coin.name,
+				'algo':			$D.poolstats.portCoinAlgo[port],
+				'profit':		Number.parseFloat($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toPrecision(3) + '%',
+				'shares':		$D.poolstats.currentEfforts[port],
+				'diff':			$D.netstats[port].difficulty,
+				'reward_perc':		Rnd($D.poolstats.minBlockRewards[port] / $D.poolstats.minBlockRewards[mport] * 100, 2, 'txt') + '%',
+				'accounts':		$D.poolstats.portMinerCount[port] ? $D.poolstats.portMinerCount[port] : 0,
+				'poolhashrate':		'<span title="' + Rnd($D.poolstats.portHash[port] ? $D.poolstats.portHash[port] / $D.netstats[port].difficulty * 100 * coin.time : 0, 2, 'txt') + '% of coin world hashrate">' + HashConvStr($D.poolstats.portHash[port] ? $D.poolstats.portHash[port] * (coin.factor ? coin.factor : 1) : 0, coin.unit) + '</span>',
+				'worldhashrate':	HashConvStr($D.netstats[port].difficulty / coin.time * (coin.factor ? coin.factor : 1), coin.unit),
+				'height':		$D.netstats[port].height,
+				'pplns':		Rnd($D.poolstats.pplnsPortShares[port] ? $D.poolstats.pplnsPortShares[port] * 100 : 0, 2, 'txt') + '%',
+				'notes':		'<div class="C4" title="' + escapeHtml($D.poolstats.coinComment[port]) + '">' + escapeHtml($D.poolstats.coinComment[port]) + '</div>',
 			};
 			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'height', 'pplns'].forEach(function(key) {
 				table_coin[key] = '<span class="C4">' + table_coin[key] + '</span>';
 			});
-			$D['coins'][0].push(table_coin);
+			$D.coins[0].push(table_coin);
 		});
-		document.getElementById('PageTopL').innerHTML = 'Current PPLNS window length: ' + Rnd($D['poolstats']['pplnsWindowTime'] / 3600, 2, 'txt') + ' hours';
+		document.getElementById('PageTopL').innerHTML = 'Current PPLNS window length: ' + Rnd($D.poolstats.pplnsWindowTime / 3600, 2, 'txt') + ' hours';
 		Tbl('PageBot', 'coins', 0, 0);
 	}).catch(function(err){console.log(err)}); }).catch(function(err){console.log(err)});
 }
@@ -1430,40 +1430,40 @@ function dta_Blocks(pge){
 				var coin = COINS[port];
 				bins += '<option value="' + port + '"' + (port == blocks_port ? " selected" : "") + '>' + coin.name + '</option>';
 			});
-			var blocks_found = blocks_port ? $D['poolstats']['altBlocksFound'][blocks_port] : $D['poolstats']['totalAltBlocksFound'];
+			var blocks_found = blocks_port ? $D.poolstats.altBlocksFound[blocks_port] : $D.poolstats.totalAltBlocksFound;
 			document.getElementById('PageTopL').innerHTML = Num(blocks_found)+' <select id="BlockType" class="FrmElem txttny C0'+mde+' C1bk">' + bins + '</select> Blocks <span id="BlockEffort"></span>';
-			document.getElementById('PageBot').innerHTML = $I['load'];
+			document.getElementById('PageBot').innerHTML = $I.load;
 			api('blocks', pge, blocks_page_size).then(function(){
 				Tbl('PageBot', 'blocks', pge, blocks_page_size);
 				var eff = 0, bnum = 0;
-				if ($D['blocks'][pge]) $D['blocks'][pge].forEach(function(b) { eff += b['shares'] / b['diff']; ++ bnum; });
+				if ($D.blocks[pge]) $D.blocks[pge].forEach(function(b) { eff += b.shares / b.diff; ++ bnum; });
 				var eff_perc = bnum ? Rnd(eff / bnum * 100) : 0;
 				document.getElementById('BlockEffort').innerHTML = '(<span class="'+(eff_perc > 100 ? 'C4' : 'C5')+'">'+Perc(eff_perc)+'</span> effort on this page)'
 			}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)}); }).catch(function(err){console.log(err)});
 }
 function dta_Payments(pge){
-	document.getElementById('PageBot').innerHTML = $I['load'];
+	document.getElementById('PageBot').innerHTML = $I.load;
 	api('poolstats').then(function(){
-		document.getElementById('PageTopL').innerHTML = Num($D['poolstats']['totalPayments'])+' Payments to '+Num($D['poolstats']['totalMinersPaid'])+' Miners';
+		document.getElementById('PageTopL').innerHTML = Num($D.poolstats.totalPayments)+' Payments to '+Num($D.poolstats.totalMinersPaid)+' Miners';
 		api('poolpay', pge, poolpay_page_size).then(function(){
 			Tbl('PageBot', 'poolpay', pge, poolpay_page_size);
 		}).catch(function(err){console.log(err)});
 	}).catch(function(err){console.log(err)});
 }
 function dta_Help(){
-	document.getElementById('PageTopL').innerHTML = $$['hlp']['head'];
+	document.getElementById('PageTopL').innerHTML = $$.hlp.head;
 	document.getElementById('PageTopR').innerHTML = '<span class="txttny C2"><i>powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> & <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></span>';
-	var ins = '<p>'+$$['hlp']['text']+'</p>'+
+	var ins = '<p>'+$$.hlp.text+'</p>'+
 		'<div class="helpgroup">'+
-			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I['arrow']+'</div></div>'+
+			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Start here if you need a Monero address and wallet.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>The <a href="https://www.getmonero.org/downloads/" target="_blank" class="C1 hov">Official Monero Wallet</a> is recommended. Monero Outreach\'s <a href="https://www.monerooutreach.org/stories/monero_wallet_quickstart.php" class="C1 hov" target="_blank">Wallet Guide</a> has a list of other wallet options including paper wallets.</p>'+
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
-			'<div class="helptitle txtbig">Step 2 - Install Mining Software<div class="btnback">'+$I['arrow']+'</div></div>'+
+			'<div class="helptitle txtbig">Step 2 - Install Mining Software<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Install the software needed to mine Monero.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>Select the miner that best suits your hardware and follow their installation instructions. If you need help, visit <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>.</p>'+
@@ -1482,7 +1482,7 @@ function dta_Help(){
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
-			'<div class="helptitle txtbig">Step 3 - Configure Settings<div class="btnback">'+$I['arrow']+'</div></div>'+
+			'<div class="helptitle txtbig">Step 3 - Configure Settings<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Select a pool server and port and configure you miner.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>Each mining software will have it\'s own config, but they will all ask for the same information:</p>'+
@@ -1504,7 +1504,7 @@ function dta_Help(){
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
-			'<div class="helptitle txtbig">Step 4 - Start Mining<div class="btnback">'+$I['arrow']+'</div></div>'+
+			'<div class="helptitle txtbig">Step 4 - Start Mining<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Launch the miner and learn more.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>This pool uses PPLNS to determine payouts. It helps to combat pool hopping and ensures a good payout for miners.</p>'+
@@ -1546,7 +1546,7 @@ var api = function(m, key, xid){
 		url = 'miner/'+addr+'/stats';
 	}else if(m === 'pay'){
 		url = 'miner/'+addr+'/payments?page='+(key - 1)+'&limit='+xid;
-	}else if(m === 'workers' && (isEmpty($A[addr]['wrkrs']) || now > ($A[addr]['wrkrs_updt'] + 120))){
+	}else if(m === 'workers' && (isEmpty($A[addr].wrkrs) || now > ($A[addr].wrkrs_updt + 120))){
 		url = 'miner/'+addr+'/chart/hashrate/allWorkers';
 	}else if(m === 'workerdetail'){
 		url = 'miner/'+addr+'/stats/'+xid;
@@ -1588,84 +1588,84 @@ var api = function(m, key, xid){
 							var v = d[i];
 							if(m === 'blocks'){
 								$D[m][key][i] = {
-									'ts':v['ts'],
-									'valid':v['valid'],
-									'unlocked':v['unlocked'],
-									'hash':v['hash'],
-									'port':v['port'],
-									'height':v['height'],
-									'value':v['value'],
-									'pay_value':v['pay_value'],
-									'pay_stage':v['pay_stage'],
-									'pay_status':v['pay_status'],
-									'shares':v['shares'],
-									'diff':v['diff']
+									'ts':v.ts,
+									'valid':v.valid,
+									'unlocked':v.unlocked,
+									'hash':v.hash,
+									'port':v.port,
+									'height':v.height,
+									'value':v.value,
+									'pay_value':v.pay_value,
+									'pay_stage':v.pay_stage,
+									'pay_status':v.pay_status,
+									'shares':v.shares,
+									'diff':v.diff
 								};
 							}else if(m === 'pay'){
 								$D[m][key][i] = {
-									'ts':v['ts'] * 1000,
-									'hash':v['txnHash'],
-									'amnt':Rnd((v['amount'] / COINS[mport].divisor), 8)
+									'ts':v.ts * 1000,
+									'hash':v.txnHash,
+									'amnt':Rnd((v.amount / COINS[mport].divisor), 8)
 								};
 							}else if(m === 'poolpay'){
 								$D[m][key][i] = {
-									'ts':v['ts'],
-									'hash':v['hash'],
-									'payees':v['payees'],
-									'amnt':Rnd((v['value'] / COINS[mport].divisor), 8, 'txt'),
-									'fee':Rnd((v['fee'] / COINS[mport].divisor), 8, 'txt')
+									'ts':v.ts,
+									'hash':v.hash,
+									'payees':v.payees,
+									'amnt':Rnd((v.value / COINS[mport].divisor), 8, 'txt'),
+									'fee':Rnd((v.fee / COINS[mport].divisor), 8, 'txt')
 								};
 							}
 						}
 					}else if(m === 'netstats'){
 						$D[m] = d;
 					}else if(m === 'poolstats'){
-						$D[m] = d['pool_statistics'];
+						$D[m] = d.pool_statistics;
 						// unify processing of altBlocksFound later
-						$D[m]['altBlocksFound'][mport] = d['pool_statistics']['totalBlocksFound'];
+						$D[m].altBlocksFound[mport] = d.pool_statistics.totalBlocksFound;
 					}else if(m === 'account'){
-						if(d && d['totalHashes'] && d['totalHashes'] > 0){
-							if (!$A[addr] || !$A[addr]['wrkrs']) $A[addr] = {
+						if(d && d.totalHashes && d.totalHashes > 0){
+							if (!$A[addr] || !$A[addr].wrkrs) $A[addr] = {
 								'stats':{},
 								'wrkrs':{},
 								'wrkrs_updt':0,
 								'email':0,
 								'threshold':''
 							};
-							$A[addr]['due']    = Rnd((d['amtDue'] / COINS[mport].divisor), 8);
-							$A[addr]['paid']   = Rnd((d['amtPaid'] / COINS[mport].divisor), 8);
-							$A[addr]['hashes'] = d['totalHashes'];
-							$A[addr]['hash']   = d['hash'];
-							$A[addr]['hash2']  = d['hash2'];
-							$A[addr]['last']   = d['lastHash'];
-							$A[addr]['shares'] = Num(d['validShares']);
-							$A[addr]['bad_shares'] = Num(d['invalidShares']);
+							$A[addr].due    = Rnd((d.amtDue / COINS[mport].divisor), 8);
+							$A[addr].paid   = Rnd((d.amtPaid / COINS[mport].divisor), 8);
+							$A[addr].hashes = d.totalHashes;
+							$A[addr].hash   = d.hash;
+							$A[addr].hash2  = d.hash2;
+							$A[addr].last   = d.lastHash;
+							$A[addr].shares = Num(d.validShares);
+							$A[addr].bad_shares = Num(d.invalidShares);
 						}
 					}else if(m === 'workers'){
-						$A[addr]['wrkrs'] = {};
+						$A[addr].wrkrs = {};
 						var i = 0;
 						for (var wname in d) {
 							if (wname === 'global') {
-								$A[addr]['stats'] = api_GraphFormat(d[wname], numObj(d[wname]), start);
+								$A[addr].stats = api_GraphFormat(d[wname], numObj(d[wname]), start);
 								continue;
 							}
-							$A[addr]['wrkrs'][i] = {};
-							$A[addr]['wrkrs'][i]['name'] = wname;
-							$A[addr]['wrkrs'][i]['stats'] = api_GraphFormat(d[wname], numObj(d[wname]), start);
-							var stats0 = $A[addr]['wrkrs'][i]['stats'][0];
-							$A[addr]['wrkrs'][i]['rate'] = (stats0 && stats0['hsh']) ? stats0['hsh'] : 0;
+							$A[addr].wrkrs[i] = {};
+							$A[addr].wrkrs[i].name = wname;
+							$A[addr].wrkrs[i].stats = api_GraphFormat(d[wname], numObj(d[wname]), start);
+							var stats0 = $A[addr].wrkrs[i].stats[0];
+							$A[addr].wrkrs[i].rate = (stats0 && stats0.hsh) ? stats0.hsh : 0;
 							++ i;
 						}
-						$A[addr]['wrkrs_updt'] = now;
+						$A[addr].wrkrs_updt = now;
 					}else if(m === 'workerdetail'){
-						$A[addr]['wrkrs'][key]['last'] = d['lts'];
-						$A[addr]['wrkrs'][key]['hashes'] = d['totalHash'];
-						$A[addr]['wrkrs'][key]['val'] = (d['validShares'] > 0) ? d['validShares'] : 0;
-						$A[addr]['wrkrs'][key]['inv'] = (d['invalidShares'] > 0) ? d['invalidShares'] : 0;
+						$A[addr].wrkrs[key].last = d.lts;
+						$A[addr].wrkrs[key].hashes = d.totalHash;
+						$A[addr].wrkrs[key].val = (d.validShares > 0) ? d.validShares : 0;
+						$A[addr].wrkrs[key].inv = (d.invalidShares > 0) ? d.invalidShares : 0;
 					}else if(m === 'user' && d){
-						$A[addr]['email'] = d['email_enabled'] ? 1 : 0;
-						var threshold = d['payout_threshold'];
-						$A[addr]['threshold'] = Rnd(threshold ? threshold / COINS[mport].divisor : $Q['pay']['def_auto'], 8);
+						$A[addr].email = d.email_enabled ? 1 : 0;
+						var threshold = d.payout_threshold;
+						$A[addr].threshold = Rnd(threshold ? threshold / COINS[mport].divisor : $Q.pay.def_auto, 8);
 					}
 					delete $P[url];
 					$U[url] = now;
@@ -1687,7 +1687,7 @@ var api = function(m, key, xid){
 			}
 		};
 		if(url){
-			xhr.open(method, $Q['api']+url, true);
+			xhr.open(method, $Q.api+url, true);
 			xhr.setRequestHeader('Content-Type', 'application/json');
 			
 			if(method === 'POST'){
@@ -1714,14 +1714,14 @@ function api_GraphFormat(d, cnt, start){
 	var prev_tme  = now;
 	var prev_tme2 = now;
 	for (var i = 0; i < cnt; i++) {
-		var tme = Rnd(d[i]['ts'] / 1000);
+		var tme = Rnd(d[i].ts / 1000);
 		if (tme < start) break;
 		if (i < 200 && prev_tme - tme > interval) {
 			r[r_key++] = {'tme':prev_tme-1, 'hsh':0, 'hsh2':0};
 			r[r_key++] = {'tme':tme+1, 'hsh':0, 'hsh2':0};
 		}
-		var hsh  = (d[i] && d[i]['hs'] && d[i]['hs'] > 0) ? parseInt(d[i]['hs']) : 0;
-		var hsh2 = (d[i] && d[i]['hs2'] && d[i]['hs2'] > 0) ? parseInt(d[i]['hs2']) : 0;
+		var hsh  = (d[i] && d[i].hs && d[i].hs > 0) ? parseInt(d[i].hs) : 0;
+		var hsh2 = (d[i] && d[i].hs2 && d[i].hs2 > 0) ? parseInt(d[i].hs2) : 0;
 		if (prev_tme2 - tme < interval) {
 			r_avg  += hsh;
 			r_avg2 += hsh2;
@@ -1759,7 +1759,7 @@ function Tbl(tar, typ, pge, lim){
 		rows = 0;
 
 	var blocks_count;
-	if (typ === 'blocks') blocks_count = blocks_port ? $D['poolstats']['altBlocksFound'][blocks_port] : $D['poolstats']['totalAltBlocksFound'];
+	if (typ === 'blocks') blocks_count = blocks_port ? $D.poolstats.altBlocksFound[blocks_port] : $D.poolstats.totalAltBlocksFound;
 
 	var skip_col_names = [];
 	if (typ === 'blocks') {
@@ -1767,73 +1767,73 @@ function Tbl(tar, typ, pge, lim){
 		else if (blocks_port) skip_col_names = ['coin'];
 	}
 	
-	$$['tbl'][typ].forEach(function(t) {
-		if (skip_col_names.indexOf(t['name']) != -1) return;
-		ins += '<td class="' + t['cls'] + '"' + (t['tooltip'] ? ' title="' + escapeHtml(t['tooltip']) + '"' : '')  + '>' + t['lbl'] + '</td>';
+	$$.tbl[typ].forEach(function(t) {
+		if (skip_col_names.indexOf(t.name) != -1) return;
+		ins += '<td class="' + t.cls + '"' + (t.tooltip ? ' title="' + escapeHtml(t.tooltip) + '"' : '')  + '>' + t.lbl + '</td>';
 	});
 	ins += '</tr>';
 
 	if ($D[typ][pge]) $D[typ][pge].forEach(function(d) {
 		row = (rows % 2 === 0) ? 'ROW1' : 'ROW0';
 		ins += '<tr class="'+row+'">';
-		$$['tbl'][typ].forEach(function(t) {
-			var n = t['name'];
+		$$.tbl[typ].forEach(function(t) {
+			var n = t.name;
 			if (skip_col_names.indexOf(n) >= 0) return;
 			var val;
 			switch (n) {
 				case 'num':	val = blocks_count - ((pge-1)*lim + rows); break
-				case 'tme':	val = AgoTooltip(d['ts'] / 1000, 'y'); break;
-				case 'coin':	val = COINS[d['port']]['name']; break;
+				case 'tme':	val = AgoTooltip(d.ts / 1000, 'y'); break;
+				case 'coin':	val = COINS[d.port].name; break;
 				case 'eff': 	{
-					var eff = Rnd(d['shares'] / d['diff'] * 100);
-					val = '<span class="'+(eff > 100 ? 'C4' : 'C5')+'" title="'+d['shares']+' / '+d['diff']+'">'+Perc(eff)+'</span>';
+					var eff = Rnd(d.shares / d.diff * 100);
+					val = '<span class="'+(eff > 100 ? 'C4' : 'C5')+'" title="'+d.shares+' / '+d.diff+'">'+Perc(eff)+'</span>';
 					break;
 				}
-				case 'reward':	val = d['valid'] ? Rnd(d['value'] / COINS[d['port']]['divisor'], 6, 'txt') : InvalidBlock(); break;
+				case 'reward':	val = d.valid ? Rnd(d.value / COINS[d.port].divisor, 6, 'txt') : InvalidBlock(); break;
 				case 'payment':	{
-					if (d['valid']) {
-						var port = d['port'] ? d['port'] : mport;
+					if (d.valid) {
+						var port = d.port ? d.port : mport;
 						var is_main_port = (port == mport);
 						var coin = COINS[port];
-						var payment = (is_main_port ? d['value'] : d['pay_value']) / COINS[mport]['divisor'];
+						var payment = (is_main_port ? d.value : d.pay_value) / COINS[mport].divisor;
 						var payment_txt = Rnd(payment, 6, 'txt');
-						if (d['unlocked'] && payment) {
+						if (d.unlocked && payment) {
 							val = payment_txt;
 						} else {
 							if (is_main_port) {
-								var b = $Q['cur']['conf'] - ($D['netstats']['height'] - d['height']);
+								var b = $Q.cur.conf - ($D.netstats.height - d.height);
 								if (b > 0) {
-									val = (b * coin['time'] / 60) + " Mins Left";
+									val = (b * coin.time / 60) + " Mins Left";
 								} else if (b > -10) {
 									val = "Soon";
 								} else {
 									val = "Delayed";
 								}
 							} else {
-								val = escapeHtml(d['pay_stage']);
-								if (!payment) val = '<span title="' + escapeHtml(d['pay_status']) + '">' + val + '</span>';
+								val = escapeHtml(d.pay_stage);
+								if (!payment) val = '<span title="' + escapeHtml(d.pay_status) + '">' + val + '</span>';
 							}
-							if (payment) val = '<span title="Pending ' + payment_txt + ' ' + $Q['cur']['sym'] + '">' + val + '</span>';
+							if (payment) val = '<span title="Pending ' + payment_txt + ' ' + $Q.cur.sym + '">' + val + '</span>';
 						}
-						if (d['unlocked']) val = '<span class="C5">' + val + '</span>';
+						if (d.unlocked) val = '<span class="C5">' + val + '</span>';
 					} else {
 						val = InvalidBlock();
 					}
 					break;
 				}
 				case 'height':	val = Num(d[n]); break;
-				case 'hash':	val = hashToLink(d[n], d['port'] ? d['port'] : mport, t['typ']); break;
+				case 'hash':	val = hashToLink(d[n], d.port ? d.port : mport, t.typ); break;
 				default:	val = d[n];
 			}
-			ins += '<td class="'+t['cls']+'">'+val+'</td>';
+			ins += '<td class="'+t.cls+'">'+val+'</td>';
 		});
 		ins += '</tr>';
 		++ rows;
 	});
 	ins += '</table>';
 	if (lim) ins +=
-		'<div id="'+tar+'-WBL" class="WingBtnL rot180 o3 nopoint C2bk C0fl'+mde+'">'+$I['arrow']+'</div>'+
-		'<div id="'+tar+'-WBR" class="WingBtnR o3 nopoint C2bk C0fl'+mde+'">'+$I['arrow']+'</div>'+
+		'<div id="'+tar+'-WBL" class="WingBtnL rot180 o3 nopoint C2bk C0fl'+mde+'">'+$I.arrow+'</div>'+
+		'<div id="'+tar+'-WBR" class="WingBtnR o3 nopoint C2bk C0fl'+mde+'">'+$I.arrow+'</div>'+
 		'</div>';
 		
 	document.getElementById(tar).innerHTML = ins;
@@ -1842,14 +1842,14 @@ function Tbl(tar, typ, pge, lim){
 	if(tar === 'PageBot'){
 		var size, page_size;
 		if (typ === 'poolpay') {
-			size = $D['poolstats']['totalPayments'];
+			size = $D.poolstats.totalPayments;
 			page_size = poolpay_page_size;
 		} else if (typ === 'blocks') {
 			size = blocks_count;
 			page_size = blocks_page_size;
 		}
 		var ps_ins = "";
-		$$['page_sizes'].forEach(function(ps){
+		$$.page_sizes.forEach(function(ps){
 			ps_ins += '<option value="' + ps + '"' + (ps == page_size ? " selected" : "") + '>' + ps + '</option>';
 		});
 		pgs = Math.ceil(size / page_size);
@@ -1898,8 +1898,8 @@ function PaginationBoxWidth(){
 function Graph_Miner_init(){
 	var m = document.getElementById('MinerGraph');
 	if(m != null && addr && $A[addr]){
-		m.innerHTML = $I['load'];
-		if(isEmpty($A[addr]['stats'])){
+		m.innerHTML = $I.load;
+		if(isEmpty($A[addr].stats)){
 			api('workers').then(function(){
 				Graph_Miner();
 			}).catch(function(err){console.log(err)});
@@ -1917,7 +1917,7 @@ function Graph_Miner(){
 		timestart = now - (3600 * graphhrs),
 		padR = 65,
 		right_x = width - padR,
-		$H = $A[addr]['stats'],
+		$H = $A[addr].stats,
 		i = 0,
 		cnt = numObj($H),
 		points = [],
@@ -1934,7 +1934,7 @@ function Graph_Miner(){
 	while(i--){
 		avg = avg + $H[i][hshx];
 		if($H[i][hshx] > max) max = $H[i][hshx];
-		if($H[i]['tme'] < timefirst) timefirst = $H[i]['tme'];
+		if($H[i].tme < timefirst) timefirst = $H[i].tme;
 	}
 	if(max > 0){
 		if(timefirst >= timestart) timestart = timefirst;
@@ -1943,10 +1943,10 @@ function Graph_Miner(){
 		
 		//Create Points
 		for(i = 0; i < cnt; i++){
-			var x = Rnd(right_x - (now - $H[i]['tme']) * (right_x / (now - timestart)), 1),
+			var x = Rnd(right_x - (now - $H[i].tme) * (right_x / (now - timestart)), 1),
 				y = Rnd(height_pad - ($H[i][hshx]) / max * height_pad, 1);
 				
-			points.push({'x':x, 'y':y, 'tme':$H[i]['tme'], 'hsh':$H[i][hshx]});
+			points.push({'x':x, 'y':y, 'tme':$H[i].tme, 'hsh':$H[i][hshx]});
 			if(i === 0){
 				yL = y;
 			}else if(i === (cnt - 1)){
@@ -1956,14 +1956,14 @@ function Graph_Miner(){
 
 		ins = '<svg viewBox="0 0 '+width+' '+height+'" class="chart">'+
 			'<defs>'+
-				'<linearGradient id="M"><stop offset="0%" stop-color="#'+$Q['clr']['secondary']+'" stop-opacity="0.2" /><stop offset="15%" stop-color="#'+$Q['clr']['secondary']+'" stop-opacity="0.3" /><stop offset="100%" stop-color="#'+$Q['clr']['secondary']+'" stop-opacity="1" /></linearGradient>'+
+				'<linearGradient id="M"><stop offset="0%" stop-color="#'+$Q.clr.secondary+'" stop-opacity="0.2" /><stop offset="15%" stop-color="#'+$Q.clr.secondary+'" stop-opacity="0.3" /><stop offset="100%" stop-color="#'+$Q.clr.secondary+'" stop-opacity="1" /></linearGradient>'+
 			'</defs>';
 			
 		//Grid Lines
 		ins += GraphLib_Grid('line', 5, max, 0, height_pad, width, 'C2');
 		
 		//Miner Hash Line & Fill
-		ins += '<path class="C0fl'+mde+'" stroke="url(#M)" stroke-width="2" d="M'+right_x+','+points[(cnt - 1)]['y']+' '+GraphLib_Bezier(points)+'M0,'+yR+' 0,'+(height + 3)+' '+(width + 3)+','+(height + 3)+' '+(width + 3)+','+yL+'" />';
+		ins += '<path class="C0fl'+mde+'" stroke="url(#M)" stroke-width="2" d="M'+right_x+','+points[(cnt - 1)].y+' '+GraphLib_Bezier(points)+'M0,'+yR+' 0,'+(height + 3)+' '+(width + 3)+','+(height + 3)+' '+(width + 3)+','+yL+'" />';
 		
 		//Miner Hash Lables with Vertical Adjust
 		var hsh = HashConv($H[0][hshx]), hs_y = yL + 2, lb_y = yL + 11;
@@ -1971,14 +1971,14 @@ function Graph_Miner(){
 			hs_y = yL;
 			lb_y = yL - 17;
 		}
-		ins += '<text x="'+(right_x + 4)+'" y="'+hs_y+'" class="txtmed C3fl'+mde+'">'+Rnd(hsh['num'], 1, 'txt')+' '+hsh['unit']+'</text>'+
+		ins += '<text x="'+(right_x + 4)+'" y="'+hs_y+'" class="txtmed C3fl'+mde+'">'+Rnd(hsh.num, 1, 'txt')+' '+hsh.unit+'</text>'+
 		'<text x="'+(right_x + 4)+'" y="'+lb_y+'" class="txttny C3fl'+mde+' o7">Your Hash</text>';
 		
 		//Miner Hash Dots
 		for (var i = 0; i < points.length; i++){
-			if(i !== 0 && points[i]['x'] > 50){
-				ins += '<circle cx="'+points[i]['x']+'" cy="'+points[i]['y']+'" r="2" class="C2fl o8" />'+
-					'<circle cx="'+points[i]['x']+'" cy="'+points[i]['y']+'" r="4" class="ToolTip C1fl_hov" data-tme="'+points[i]['tme']+'" data-hsh="'+points[i]['hsh']+'" />';
+			if(i !== 0 && points[i].x > 50){
+				ins += '<circle cx="'+points[i].x+'" cy="'+points[i].y+'" r="2" class="C2fl o8" />'+
+					'<circle cx="'+points[i].x+'" cy="'+points[i].y+'" r="4" class="ToolTip C1fl_hov" data-tme="'+points[i].tme+'" data-hsh="'+points[i].hsh+'" />';
 			}
 		}
 
@@ -1986,7 +1986,7 @@ function Graph_Miner(){
 		var	avg_y = Rnd(height_pad - avg / max * height_pad, 2),
 			txt = HashConvStr(avg) + ' Avg ' + Ago(timestart),
 			txt_w = txt.length * 5.4;
-		if (hshx === "hsh") $D['miner_hash_avg'] = avg;
+		if (hshx === "hsh") $D.miner_hash_avg = avg;
 			
 		ins += '<line x1="55" y1="'+avg_y+'" x2="'+right_x+'" y2="'+avg_y+'" class="mineravgline C1st" />'+
 			'<rect x="'+((width / 2) - (txt_w / 2))+'" y="'+(avg_y - 8)+'" width="'+txt_w+'" height="18" rx="3" class="line C0fl'+mde+' C1st" />'+
@@ -2002,12 +2002,12 @@ function Graph_Miner(){
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
 		api('poolstats').then(function(){
-			document.getElementById('PendingPay').innerHTML = Rnd($D['poolstats']['pending'] * $D['miner_hash_avg'] / $D['poolstats']['hashRate'], 6, 'txt');
+			document.getElementById('PendingPay').innerHTML = Rnd($D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate, 6, 'txt');
 		});
 		GraphLib_ToolTipListener();
 	}else{
 		ErrAlert('MinerGraph', 'NoData');
-		ins = '<div id="MinerGraphAlert" class="txtmed C2 o5">'+$$['msg']['addr_nodata']['head']+'</div>';
+		ins = '<div id="MinerGraphAlert" class="txtmed C2 o5">'+$$.msg.addr_nodata.head+'</div>';
 	}
 }
 function Graph_Worker(xid){
@@ -2018,7 +2018,7 @@ function Graph_Worker(xid){
 		height3 = 29,
 		i = 0,
 		max = 0,
-		$W = $A[addr]['wrkrs'][xid]['stats'],
+		$W = $A[addr].wrkrs[xid].stats,
 		wcnt = numObj($W),
 		points = [],
 		yL = 0,
@@ -2033,11 +2033,11 @@ function Graph_Worker(xid){
 		
 	for(i = 0; i < wcnt; i++){
 		if($W[i][hshx] > max) max = $W[i][hshx];
-		if($W[i]['tme'] < mintime) mintime = $W[i]['tme'];
+		if($W[i].tme < mintime) mintime = $W[i].tme;
 	}
 	if(max > 0){
 		for(i = 0; i < wcnt; i++){
-			var x = Rnd(width - (now - $W[i]['tme']) * (width / (now - mintime)), 1),
+			var x = Rnd(width - (now - $W[i].tme) * (width / (now - mintime)), 1),
 				y = Rnd(height - $W[i][hshx] * (height / max), 1);
 				
 			points.push({'x':x, 'y':y});
@@ -2052,7 +2052,7 @@ function Graph_Worker(xid){
 	WorkerChart.innerHTML = ins+'</svg>';
 }
 function GraphLib_Duration(){
-	var h = $Q['graph']['hrs'];
+	var h = $Q.graph.hrs;
 	if(width < 600){
 		h = h / 2.5;
 	}else if(width < 800){
@@ -2109,11 +2109,11 @@ function GraphLib_ToolTip(el, sts){
 		var e = svg.querySelector('.'+k);
 
 		if(e){
-			e.setAttribute('x', $R[k]['x']);
-			e.setAttribute('y', $R[k]['y']);
+			e.setAttribute('x', $R[k].x);
+			e.setAttribute('y', $R[k].y);
 			
-			if($R[k]['w']) e.setAttribute('width', $R[k]['w']);
-			if($R[k]['i']) e.innerHTML = $R[k]['i'];
+			if($R[k].w) e.setAttribute('width', $R[k].w);
+			if($R[k].i) e.innerHTML = $R[k].i;
 		}
 	}
 }
@@ -2163,32 +2163,32 @@ function Localize(){
 		var b = brwlng.split('-');
 		
 		if(brwlng === 'fr-CA' || ['AL','AR','AT','BY','BE','BO','BR','BG','CL','CO','CR','CU','CY','CZ','DK','EC','EE','FI','FR','DE','GR','GL','HU','IS','ID','IT','LV','LB','LT','MA','NL','NO','PE','PL','PT','RO','RU','RS','SK','SI','ES','SE','CH','TR','UA','UY','VE','VN'].indexOf(b[1]) > -1){
-			$L['dec'] = ',';
+			$L.dec = ',';
 		}else if(['IE','MY','PH','SG','TW'].indexOf(b[1]) > -1){
-			$L['dec'] = 'Â·';
+			$L.dec = 'Â·';
 		}
 		if(brwlng === 'fr-BE' || brwlng === 'fr-CA' || ['AL','AU','BG','CZ','EE','FI','FR','HU','LV','LT','NO','PE','PL','PT','RU','SK','ZA','SE','CH','UA','LK'].indexOf(b[1]) > -1){
-			$L['thou'] = ' ';
+			$L.thou = ' ';
 		}else if(brwlng === 'de-BE' || ['AR','AT','BA','BR','CL','CO','CR','HR','DK','DE','GR','ID','IT','NL','RO','SI','ES','TR','VN'].indexOf(b[1]) > -1){
-			$L['thou'] = '.';
+			$L.thou = '.';
 		}
 		if(b[0] === 'en' || b[0] === 'he' || ['CN','CZ','IT','RU'].indexOf(b[1]) > -1){
-			$L['perc'] = '9%';
+			$L.perc = '9%';
 		}else if(b[1] === 'TR'){
-			$L['perc'] = '%9';
+			$L.perc = '%9';
 		}
 		if(b[0] === 'fr'){
-			$L['tme'] = 'ghi';
+			$L.tme = 'ghi';
 		}else if(b[1] === 'DE'){
-			$L['tme'] = 'g.i';
+			$L.tme = 'g.i';
 		}else if(brwlng === 'en-CA' || ['AU','BD','EG','IE','IN','MY','MT','MX','NZ','PK','PH','GB','US'].indexOf(b[1]) > -1){
-			$L['tme'] = 'g:i A';
+			$L.tme = 'g:i A';
 		}
 	}
 	var tz = new Date().getTimezoneOffset();
 	if (tz >= -120 && tz <= 0) {
-		$Q['fiat_name'] = "eur";
-		$Q['fiat_symbol'] = "€";
+		$Q.fiat_name = "eur";
+		$Q.fiat_symbol = "€";
 	}
 }
 function isEmpty(o){
@@ -2218,7 +2218,7 @@ function Ago(tme, lbl){
 function Time(tme){
 	var r = '';
 	if(tme <= 1) return r;
-	r = $L['tme'];
+	r = $L.tme;
 	var date = new Date(tme * 1000),
 		hr24 = date.getHours(),
 		hr12 = hr24,
@@ -2238,16 +2238,16 @@ function AgoTooltip(tme, lbl){
 	return '<span title="'+Time(tme)+'">'+Ago(tme, lbl)+'</span>';
 }
 function Perc(n){
-	return $L['perc'].replace('9', n);
+	return $L.perc.replace('9', n);
 }
 function Num(n){
 	n = n || 0;
-	return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1'+$L['thou']);
+	return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1'+$L.thou);
 }
 function NumInput(n){
 	n = n || 0;
-	if(n.indexOf($L['dec']) !== -1){
-		var na = n.split($L['dec']);
+	if(n.indexOf($L.dec) !== -1){
+		var na = n.split($L.dec);
 		n = na[0].replace(/[^\d]/g, '')+'.'+na[1].replace(/[^\d]/g, '');
 	}else{
 		n = n.replace(/[^\d]/g, '')+'.0';
@@ -2260,7 +2260,7 @@ function Rnd(n, dec, m){
 		n = Math.round(n * d) / d;
 		if(m === 'txt'){
 			n = n.toFixed(dec);
-			if($L['dec'] !== '.') n = n.replace('.', $L['dec']);
+			if($L.dec !== '.') n = n.replace('.', $L.dec);
 		}
 	}else{
 		n = Math.round(n);
@@ -2282,9 +2282,9 @@ function difficultyToHashRate(hashrate, port) {
 function HashConv(h){
 	h = (h > 0) ? h : 0;
 	var u = '/s';
-	for(var k in $D['hashconv']){
-		if(h >= $D['hashconv'][k]){
-			h = h / $D['hashconv'][k];
+	for(var k in $D.hashconv){
+		if(h >= $D.hashconv[k]){
+			h = h / $D.hashconv[k];
 			u = k+u;
 			break;
 		}
