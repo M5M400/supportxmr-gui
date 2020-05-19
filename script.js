@@ -659,7 +659,9 @@ function TimerUpdateData(){
 			ErrAlert('X');
                         document.getElementById('WorldHash').innerHTML  = HashConvStr(difficultyToHashRate($D.netstats.difficulty, mport));
 			document.getElementById('PoolHash').innerHTML   = HashConvStr($D.poolstats.hashRate);
-			document.getElementById('CurrEffort').innerHTML = Rnd(100 * $D.poolstats.roundHashes / $D.netstats.difficulty, 2, 'txt') + "%";
+			document.getElementById('CurrEffort').innerHTML =
+				'<span title="' + $D.poolstats.roundHashes  + ' / ' + $D.netstats.difficulty + '">' +
+				Rnd(100 * $D.poolstats.roundHashes / $D.netstats.difficulty, 2, 'txt') + "%</span>";
 			document.getElementById('BlockCount').innerHTML =
 				'<span title="' + $D.poolstats.totalBlocksFound + ' ' + $Q.cur.nme + ' blocks and ' + $D.poolstats.totalAltBlocksFound + ' altcoin blocks">' +
 				($D.poolstats.totalBlocksFound + $D.poolstats.totalAltBlocksFound) + '</span>';
