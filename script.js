@@ -47,9 +47,7 @@ var	mde = 'l',
 			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
 		},
 		'msg':{
-			'welcome':{'head':'Welcome to '+$Q.pool.nme, 'text':'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q.cur.nme+' address above. After you\'ve submitted a share, your stats will appear here.'},
 			'addr_invalid':{'head':'Invalid '+$Q.cur.nme+' Address', 'text':'Double check that your address is complete.'},
-			'addr_notfound':{'head':'Address Not Found', 'text':'If you\'ve submitted your first share, be patient, it may take a minute or two to update. If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u><br><br>You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div>'},
 			'addr_nodata':{'head':'No Data', 'text':''}
 		},
 		'nav':{
@@ -919,7 +917,19 @@ function Dash_load(typ){
 					}).catch(function(err){console.log(err)});
 				}else{
 					Dash_reset();
-					m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$.msg.addr_notfound.head+'</div><div class="LR80 txt shim10">'+$$.msg.addr_notfound.text+'</div></div>';
+					m.innerHTML =
+						'<div class="MinerMsg C3'+mde+'"><div class="txtmed">Address Not Found</div><div class="LR80 txt shim10">' +
+						'If you\'ve submitted your first share, be patient, it may take a minute or two to update. ' +
+						'If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u><br><br>' +
+						'You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>' +
+						'You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div><br><br>' +
+						'Standalone miner reference setup info:<br>' +
+							'Pool: gulf.moneroocean.stream<br>' +
+							'Port: 10128 or 20128 for SSL (128000 diff)<br>' + 
+							'User: ' + addr + '<br><br>' +
+							'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
+							'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
+						'</div></div>';
 					l.classList.add('hide');
 					WebMinerSetBtn();
 					MinerSetupScriptsBtn(miner_setup_open);
@@ -932,7 +942,17 @@ function Dash_load(typ){
 		}
 	}else{
 		Dash_reset();
-		m.innerHTML = '<div class="MinerMsg C3'+mde+'"><div class="txtmed">'+$$.msg.welcome.head+'</div><div class="LR80 txt shim10">'+$$.msg.welcome.text+'</div></div>';
+		m.innerHTML =
+			'<div class="MinerMsg C3'+mde+'"><div class="txtmed">Welcome to ' + $Q.pool.nme +'</div><div class="LR80 txt shim10">' +
+			'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q.cur.nme+' address above. ' +
+			'After you\'ve submitted a share, your stats will appear here.<br><br>' +
+			'Standalone miner reference setup info:<br>' +
+				'Pool: gulf.moneroocean.stream<br>' +
+				'Port: 10128 or 20128 for SSL (128000 diff)<br><br>' +
+				'User: &lt;Your XMR wallet address&gt;<br><br>' +
+				'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
+				'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
+			'</div></div>';
 	}
 }
 function Dash_reset(){
@@ -1474,19 +1494,12 @@ function dta_Help(){
 			'<div class="helptitle txtbig">Step 2 - Install Mining Software<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Install the software needed to mine Monero.</div>'+
 			'<div class="helpcontent hide">'+
-				'<p>Select the miner that best suits your hardware and follow their installation instructions. If you need help, visit <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>.</p>'+
-				'<p><table class="txtsmall C3'+mde+'"><tr>'+
-					'<td NOWRAP>'+
-						'<i>Alphabetically</i><br>'+
-						'<a href="https://github.com/KlausT/ccminer-cryptonight/releases" class="C1 hov" target="_blank">ccminer-cryptonight</a> (Nvidia)<br>'+
-						'<a href="https://bitcointalk.org/index.php?topic=638915.0" class="C1 hov" target="_blank">Claymore\'s miner</a> (CPU, AMD)<br>'+
-					'</td>'+
-					'<td NOWRAP>'+
-						'<a href="https://github.com/Dead2/CryptoGoblin/releases" class="C1 hov" target="_blank">CryptoGoblin</a> (CPU, Nvidia, AMD)<br>'+
-						'<a href="https://github.com/xmrig/xmrig/" class="C1 hov" target="_blank">XMRig</a> (CPU, Nvidia, AMD)<br>'+
-						'<a href="https://github.com/fireice-uk/xmr-stak/releases" class="C1 hov" target="_blank">XMR-Stak</a> (CPU, Nvidia, AMD)'+
-					'</td>'+
-				'</tr></table></p>'+
+				'<p>Select the miner that best suits your hardware and follow their installation instructions. If you need help, visit <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>.</p>' +
+					'&nbsp;<a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">MO XMRig</a>: for top profit algo switching mining on CPU and GPU (Nvidia, AMD)<br>' +
+					'&nbsp;<a href="https://github.com/xmrig/xmrig/releases" class="C1 hov" target="_blank">XMRig</a>: for mining on CPU and GPU (Nvidia, AMD)<br>' +
+					'&nbsp;<a href="https://github.com/fireice-uk/xmr-stak/releases" class="C1 hov" target="_blank">XMR-Stak/RX</a>: for mining on CPU<br>' +
+					'&nbsp;<a href="https://github.com/MoneroOcean/meta-miner" class="C1 hov" target="_blank">mm.js</a>: for algo switching miner wrapper (advanced)<br><br>' +
+				'<p>Use <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if you have many miners.</p>' +
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
@@ -1494,21 +1507,21 @@ function dta_Help(){
 			'<div class="helpteaser">Select a pool server and port and configure you miner.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>Each mining software will have it\'s own config, but they will all ask for the same information:</p>'+
-				'<p><b>Your Monero Address</b><br>Often this will be labeled username, but check the instructions. You can specify a paymentID by using the following format: <i>address</i>.<i>paymentID</i></p>'+
-				'<p><b>Pool Address</b><br>The miner will want a url and a port, like this: gulf.moneroocean.stream:10032</p>'+
+				'<p><b>Your Monero Address</b><br>Often this will be labeled username, but check the instructions.</p>'+
+				'<p><b>Pool Address</b><br>The miner will want a url and a port, like this: gulf.moneroocean.stream:10128</p>'+
 				'<p><table class="txtsmall C3'+mde+'"><tr>'+
 					'<td>'+
 						'<p>Port descriptions:</p>'+
-						'<ul><li>3333 Low-end CPU</li><li>5555 Fast/Multi CPU</li><li>7777 GPU rigs</li><li>9000 SSL/TLS</li></ul>'+
+						'<ul><li>10032: Old CPU/GPU</li><li>10128: Modern CPU/GPU</li><li>11024: CPU/GPU farm</li><li>20128: SSL/TLS</li><li>10001: Very old CPU (1000 diff)</li></ul>'+
 					'</td>'+
 					'<td>'+
-						'<p>If you can\'t get through firewall, try these:</p>'+
-						'<ul><li>8080 Firewall bypass</li><li>80 Firewall bypass</li><li>443 Firewall bypass w/SSL/TLS</li></ul>'+
+						'<p>If you can\'t get through firewall, try these (specify +128000 difficulty after your Monero Address):</p>'+
+						'<ul><li>80: Firewall bypass</li><li>443: Firewall bypass w/SSL/TLS</li></ul>'+
 					'</td>'+
 				'</tr></table></p>'+
 				'<p><b>Optional Fields</b><br>You can also set worker names or fixed difficulty through the configuration.</p>'+
-				'<p>Standard wallet address<br><i>(e.g. miner.exe -u 43T...sUW -p Steve)</i></p>'+
-				'<p>Fixed difficulty of 3500 for the worker<br><i>(e.g. miner.exe -u 43T...sUW+3500 -p Steve)</i></p>'+
+				'<p>Standard wallet address<br><i>(e.g. xmrig.exe -u 43T...sUW -p worker1)</i></p>'+
+				'<p>Fixed difficulty of 128000 for the worker<br><i>(e.g. xmrig.exe -u 43T...sUW+128000 -p worker1)</i></p>'+
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
@@ -1516,9 +1529,9 @@ function dta_Help(){
 			'<div class="helpteaser">Launch the miner and learn more.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>This pool uses PPLNS to determine payouts. It helps to combat pool hopping and ensures a good payout for miners.</p>'+
-				'<p>'+Perc('0.6')+' Pool Fee</p>'+
-				'<p>0.1 XMR Default Payout</p>'+
-				'<p>60 Block Confirmation Time</p>'+
+				'<p>'+Perc('0.0')+' (yes, Zero!) Pool Fee</p>'+
+				'<p>' + $Q.pay.min_auto + ' XMR Minimum Payout</p>'+
+				'<p>' + $Q.cur.conf +' Block Confirmation Time</p>'+
 			'</div>'+
 		'</div>';
 		
@@ -1911,8 +1924,9 @@ function Graph_Miner_init(){
 	if(m != null && addr && $A[addr] && $A[addr].hashes){
 		m.innerHTML = $I.load;
 		if(isEmpty($A[addr].stats)){
+			var addr2 = addr;
 			api('workers').then(function(){
-				if (is_home_page()) Graph_Miner();
+				if (is_home_page() && addr === addr2) Graph_Miner();
 			}).catch(function(err){console.log(err)});
 		}else{
 			Graph_Miner();
