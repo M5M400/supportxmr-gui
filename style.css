@@ -169,8 +169,8 @@ header{height:44px}
 #MinerDash{margin-bottom:10px}
 #MinerDash .Spl{display:inline-block;text-align:center;width:50%}
 #MinerPayments{border-bottom:1px solid rgba(0,0,0,.25);height:0;overflow:hidden;position:relative;transition:height 300ms}
-#MinerPayments.Opened{height:220px}
-#MinerPayments.OpenedBig{height:520px}
+#MinerPayments.Opened{height:250px}
+#MinerPayments.OpenedBig{height:550px}
 #MinerPayments .LR85{height:calc(100% - 1px)}
 #MinerPaymentsStage{height:calc(100% - 1px);position:relative}
 #WebMinerBtn{height:20px;width:120px}
