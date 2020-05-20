@@ -4,10 +4,10 @@ var	mde = 'l',
 			'nme':'MoneroOcean',										//also sets the cookie prefix
 		},
 		'clr':{
-			'main':'2fcaca',										//C1
+			'main':'208b8b',										//C1
 			'secondary':'818181',									//C2
-			'back-l':'2fcaca',										//C0 - light
-			'back-d':'313131'	   									//C0 - dark
+			'back-l':'208b8b',										//C0 - light
+			'back-d':'212121'	   									//C0 - dark
 		},
 		'cur':{
 			'nme':'Monero',						
