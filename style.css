@@ -56,8 +56,8 @@ header,section{margin:0;padding:0}
 .WingPanel table td{padding:5px 4px;white-space:nowrap}
 #WorkerSortName,#WorkerSortRate,.WingBtnL,.WingBtnR,.WingLblL{border-radius:50%;box-sizing:border-box;height:24px;left:0;margin-left:-29px;padding:4px;position:absolute;top:3px;width:24px}
 #WorkerSortRate,.WingBtnR{left:100%;margin-left:5px}
-#WorkerSortName{margin-left:-19px}
-#WorkerSortRate{margin-left:-5px}
+#WorkerSortName{margin-left:-5px}
+#WorkerSortRate{margin-left:-20px}
 .o3{opacity:.3}
 .o7{opacity:.7}
 .o8{opacity:.8}

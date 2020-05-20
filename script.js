@@ -65,16 +65,16 @@ var	mde = 'l',
 			'on':  'Web minining: <span id="WebMinerHash">--</span>',
 			'off': 'Run Web Miner',
 		},
-		'sts':{
-			'MinerWorkerCount':{'lbl':'<div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>'},
-			'MinerHashes':{'lbl':'Your <select id="HashSelect"></select> Hashrate', 'var':'hashes'},
-			'MinerShares':{'lbl':'Shares (Hashes: <span id="TotalHashes">--</span>)', 'var':'shares'},
-			'MinerCalc':{'lbl':'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>'}
-		},
-		'stsw':{ // For worker
-			'MinerHashes':{'lbl':'Total Hashes', 'var':'hashes'},
-			'MinerShares':{'lbl':'Valid / Invalid Shares', 'def':'-- / --', 'var':'shares'},
-		},
+		'sts': function() { return {
+			'MinerWorkerCount':	'<div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
+			'MinerHashes':		'Your <select id="HashSelect"></select> Hashrate',
+			'MinerShares':		'Shares (Hashes: <span id="TotalHashes">--</span>)',
+			'MinerCalc': 		'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>',
+		}},
+		'stsw': function() { return { // For worker
+			'MinerHashes': 		'Total Hashes',
+			'MinerShares': 		'Valid / Invalid Shares',
+		}},
 		'tbl':{
 			'coins':[
 				{'name':'name', 'lbl':'Name', 'cls':'min'},
@@ -830,13 +830,13 @@ function Dash_init(){
 	for(var j = 0; j < 2; j++){
 		ins += '<div class="'+$S[j]+'">';
 		var i = 0;
-		for(var k in $$.sts){
+		var sts = $$.sts();
+		for(var k in sts){
 			if((j === 0 && i < 2) || (j === 1 && i >= 2)){
-				var d = $$.sts[k].def || '--';
 				ins += '<div class="Spl">'+
-					'<div id="'+k+'">'+d+'</div>'+
+					'<div id="'+k+'">--</div>'+
 					'<div class="hbar shim4 o8"></div>'+
-					'<div class="C2 txttny">'+$$.sts[k].lbl+'</div>'+
+					'<div class="C2 txttny">'+sts[k]+'</div>'+
 				'</div>';
 			}
 			i++;
@@ -972,9 +972,9 @@ function Dash_reset(){
 		var e = document.getElementById(k);
 		if(e) e.innerHTML = $$.pay[k].def || '--';
 	}
-	for(var k in $$.sts){
+	for(var k in $$.sts()){
 		var e = document.getElementById(k);
-		if(e) e.innerHTML = $$.sts[k].def || '--';
+		if(e) e.innerHTML = '--';
 	}
 
 }
@@ -1175,8 +1175,8 @@ function Workers_detail(xid){
 				'<div class="BoxL center">'+Num(d.hashes)+'</div>'+
 				'<div class="BoxR center">'+Num(d.val)+' / '+Num(d.inv)+'</div>'+
 				'<div class="pbar shim4"></div>'+
-				'<div class="BoxL txttny C2 center">'+$$.stsw.MinerHashes.lbl+'</div>'+
-				'<div class="BoxR txttny C2 center">'+$$.stsw.MinerShares.lbl+'</div>';
+				'<div class="BoxL txttny C2 center">'+$$.stsw().MinerHashes+'</div>'+
+				'<div class="BoxR txttny C2 center">'+$$.stsw().MinerShares+'</div>';
 		}).catch(function(err){console.log(err)});
 	}
 }
@@ -1210,7 +1210,7 @@ function MinerPayments(typ){
 						'<div class="pbar"></div><span class="txttny C2 noselect">Auto pay ' + $Q.cur.sym + ' threshold</span>'+
 					'</td>'+
 					'<td width="50%" class="center">'+
-						'<div id="AutoPayBtn" class="BtnElem txtmed C1bk C2bk_hov o5">'+$$.trn.set+'</div>'+
+						'<div id="AutoPayBtn" class="BtnElem txtmed C0'+mde+' C1bk C2bk_hov o5">'+$$.trn.set+'</div>'+
 						'<div class="pbar"></div><span id="AutoPayFeeLbl" class="txttny C2 noselect">' + fee_txt($A[addr].threshold) + '</span>'+
 					'</td>'+
 				'</tr></table>'+
