@@ -897,7 +897,7 @@ function Dash_load(typ){
 						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
 					}
 					document.getElementById('MinerHashes').innerHTML = (now - $A[addr].last) < 10*60
-						? '<span title="' + Ago($A[addr].last, 'y') + '">' + HashConvStr($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash2' : 'hash']) + '</span>'
+						? '<span title="' + Ago($A[addr].last, 'y') + '">' + HashConvStr($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash' : 'hash2']) + '</span>'
 						: AgoTooltip($A[addr].last, 'y');
 					document.getElementById('MinerShares').innerHTML = '<span title="Invalid shares: ' + $A[addr].bad_shares + '">' + $A[addr].shares + '</span>';
 					document.getElementById('TotalHashes').innerHTML = Num($A[addr].hashes);
