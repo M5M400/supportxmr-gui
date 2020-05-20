@@ -784,7 +784,7 @@ function Navigate(tar){
 		if(tar && ['coins','blocks','payments','help'].indexOf(tar) >= 0){
 			n = 'short';
 			m += ' short';
-			if (tar != 'coins') {
+			if (tar != 'coins' && tar != 'help') {
 				h += '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div><div id="PageTopR" class="right"></div></div>';
 			} else {
 				h += '<div class="LR85 clearfix"><div id="PageTopL" class="C3'+mde+' txtmed"></div></div>';
@@ -1481,7 +1481,6 @@ function dta_Payments(pge){
 }
 function dta_Help(){
 	document.getElementById('PageTopL').innerHTML = $$.hlp.head;
-	document.getElementById('PageTopR').innerHTML = '<span class="txttny C2"><i>powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> & <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></span>';
 	var ins = '<p>'+$$.hlp.text+'</p>'+
 		'<div class="helpgroup">'+
 			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I.arrow+'</div></div>'+
@@ -1532,6 +1531,7 @@ function dta_Help(){
 				'<p>'+Perc('0.0')+' (yes, Zero!) Pool Fee</p>'+
 				'<p>' + $Q.pay.min_auto + ' XMR Minimum Payout</p>'+
 				'<p>' + $Q.cur.conf +' Block Confirmation Time</p>'+
+				'<br><p><i>Powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> &amp; <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></p>' +
 			'</div>'+
 		'</div>';
 		
