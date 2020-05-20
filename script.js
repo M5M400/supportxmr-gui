@@ -622,7 +622,7 @@ function LoadTimer(){
 			}, 1500);
 		}else{
 			var clr = (mde === 'd') ? $Q.clr['back-d'] : $Q.clr['back-l'],
-				grd = 'linear-gradient('+(-90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #25abf0';
+				grd = 'linear-gradient('+(-90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #208b8b';
 				
 			if(updateTimer < ($Q.timer / 2)) grd = 'linear-gradient('+(90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #'+clr;
 			$C.TimerPie.style.backgroundImage = grd+' 50%),linear-gradient(90deg, #'+clr+' 50%, transparent 50%)';
