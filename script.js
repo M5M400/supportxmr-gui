@@ -702,7 +702,7 @@ function Resize(){
 }
 function SwitchMode(){
 	var $CL = ['C0','C0fl','C0bk','C0st','C3','C3fl','FLD'],
-		$clr = {'l':{'f':'454545','b':'efefef'},'d':{'f':'b3b3b3','b':'3b3b3b'}},
+		$clr = {'l':{'f':'454545','b':'efefef'},'d':{'f':'b3b3b3','b':'1b1b1b'}},
 		bt = (mde === 'd') ? 'l' : 'd',
 		i = $CL.length;
 		
