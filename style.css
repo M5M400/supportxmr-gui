@@ -11,11 +11,11 @@
 .C1bk{background-color:#208b8b}
 .C1br{border-color:#00cdf0!important}
 .C1st{stroke:#208b8b}
-.C2{color:#2fcaca}
-.C2fl{fill:#2fcaca}
-.C2br,.C2br_hov:hover{border-color:#2fcaca}
-.C2bk,.C2bk_hov:hover{background-color:#2fcaca}
-.C2st{stroke:#2fcaca}
+.C2{color:#196b6b}
+.C2fl{fill:#196b6b}
+.C2br,.C2br_hov:hover{border-color:#196b6b}
+.C2bk,.C2bk_hov:hover{background-color:#196b6b}
+.C2st{stroke:#196b6b}
 .C3l{color:#454545}
 .C3fll{fill:#454545}
 .FLDl:-webkit-autofill{-webkit-text-fill-color:#454545}
@@ -194,7 +194,7 @@ table.noborder{border-width:0!important}
 #PageBot{min-height:200px}
 .helpgroup{margin-top:20px;padding-bottom:10px;padding-left:25px}
 .helptitle{color:#208b8b;cursor:pointer;display:inline-block;fill:#208b8b;position:relative}
-.helptitle:hover{color:#2fcaca;fill:#2fcaca}
+.helptitle:hover{color:#196b6b;fill:#196b6b}
 .helptitle .btnback{border-radius:50%;box-sizing:border-box;height:26px;margin-left:-33px;padding:3px;position:absolute;top:-2px;width:26px;z-index:2}
 .helpteaser,.helpcontent{margin-top:5px}
 .footer{bottom:0;left:0;position:relative;width:100%}
@@ -208,19 +208,19 @@ table.noborder{border-width:0!important}
 #AutoPayBtn,#PaymentHistoryBtn,#PaymentHistoryBtnClose,#EmailSubscribeBtn{height:32px;width:95%}
 #MinerPaymentsTable,#WorkerList{min-height:100px}
 @-webkit-keyframes glowing {
-50%{-webkit-box-shadow:0 0 20px #2fcaca;background-color:#2fcaca}
+50%{-webkit-box-shadow:0 0 20px #196b6b;background-color:#196b6b}
 0%,100%{-webkit-box-shadow:0 0 3px #208b8b;background-color:#208b8b}
 }
 @-moz-keyframes glowing {
-50%{-moz-box-shadow:0 0 20px #2fcaca;background-color:#2fcaca}
+50%{-moz-box-shadow:0 0 20px #196b6b;background-color:#196b6b}
 0%,100%{-moz-box-shadow:0 0 3px #208b8b;background-color:#208b8b}
 }
 @-o-keyframes glowing {
-50%{background-color:#2fcaca;box-shadow:0 0 20px #2fcaca}
+50%{background-color:#196b6b;box-shadow:0 0 20px #196b6b}
 0%,100%{background-color:#208b8b;box-shadow:0 0 3px #208b8b}
 }
 @keyframes glowing {
-50%{background-color:#2fcaca;box-shadow:0 0 20px #2fcaca}
+50%{background-color:#196b6b;box-shadow:0 0 20px #196b6b}
 0%,100%{background-color:#208b8b;box-shadow:0 0 3px #208b8b}
 }
 .glow{-moz-animation:glowing 1500ms infinite;-o-animation:glowing 1500ms infinite;-webkit-animation:glowing 1500ms infinite;animation:glowing 1500ms infinite}

@@ -62,7 +62,7 @@ var	mde = 'l',
 			'DashPaid':{'lbl':$Q.cur.sym+' Paid', 'var':'paid'}
 		},
 		'wm':{
-			'on':  'Web minining: <span id="WebMinerHash">--</span>',
+			'on':  'Web mining: <span id="WebMinerHash">--</span>',
 			'off': 'Run Web Miner',
 		},
 		'sts': function() { return {
