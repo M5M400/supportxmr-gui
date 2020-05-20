@@ -2213,7 +2213,7 @@ function Localize(){
 	var tz = new Date().getTimezoneOffset();
 	if (tz >= -120 && tz <= 0) {
 		$Q.fiat_name = "eur";
-		$Q.fiat_symbol = "€"; // EUR symbol
+		$Q.fiat_symbol = "&euro;"; // EUR symbol
 	}
 }
 function isEmpty(o){
