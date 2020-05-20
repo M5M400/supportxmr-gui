@@ -1953,7 +1953,7 @@ function Graph_Miner(){
 		xR = right_x,
 		yR = 0;
 
-	var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh2" : "hsh";
+	var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh" : "hsh2";
 
 	i = cnt;
 	while(i--){
@@ -2054,7 +2054,7 @@ function Graph_Worker(xid){
 				'<linearGradient id="F" gradientTransform="rotate(90)"><stop offset="0%" stop-color="#000" stop-opacity="0.07" /><stop offset="100%" stop-color="#000" stop-opacity="0.03" /></linearGradient>'+
 			'</defs>';
 
-	var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh2" : "hsh";
+	var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh" : "hsh2";
 		
 	for(i = 0; i < wcnt; i++){
 		if($W[i][hshx] > max) max = $W[i][hshx];
