@@ -949,7 +949,7 @@ function Dash_load(typ){
 			'Standalone miner reference setup info:<br>' +
 				'Pool: gulf.moneroocean.stream<br>' +
 				'Port: 10128 or 20128 for SSL (128000 diff)<br><br>' +
-				'User: &lt;Your XMR wallet address&gt;<br><br>' +
+				'User: "Your XMR wallet address"<br><br>' +
 				'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
 				'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
 			'</div></div>';
