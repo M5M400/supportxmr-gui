@@ -6,8 +6,8 @@ var	mde = 'l',
 		'clr':{
 			'main':'208b8b',										//C1
 			'secondary':'818181',									//C2
-			'back-l':'208b8b',										//C0 - light
-			'back-d':'212121'	   									//C0 - dark
+			'back-l':'e8e8e8',										//C0 - light
+			'back-d':'313131'	   									//C0 - dark
 		},
 		'cur':{
 			'nme':'Monero',						
