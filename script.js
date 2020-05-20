@@ -96,7 +96,7 @@ var	mde = 'l',
 				{'name':'eff', 'lbl':'Effort', 'cls':'min'},
 				{'name':'reward', 'lbl':'Raw reward', 'tooltip':'Raw block reward in native coin units', 'cls':'min'},
 				{'name':'payment', 'lbl':'Payment ('+$Q.cur.sym+')', 'cls':'min'},
-				{'name':'height', 'lbl':'Height', 'cls':'min'},
+				{'name':'bheight', 'lbl':'Height', 'cls':'min'},
 				{'name':'hash', 'lbl':'Transaction', 'typ':'block', 'cls':'trunc'},
 			],
 			'poolpay':[
@@ -1536,7 +1536,7 @@ function dta_Help(){
 			'<div class="helpteaser">Launch the miner and learn more.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>This pool uses PPLNS to determine payouts. It helps to combat pool hopping and ensures a good payout for miners.</p>'+
-				'<p>'+Perc('0.0')+' (yes, Zero!) Pool Fee</p>'+
+				'<p>' + Perc(0) + ' (yes, Zero!) Pool Fee</p>'+
 				'<p>' + $Q.pay.min_auto + ' XMR Minimum Payout</p>'+
 				'<p>' + $Q.cur.conf +' Block Confirmation Time</p>'+
 				'<br><p><i>Powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> &amp; <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></p>' +
@@ -1621,35 +1621,20 @@ var api = function(m, key, xid){
 						$D[m][key] = [];
 						for(i = 0; i < dcnt; i++){
 							var v = d[i];
-							if(m === 'blocks'){
-								$D[m][key][i] = {
-									'ts':v.ts,
-									'valid':v.valid,
-									'unlocked':v.unlocked,
-									'hash':v.hash,
-									'port':v.port,
-									'height':v.height,
-									'value':v.value,
-									'pay_value':v.pay_value,
-									'pay_stage':v.pay_stage,
-									'pay_status':v.pay_status,
-									'shares':v.shares,
-									'diff':v.diff
-								};
-							}else if(m === 'pay'){
-								$D[m][key][i] = {
-									'ts':v.ts * 1000,
-									'hash':v.txnHash,
-									'amnt':Rnd((v.amount / COINS[mport].divisor), 8)
-								};
-							}else if(m === 'poolpay'){
-								$D[m][key][i] = {
-									'ts':v.ts,
-									'hash':v.hash,
-									'payees':v.payees,
-									'amnt':Rnd((v.value / COINS[mport].divisor), 8, 'txt'),
-									'fee':Rnd((v.fee / COINS[mport].divisor), 8, 'txt')
-								};
+							switch (m) {
+								case 'blocks':	$D[m][key][i] = v; break;
+								case 'pay':	$D[m][key][i] = {
+									'ts':		v.ts * 1000,
+									'hash': 	v.txnHash,
+									'amnt':		Rnd((v.amount / COINS[mport].divisor), 8)
+								}; break;
+								case 'poolpay':	$D[m][key][i] = {
+									'ts':		v.ts,
+									'hash':		v.hash,
+									'payees':	v.payees,
+									'amnt':		Rnd((v.value / COINS[mport].divisor), 8, 'txt'),
+									'fee':		Rnd((v.fee / COINS[mport].divisor), 8, 'txt')
+								}; break;
 							}
 						}
 					}else if(m === 'netstats'){
@@ -1856,7 +1841,7 @@ function Tbl(tar, typ, pge, lim){
 					}
 					break;
 				}
-				case 'height':	val = Num(d[n]); break;
+				case 'bheight': val = d.port ? d.height : '<a href="https://block-share-dumps.moneroocean.stream/' + b.hash + '.cvs.xz">' + d.height + '</a>'; break;
 				case 'hash':	val = hashToLink(d[n], d.port ? d.port : mport, t.typ); break;
 				default:	val = d[n];
 			}
