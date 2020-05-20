@@ -1,5 +1,5 @@
 var	mde = 'l',
-	$Q = {										
+	$Q = {
 		'pool':{
 			'nme':'MoneroOcean',										//also sets the cookie prefix
 		},
@@ -2213,7 +2213,7 @@ function Localize(){
 	var tz = new Date().getTimezoneOffset();
 	if (tz >= -120 && tz <= 0) {
 		$Q.fiat_name = "eur";
-		$Q.fiat_symbol = "€";
+		$Q.fiat_symbol = "€"; // EUR symbol
 	}
 }
 function isEmpty(o){
