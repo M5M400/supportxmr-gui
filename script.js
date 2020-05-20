@@ -4,9 +4,9 @@ var	mde = 'l',
 			'nme':'MoneroOcean',										//also sets the cookie prefix
 		},
 		'clr':{
-			'main':'40c4ff',										//C1
+			'main':'00b0ff',										//C1
 			'secondary':'818181',									//C2
-			'back-l':'40c4ff',										//C0 - light
+			'back-l':'00b0ff',										//C0 - light
 			'back-d':'313131'	   									//C0 - dark
 		},
 		'cur':{
@@ -622,7 +622,7 @@ function LoadTimer(){
 			}, 1500);
 		}else{
 			var clr = (mde === 'd') ? $Q.clr['back-d'] : $Q.clr['back-l'],
-				grd = 'linear-gradient('+(-90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #F06A25';
+				grd = 'linear-gradient('+(-90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #25abf0';
 				
 			if(updateTimer < ($Q.timer / 2)) grd = 'linear-gradient('+(90 + (360 * updateTimer / $Q.timer))+'deg, transparent 50%, #'+clr;
 			$C.TimerPie.style.backgroundImage = grd+' 50%),linear-gradient(90deg, #'+clr+' 50%, transparent 50%)';

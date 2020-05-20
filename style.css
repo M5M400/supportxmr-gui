@@ -6,16 +6,16 @@
 .C0d{color:#3b3b3b}
 .C0fld{fill:#3b3b3b}
 .C0std{stroke:#3b3b3b}
-.C1{color:#40c4ff}
-.C1fl{fill:#40c4ff}
-.C1bk{background-color:#40c4ff}
+.C1{color:#00b0ff}
+.C1fl{fill:#00b0ff}
+.C1bk{background-color:#00b0ff}
 .C1br{border-color:#00cdf0!important}
-.C1st{stroke:#40c4ff}
-.C2{color:#00b0ff}
-.C2fl{fill:#00b0ff}
-.C2br,.C2br_hov:hover{border-color:#00b0ff}
-.C2bk,.C2bk_hov:hover{background-color:#00b0ff}
-.C2st{stroke:#00b0ff}
+.C1st{stroke:#00b0ff}
+.C2{color:#40c4ff}
+.C2fl{fill:#40c4ff}
+.C2br,.C2br_hov:hover{border-color:#40c4ff}
+.C2bk,.C2bk_hov:hover{background-color:#40c4ff}
+.C2st{stroke:#40c4ff}
 .C3l{color:#454545}
 .C3fll{fill:#454545}
 .FLDl:-webkit-autofill{-webkit-text-fill-color:#454545}
@@ -104,7 +104,7 @@ input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #
 .LoadCon{height:30px;left:50%;margin-left:-15px;margin-top:-15px;position:absolute;top:50%;width:30px}
 .Loader,.preload{-moz-animation:spin 1s linear infinite;-webkit-animation:spin 1s linear infinite;animation:spin 1s linear infinite}
 .C0bkd,.FLDd{background-color:#3b3b3b}
-.C1fl_hov:hover,.C1flim{fill:#40c4ff!important}
+.C1fl_hov:hover,.C1flim{fill:#00b0ff!important}
 svg,#WorkerSortRate .preload{height:100%;width:100%}
 .o5,.Btn16:hover,.Btn24:hover,.Btn32:hover,.nav:hover,.hov:hover,.PagBtn:hover{opacity:.5}
 select,.select-point,.nav,.hov,.C2br_hov,.C2bk_hov,.PagBtn{cursor:pointer}
@@ -193,8 +193,8 @@ table.noborder{border-width:0!important}
 #PageTopR{float:right;width:240px}
 #PageBot{min-height:200px}
 .helpgroup{margin-top:20px;padding-bottom:10px;padding-left:25px}
-.helptitle{color:#40c4ff;cursor:pointer;display:inline-block;fill:#40c4ff;position:relative}
-.helptitle:hover{color:#00b0ff;fill:#00b0ff}
+.helptitle{color:#00b0ff;cursor:pointer;display:inline-block;fill:#00b0ff;position:relative}
+.helptitle:hover{color:#40c4ff;fill:#40c4ff}
 .helptitle .btnback{border-radius:50%;box-sizing:border-box;height:26px;margin-left:-33px;padding:3px;position:absolute;top:-2px;width:26px;z-index:2}
 .helpteaser,.helpcontent{margin-top:5px}
 .footer{bottom:0;left:0;position:relative;width:100%}
@@ -208,20 +208,20 @@ table.noborder{border-width:0!important}
 #AutoPayBtn,#PaymentHistoryBtn,#PaymentHistoryBtnClose,#EmailSubscribeBtn{height:32px;width:95%}
 #MinerPaymentsTable,#WorkerList{min-height:100px}
 @-webkit-keyframes glowing {
-50%{-webkit-box-shadow:0 0 20px #00b0ff;background-color:#00b0ff}
-0%,100%{-webkit-box-shadow:0 0 3px #40c4ff;background-color:#40c4ff}
+50%{-webkit-box-shadow:0 0 20px #40c4ff;background-color:#40c4ff}
+0%,100%{-webkit-box-shadow:0 0 3px #00b0ff;background-color:#00b0ff}
 }
 @-moz-keyframes glowing {
-50%{-moz-box-shadow:0 0 20px #00b0ff;background-color:#00b0ff}
-0%,100%{-moz-box-shadow:0 0 3px #40c4ff;background-color:#40c4ff}
+50%{-moz-box-shadow:0 0 20px #40c4ff;background-color:#40c4ff}
+0%,100%{-moz-box-shadow:0 0 3px #00b0ff;background-color:#00b0ff}
 }
 @-o-keyframes glowing {
-50%{background-color:#00b0ff;box-shadow:0 0 20px #00b0ff}
-0%,100%{background-color:#40c4ff;box-shadow:0 0 3px #40c4ff}
+50%{background-color:#40c4ff;box-shadow:0 0 20px #40c4ff}
+0%,100%{background-color:#00b0ff;box-shadow:0 0 3px #00b0ff}
 }
 @keyframes glowing {
-50%{background-color:#00b0ff;box-shadow:0 0 20px #00b0ff}
-0%,100%{background-color:#40c4ff;box-shadow:0 0 3px #40c4ff}
+50%{background-color:#40c4ff;box-shadow:0 0 20px #40c4ff}
+0%,100%{background-color:#00b0ff;box-shadow:0 0 3px #00b0ff}
 }
 .glow{-moz-animation:glowing 1500ms infinite;-o-animation:glowing 1500ms infinite;-webkit-animation:glowing 1500ms infinite;animation:glowing 1500ms infinite}
 textarea{resize:none}
