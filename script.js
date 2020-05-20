@@ -4,9 +4,9 @@ var	mde = 'l',
 			'nme':'MoneroOcean',										//also sets the cookie prefix
 		},
 		'clr':{
-			'main':'196b6b',										//C1
+			'main':'1d7b7b',										//C1
 			'secondary':'818181',									//C2
-			'back-l':'196b6b',										//C0 - light
+			'back-l':'1d7b7b',										//C0 - light
 			'back-d':'313131'	   									//C0 - dark
 		},
 		'cur':{
