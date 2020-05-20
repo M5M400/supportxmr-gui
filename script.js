@@ -443,7 +443,12 @@ document.body.addEventListener('click', function(e){
 				SavePref('sort', 'R'+el.getAttribute('data-ord'));
 				Workers_init();
 			}else if(id[i] === '.nav'){
-				Navigate(el.getAttribute('data-tar'));
+				var tar = el.getAttribute('data-tar');
+				if (tar == 'old') {
+					window.location.href = 'https://old.moneroocean.stream';
+				} else {
+					Navigate(tar);
+				}
 			}else if(id[i] === '.PagBtn'){
 				var p = parseInt(el.getAttribute('data-page'));
 				switch (el.getAttribute('data-func')) {
@@ -513,6 +518,7 @@ function init(){
 		ft += '<span class="nav" data-tar="'+m+'">'+$$.nav[m]+'</span>';
 		i++;
 	}
+	ft += ' &middot; <span class="nav" data-tar="old">Old UI</span>';
 	document.querySelector('#HeadMenu select').innerHTML = mn;
 	document.getElementById('FootR').innerHTML = ft;
 	
@@ -1534,6 +1540,12 @@ function dta_Help(){
 				'<p>' + $Q.pay.min_auto + ' XMR Minimum Payout</p>'+
 				'<p>' + $Q.cur.conf +' Block Confirmation Time</p>'+
 				'<br><p><i>Powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> &amp; <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></p>' +
+			'</div>'+
+		'</div>'+
+		'<div class="helpgroup">'+
+			'<div class="helptitle txtbig">FAQ<div class="btnback">'+$I.arrow+'</div></div>'+
+			'<div class="helpteaser">Check if you have your question answered here.</div>'+
+			'<div class="helpcontent hide">'+
 			'</div>'+
 		'</div>';
 		
