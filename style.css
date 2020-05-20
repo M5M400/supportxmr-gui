@@ -9,13 +9,13 @@
 .C1{color:#40c4ff}
 .C1fl{fill:#40c4ff}
 .C1bk{background-color:#40c4ff}
-.C1br{border-color:rgba(240,105,35,0.7)!important}
+.C1br{border-color:#00cdf0!important}
 .C1st{stroke:#40c4ff}
-.C2{color:#818181}
-.C2fl{fill:#818181}
-.C2br,.C2br_hov:hover{border-color:#818181}
-.C2bk,.C2bk_hov:hover{background-color:#818181}
-.C2st{stroke:#818181}
+.C2{color:#00b0ff}
+.C2fl{fill:#00b0ff}
+.C2br,.C2br_hov:hover{border-color:#00b0ff}
+.C2bk,.C2bk_hov:hover{background-color:#00b0ff}
+.C2st{stroke:#00b0ff}
 .C3l{color:#454545}
 .C3fll{fill:#454545}
 .FLDl:-webkit-autofill{-webkit-text-fill-color:#454545}
@@ -194,7 +194,7 @@ table.noborder{border-width:0!important}
 #PageBot{min-height:200px}
 .helpgroup{margin-top:20px;padding-bottom:10px;padding-left:25px}
 .helptitle{color:#40c4ff;cursor:pointer;display:inline-block;fill:#40c4ff;position:relative}
-.helptitle:hover{color:#818181;fill:#818181}
+.helptitle:hover{color:#00b0ff;fill:#00b0ff}
 .helptitle .btnback{border-radius:50%;box-sizing:border-box;height:26px;margin-left:-33px;padding:3px;position:absolute;top:-2px;width:26px;z-index:2}
 .helpteaser,.helpcontent{margin-top:5px}
 .footer{bottom:0;left:0;position:relative;width:100%}
