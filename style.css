@@ -3,9 +3,9 @@
 .C0fll{fill:#efefef}
 .C0bkl{background-color:#efefef}
 .C0stl{stroke:#efefef}
-.C0d{color:#3b3b3b}
-.C0fld{fill:#3b3b3b}
-.C0std{stroke:#3b3b3b}
+.C0d{color:#1b1b1b}
+.C0fld{fill:#1b1b1b}
+.C0std{stroke:#1b1b1b}
 .C1{color:#196b6b}
 .C1fl{fill:#196b6b}
 .C1bk{background-color:#196b6b}
@@ -83,7 +83,7 @@ input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #
 #MinerCalcFld,#MinerCalcUnit,#MinerCalcHsh,#HashSelect{border:0;height:18px;margin:0 1px;padding:2px 1px}
 .FLDl,.FLDd{background-color:#efefef;border:0;display:inline-block;padding:8px 5px 7px;width:calc(100% - 4px)}
 .FLDl:-webkit-autofill,.FLDl:-webkit-autofill:hover,.FLDl:-webkit-autofill:focus,.FLDl:-webkit-autofill:active{-webkit-box-shadow:0 0 0 30px #efefef inset!important}
-.FLDd:-webkit-autofill,.FLDd:-webkit-autofill:hover,.FLDd:-webkit-autofill:focus,.FLDd:-webkit-autofill:active{-webkit-box-shadow:0 0 0 30px #3b3b3b inset!important}
+.FLDd:-webkit-autofill,.FLDd:-webkit-autofill:hover,.FLDd:-webkit-autofill:focus,.FLDd:-webkit-autofill:active{-webkit-box-shadow:0 0 0 30px #1b1b1b inset!important}
 .select-point{height:10px;position:absolute;right:0;top:11px;width:10px}
 #AddrRecent select,#HeadMenu select{-moz-appearance:none;-webkit-appearance:none;appearance:none;border:none;outline:none}
 .btnback,#DashPayBtn,#Timer,#TogMode{-moz-box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);-webkit-box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);background-color:rgba(19,19,19,.03);box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06)}
@@ -103,7 +103,7 @@ input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #
 .Btn32{height:32px;width:32px}
 .LoadCon{height:30px;left:50%;margin-left:-15px;margin-top:-15px;position:absolute;top:50%;width:30px}
 .Loader,.preload{-moz-animation:spin 1s linear infinite;-webkit-animation:spin 1s linear infinite;animation:spin 1s linear infinite}
-.C0bkd,.FLDd{background-color:#3b3b3b}
+.C0bkd,.FLDd{background-color:#1b1b1b}
 .C1fl_hov:hover,.C1flim{fill:#196b6b!important}
 svg,#WorkerSortRate .preload{height:100%;width:100%}
 .o5,.Btn16:hover,.Btn24:hover,.Btn32:hover,.nav:hover,.hov:hover,.PagBtn:hover{opacity:.5}
