@@ -2011,7 +2011,7 @@ function Graph_Miner(){
 		var	avg_y = Rnd(height_pad - avg / max * height_pad, 2),
 			txt = HashConvStr(avg) + ' Avg ' + Ago(timestart),
 			txt_w = txt.length * 5.4;
-		if (hshx === "hsh") $D.miner_hash_avg = avg;
+		if (hshx === "hsh2") $D.miner_hash_avg = avg;
 			
 		ins += '<line x1="55" y1="'+avg_y+'" x2="'+right_x+'" y2="'+avg_y+'" class="mineravgline C1st" />'+
 			'<rect x="'+((width / 2) - (txt_w / 2))+'" y="'+(avg_y - 8)+'" width="'+txt_w+'" height="18" rx="3" class="line C0fl'+mde+' C1st" />'+
