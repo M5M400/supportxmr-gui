@@ -1034,8 +1034,8 @@ function Workers_init(){		///check this, getting called alot
 			ky = '',
 			blkclss = '',
 			ins = '<div id="WorkerSortGroup" class="hide txttny C2">'+
-				'<div id="WorkerSortName" class="C2bk C0fl'+mde+'" data-ord="D">'+$I.sort+'</div>'+
-				'<div id="WorkerSortRate" class="C2bk C0fl'+mde+'" data-ord="D">'+$I.sort+'</div>'+
+				'<div id="WorkerSortName" class="C2bk C0fl'+mde+'" title="Sort workers by their name" data-ord="D">'+$I.sort+'</div>'+
+				'<div id="WorkerSortRate" class="C2bk C0fl'+mde+'" title="Sort workers by their hashrate" data-ord="D">'+$I.sort+'</div>'+
 			'</div>'+
 			'<div class="WingPanel">';
 		
