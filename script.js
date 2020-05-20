@@ -2315,7 +2315,7 @@ function HashConv(h){
 		}
 	}
 	if(h === 0) u = 'H/s'
-	return {'num':Rnd(h, 1), 'unit':u};
+	return {'num':Rnd(h, 2), 'unit':u};
 }
 function HashConvStr(h, unit){
 	var h = HashConv(h);
