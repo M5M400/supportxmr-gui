@@ -1083,10 +1083,11 @@ function Workers_init(){		///check this, getting called alot
 		}
 
 		var cnt = 0;
+		var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh" : "hsh2";
 		for(i = 0; i < s.length; i++){
 			var 	k = s[i][0],
 				d = $A[addr].wrkrs[k],
-				hsh = (d && d.stats && d.stats[0] && d.stats[0].hsh) ? d.stats[0].hsh : 0;
+				hsh = (d && d.stats && d.stats[0] && d.stats[0][hshx]) ? d.stats[0][hshx] : 0;
 			
 			if(hsh > 0){
 				document.getElementById('WRate-'+k).innerHTML = HashConvStr(hsh);
@@ -1160,8 +1161,9 @@ function Workers_detail(xid){
 				cnt = numObj($A[addr].wrkrs[xid].stats),
 				i = cnt;
 
+			var hshx = document.getElementById('HashSelect').value == 'raw' ? "hsh" : "hsh2";
 			while(i--){
-				avg = avg + parseInt($A[addr].wrkrs[xid].stats[i].hsh);
+				avg = avg + parseInt($A[addr].wrkrs[xid].stats[i][hshx]);
 				SynchTime($A[addr].wrkrs[xid].stats[i].tme);
 				if($A[addr].wrkrs[xid].stats[i].tme < timestart) timestart = $A[addr].wrkrs[xid].stats[i].tme;
 			}
@@ -1674,7 +1676,7 @@ var api = function(m, key, xid){
 							$A[addr].wrkrs[i].name = wname;
 							$A[addr].wrkrs[i].stats = api_GraphFormat(d[wname], numObj(d[wname]), start);
 							var stats0 = $A[addr].wrkrs[i].stats[0];
-							$A[addr].wrkrs[i].rate = (stats0 && stats0.hsh) ? stats0.hsh : 0;
+							$A[addr].wrkrs[i].rate = (stats0 && stats0.hsh2) ? stats0.hsh2 : 0; // for sorting
 							++ i;
 						}
 						$A[addr].wrkrs_updt = now;
