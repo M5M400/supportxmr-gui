@@ -1,4 +1,4 @@
-@font-face{font-family:'GothamCondensed';src:url(font/GothamCondensed-Medium.woff2) format("woff2"),url(font/GothamCondensed-Medium.woff) format("woff")}
+@font-face{font-family:'GothamCondensed';src:url(font/GothamCondensed-Medium.woff2) format("woff2"),url(font/GothamCondensed-Medium.woff) format("woff");font-display:swap}
 .C0l{color:#efefef}
 .C0fll{fill:#efefef}
 .C0bkl{background-color:#efefef}
