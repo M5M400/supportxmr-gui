@@ -58,8 +58,8 @@ var	mde = 'l',
 			help:		'Help'
 		},
 		pay:{
-			DashPending:	{lbl: '<span id="PendingPay"></span> '+$Q.cur.sym+' Pending', var: 'due'},
-			DashPaid:	{lbl: $Q.cur.sym+' Paid', var: 'paid'}
+			DashPending:	{lbl: '<span id="PendingPay"></span> ' + $Q.cur.sym + ' Pending', var: 'due', tooltip: 'Total due pool owes you'},
+			DashPaid:	{lbl: $Q.cur.sym + ' Paid', var: 'paid', tooltip: 'Amount pool already paid to you'}
 		},
 		wm:{
 			on:  'Web mining: <span id="WebMinerHash">--</span>',
@@ -1118,7 +1118,7 @@ function Dash_load(typ){
 						}else if(val > 99){
 							dec = 7;
 						}
-						document.getElementById(k).innerHTML = Rnd(val, dec, 'txt');	
+						document.getElementById(k).innerHTML = '<span title="' + $$.pay[k].tooltip + '">' + Rnd(val, dec, 'txt') + '</span>';
 					}
 					document.getElementById('MinerHashes').innerHTML = (now - $A[addr].last) < 10*60
 						? '<span title="' + Ago($A[addr].last, 'y') + '">' + HashConvStr($A[addr][document.getElementById('HashSelect').value == 'raw' ? 'hash' : 'hash2']) + '</span>'
@@ -1876,8 +1876,8 @@ var api = function(m, key, xid){
 								email:		0,
 								threshold:	''
 							};
-							$A[addr].due    = '<span title="Total due pool owes you">' + Rnd((d.amtDue / COINS[mport].divisor), 8) + '</span>';
-							$A[addr].paid   = '<span title="Amount pool already paid to you">' + Rnd((d.amtPaid / COINS[mport].divisor), 8) + '</span>';
+							$A[addr].due    = Rnd((d.amtDue / COINS[mport].divisor), 8);
+							$A[addr].paid   = Rnd((d.amtPaid / COINS[mport].divisor), 8);
 							$A[addr].hashes = d.totalHashes;
 							$A[addr].hash   = d.hash;
 							$A[addr].hash2  = d.hash2;
