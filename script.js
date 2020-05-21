@@ -171,7 +171,7 @@ var	mde = 'l',
 			// Pool UI 
 
 			{ q:	'When payments happen?',
-			  a:	'Payments happen automatically when your total due reaches your payment threshold. By default payment threshold is <b>0.3</b> XMR but your can lower it in home options.'
+			  a:	'Payments happen automatically when your total due reaches your payment threshold. By default payment threshold is <b>0.3</b> XMR but your can lower it in home page miner options.'
 			},
 
 			{ q:	'What does raw hashrate means?',
@@ -179,7 +179,7 @@ var	mde = 'l',
 			},
 
 			{ q:	'How set or update your email for notifications?',
-			  a:	'Go to home options, put your new email into <b>Change email TO</b> field and press <b>Email alerts On/Off</b> button. You must correctly fill <b>Change email FROM</b> field if you have email previously set. If you can not remember your previous email please contact pool operator providing your XMR wallet address so he can reset your email address.'
+			  a:	'Go to home page miner options, put your new email into <b>Change email TO</b> field and press <b>Email alerts On/Off</b> button. You must correctly fill <b>Change email FROM</b> field if you have email previously set. If you can not remember your previous email please contact pool operator providing your XMR wallet address so he can reset your email address.'
 			},
 
 			{ q:	'Is it possible to open pool home page on specific XMR address?',
@@ -251,7 +251,7 @@ var	mde = 'l',
 
 			{ q:	'What is miner ban policy on this pool?',
 			  a:	'In case of invalid shares pool can use temporary IP based bans that will be automatically removed.<br><br>'+
-				'Permanent XMR address ban can be only issued if we get enough evidence that any wallet address on the pool is used for malware/botnet activities. By enough evidence we mean at least several reports from different sources. And by address ban we mean that workers that try to use this address will be rejected. We do not plan to freeze already mined funds (total due), so they can be retrieved by setting lower payment threshold in home options as usual.'
+				'Permanent XMR address ban can be only issued if we get enough evidence that any wallet address on the pool is used for malware/botnet activities. By enough evidence we mean at least several reports from different sources. And by address ban we mean that workers that try to use this address will be rejected. We do not plan to freeze already mined funds (total due), so they can be retrieved by setting lower payment threshold in home page miner options as usual.'
 			},
 			{ q:	'Why some of my worker names are replaced by <b>all_other_workers</b> worker?',
 			  a:	'This is because you use too many worker names and to avoid DB / network channel overloads all extra miners are joined under <b>all_other_workers</b> worker name.'
