@@ -163,7 +163,7 @@ header{height:44px}
 .StageFade{opacity:1!important}
 #News{background:linear-gradient(0deg,rgba(19,19,19,0.05) 0%,rgba(19,19,19,0) 50%)}
 #NewsCard,#NewsBody{box-sizing:border-box}
-#NewsCard{border:1px solid rgba(0,0,0,.3);border-bottom:0;border-radius:5px 5px 0 0;min-height:40px;padding:9px 38px 0 10px}
+#NewsCard{border:1px solid rgba(0,0,0,.3);border-radius:5px;min-height:40px;padding:9px 38px 9px 10px;margin-bottom:10px}
 #NewsTime{float:right;padding-top:4px}
 #NewsBody{padding:10px 0 15px}
 #MinerDash{margin-bottom:10px}
