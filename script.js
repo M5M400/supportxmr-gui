@@ -1876,8 +1876,8 @@ var api = function(m, key, xid){
 								email:		0,
 								threshold:	''
 							};
-							$A[addr].due    = Rnd((d.amtDue / COINS[mport].divisor), 8);
-							$A[addr].paid   = Rnd((d.amtPaid / COINS[mport].divisor), 8);
+							$A[addr].due    = '<span title="Total due pool owes you">' + Rnd((d.amtDue / COINS[mport].divisor), 8) + '</span>';
+							$A[addr].paid   = '<span title="Amount pool already paid to you">' + Rnd((d.amtPaid / COINS[mport].divisor), 8) + '</span>';
 							$A[addr].hashes = d.totalHashes;
 							$A[addr].hash   = d.hash;
 							$A[addr].hash2  = d.hash2;
