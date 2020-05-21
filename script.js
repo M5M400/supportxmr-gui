@@ -896,7 +896,7 @@ function TimerUpdateData(){
 	}).catch(function(err){ErrAlert('NetStats', '')});
 
 	if($Q.news){
-		var n = document.getElementById('News'), c = document.getElementById('NewsCard'), h = '';
+		var n = document.getElementById('News'), c = document.getElementById('NewsCard'), h = 'clearfix';
 		if(n != null && c.innerHTML === ''){
 			api('news').then(function(){
 				if($D.news && $D.news.created){
