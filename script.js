@@ -126,9 +126,213 @@ var	mde = 'l',
 			vwpy:		'Show Your Payments'
 		},
 		faq: [
-			{q: 'Question 1', a: 'Answer 1'},
-			{q: 'Question 2', a: 'Answer 2'},
-			{q: 'Question 3', a: 'Answer 3'},
+
+			// Advanced worker configuration
+
+			{ q:	'What are avaiable pool addresses?',
+			  a:	'We recommend using <b>gulf.moneroocean.stream</b> as primary mining address because it will direct you to the closest alive pool server with the lowest latency. Other pool node servers you can use as backup:'+
+				'<ul>'+
+					'<li><b>us-or.moneroocean.stream</b>: USA West coast</li>'+
+					'<li><b>us-va.moneroocean.stream</b>: USA East coast</li>'+
+					'<li><b>de.moneroocean.stream</b>: Germany</li>'+
+					'<li><b>fi.moneroocean.stream</b>: Finland</li>'+
+					'<li><b>fr.moneroocean.stream</b>: France</li>'+
+					'<li><b>jp.moneroocean.stream</b>: Japan</li>'+
+					'<li><b>sg.moneroocean.stream</b>: Singapore</li>'+
+				'</ul>'
+			},
+
+			{ q:	'What are avaiable pool ports?',
+			  a:	'Pool support many ports that are only different by their starting difficulty. Please select them based on your miner speed:'+
+				'<ul>'+
+					'<li><b>80</b> (SSL <b>443</b>): 100 diff (1-5 h/s)</li>'+
+					'<li><b>10001</b> (SSL <b>20001</b>): 1000 diff (5-50 h/s)</li>'+
+					'<li><b>10002</b> (SSL <b>20002</b>): 2000 diff (50-100 h/s)</li>'+
+					'<li><b>10004</b> (SSL <b>20004</b>): 4000 diff (100-150 h/s)</li>'+
+					'<li><b>10008</b> (SSL <b>20008</b>): 8000 diff (150-300 h/s)</li>'+
+					'<li><b>10016</b> (SSL <b>20016</b>): 16000 diff (300-500 h/s)</li>'+
+					'<li><b>10032</b> (SSL <b>20032</b>): 32000 diff (500-1000 h/s)</li>'+
+					'<li><b>10064</b> (SSL <b>20064</b>): 64000 diff (1000-2000 h/s)</li>'+
+					'<li><b>10128</b> (SSL <b>20128</b>): 128000 diff (2000-4000 h/s)</li>'+
+					'<li><b>10256</b> (SSL <b>20256</b>): 256000 diff (4000-8000 h/s)</li>'+
+					'<li><b>10512</b> (SSL <b>20512</b>): 512000 diff (8000-20000 h/s)</li>'+
+					'<li><b>11024</b> (SSL <b>21024</b>): 1024000 diff (20000-40000 h/s)</li>'+
+					'<li><b>12048</b> (SSL <b>22048</b>): 2048000 diff (40000-80000 h/s)</li>'+
+					'<li><b>14096</b> (SSL <b>24096</b>): 4096000 diff (80000-160000 h/s)</li>'+
+					'<li><b>18192</b> (SSL <b>28192</b>): 8192000 diff (160000+ h/s)</li>'+
+				'</ul>'
+			},
+
+			{ q:	'Can I mine here using Tor .onion address?',
+			  a:	'Yes. You can mine on MoneroOcean pool using <b>mo2tor2amawhphlrgyaqlrqx7o27jaj7yldnx3t6jip3ow4bujlwz6id.onion</b> Tor address (and usual <b>10001</b>-<b>18192</b> http ports).'
+			},
+
+
+			// Pool UI 
+
+			{ q:	'When payments happen?',
+			  a:	'Payments happen automatically when your total due reaches your payment threshold. By default payment threshold is <b>0.3</b> XMR but your can lower it in home options.'
+			},
+
+			{ q:	'What does raw hashrate means?',
+			  a:	'<b>Raw hashrate</b> is hashrate your miner produces on algo it mines. <b>Pay hashrate</b> is hashrate that is used to determine how much you will be payed (it is <b>raw hashrate</b> multiplied by profit factors from the coins page).'
+			},
+
+			{ q:	'How set or update your email for notifications?',
+			  a:	'Go to home options, put your new email into <b>Change email TO</b> field and press <b>Email alerts On/Off</b> button. You must correctly fill <b>Change email FROM</b> field if you have email previously set. If you can not remember your previous email please contact pool operator providing your XMR wallet address so he can reset your email address.'
+			},
+
+			{ q:	'Is it possible to open pool home page on specific XMR address?',
+			  a:	'Yes. You can use <b>https://moneroocean.stream/#/dashboard?addr=&quot;xmr_address&quot;</b> link for that. Moreover you can use this address to start web mining immediately without need to click the button: <b>https://moneroocean.stream/#/dashboard?addr=&quot;xmr_address&quot;&amp;web_miner</b>.'
+			},
+
+			// Algo switching
+
+			{ q:	'How pool determines the most profitable coin to mine for my algo switching miner?',
+			  a:	'During login your algo switching miner will report hashrates it can do for all algorithms it support. Pool use that data to offer your miner a coin with the best profit that is determined by multiplication of hashrate of your miner and current coin hash profit.'
+			},
+
+			{ q:	'Can I mine coins supported here using miner that does not support algo switching?',
+			  a:	'Yes. You can do that if you add name of your coin algorithm at the end of miner password field after <b>~</b> character, like this: <b>worker_name~k12</b>. The list of supported algorithms can be found at <u class="nav C1" data-tar="coins">coins page</u>.'
+			},
+
+			{ q:	'Do I need to have altcoin wallets to mine them here?',
+			  a:	'No. Only Monero wallet is needed because pool does all payments in Monero (XMR).'
+			},
+
+			{ q:	'Am I payed only for the coin blocks I mine?',
+			  a:	'No. Pool pays you your share from every block we find as before. Your pay share like before is based on amount of hashes you submitted in the PPLNS window on the moment block is found. In particulair that means that your are payed even after you stopped mining as long as your shares are within PPLNS window.'
+			},
+
+			{ q:	'How can I verify my PPLNS reward for a particular XMR block?',
+			  a:	'For each XMR block for the last month pool stores CSV file with shares used to determine block rewards to all miners on the pool. You can access this file using link from XMR block reward value or from <b>https://block-share-dumps.moneroocean.stream/&quot;block hash&quot;.cvs.xz</b> location directly. Each line of this file corresponds to submitted share and has the following fields:'+
+				'<ul>'+
+					'<li><b>part_of_xmr_address</b> - last 16 characters of your XMR address used on the pool</li>'+
+					'<li><b>timestamp</b>: Linux timestamp in hex format</li>'+
+					'<li><b>raw_diff</b>: difficulty of this share</li>'+
+					'<li><b>count</b>: number of shares merged into this one (with cumulative raw_diff)</li>'+
+					'<li><b>coin</b>: name of the coin</li>'+
+					'<li><b>xmr_diff</b>: diff normalized to XMR profits using current profit factor for that coin</li>'+
+					'<li><b>xmr_diff_payed</b>: can be omitted if equal to xmr_diff</li>'+
+				'</ul>'+
+				'You can also use calc_mo_cvs.js script to parse this file like this on Linux:<br>'+
+					'<b>wget https://raw.githubusercontent.com/MoneroOcean/nodejs-pool/master/block_share_dumps/calc_mo_cvs.js<br>'+
+					'wget -O - https://block-share-dumps.moneroocean.stream/4900622681b754d56d5c93e1e4d010f6fc2097e2f2c1a0809e30b09b13f12472.cvs.xz | unxz -c | node calc_mo_cvs.js 44qJYxdbuqSKarYnDSXB6KLbsH4yR65vpJe3ELLDii9i4ZgKpgQXZYR4AMJxBJbfbKZGWUxZU42QyZSsP4AyZZMbJBCrWr1<br>'+
+					'<br>'+
+					'PPLNS window size:             3.76 hours<br>'+
+					'PPLNS window size:             215549020500 xmr hashes<br>'+
+					'Pool XMR normalized hashrate:  15.94 MH/s<br>'+
+					'<br>'+
+					'Your submitted shares:         33578<br>'+
+					'Your payment:                  0.346985% (747923823 xmr hashes)<br>'+
+					'Your XMR normalized hashrate:  55.32 KH/s<br>'+
+					'<br>'+
+					'You mined these coins:<br>'+
+					' LOKI: 244825043 raw coin hashes (37.478417% of XMR normalized hashrate)<br>'+
+					' MSR: 1809000 raw coin hashes (0.182182% of XMR normalized hashrate)<br>'+
+					' TUBE: 295000 raw coin hashes (0.095110% of XMR normalized hashrate)<br>'+
+					' XHV: 359000 raw coin hashes (0.119957% of XMR normalized hashrate)<br>'+
+					' XMR: 464642699 raw coin hashes (62.124335% of XMR normalized hashrate)</b>'
+			},
+
+			// Solving issues
+
+			{ q:	'Can I have payment if I have less than <b>' + $Q.pay.min_auto + '</b> XMR?',
+			  a:	'Sorry, no. Minimum payment of <b>' + $Q.pay.min_auto + '</b> XMR is hardcoded in the pool code and it is too much mess to workaround it. Please consider to accumulate <b>' + $Q.pay.min_auto + '</b> XMR to get payment.'
+			},
+
+			{ q:	'Is there a way to change my wallet address (move total amount due from on wallet to another)?',
+			  a:	'Generally, no. However it can be reviewed on case by case basis if there is enough evidence that you are asking to move money from wallet you own. That includes you knowing email address for that wallet (if it is set); stopping ALL mining activity for at least one week to your old wallet; &hellip; other checks that we will not disclose now.'
+			},
+
+			{ q:	'Why my miner recieves pool errors about throttled shares?',
+			  a:	'Because you are connecting too many miners with too low diff. Either increase miner diff or use mining proxy.'
+			},
+
+			{ q:	'What is miner ban policy on this pool?',
+			  a:	'In case of invalid shares pool can use temporary IP based bans that will be automatically removed.<br><br>'+
+				'Permanent XMR address ban can be only issued if we get enough evidence that any wallet address on the pool is used for malware/botnet activities. By enough evidence we mean at least several reports from different sources. And by address ban we mean that workers that try to use this address will be rejected. We do not plan to freeze already mined funds (total due), so they can be retrieved by setting lower payment threshold in home options as usual.'
+			},
+			{ q:	'Why some of my worker names are replaced by <b>all_other_workers</b> worker?',
+			  a:	'This is because you use too many worker names and to avoid DB / network channel overloads all extra miners are joined under <b>all_other_workers</b> worker name.'
+			},
+
+			{ q:	'Why is the web miner not working (always shows zero hashrate)?',
+			  a:	'Try to use your browser&#039;s incognito mode or another browser. Also maybe your are blocked by your malware or antivirus software or by your ISP.'
+			},
+
+			{ q:	'How can I uninstall miner installed using the MoneroOcean miner setup scripts?',
+			  a:	'On Windows run this command: <b>powershell -Command &quot;$wc = New-Object System.Net.WebClient; $tempfile = [System.IO.Path]::GetTempFileName(); $tempfile += &#039;.bat&#039;; $wc.DownloadFile(&#039;https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/uninstall_moneroocean_miner.bat&#039;, $tempfile); &amp; $tempfile; Remove-Item -Force $tempfile&quot;</b><br>'+
+				'On Linux run this command: <b>curl -s -L https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/uninstall_moneroocean_miner.sh | bash -s</b>'
+			},
+
+			// Fees and donations
+
+			{ q:	'Are pool mining fees are really zero?',
+			  a:	'Yes, mining fee is zero. However please note that there is also withdrawal tx fee (that became also zero after <b>4.0</b> XMR). There is also small <b>0.4%</b>-<b>0.6%</b> TradeOgre exchange fee. Also web mining fee is <b>3%</b> (payed to web miner software developer).'
+			},
+
+			{ q:	'Can I split/donate hashrate of my worker between several Monero addresses?',
+			  a:	'Yes. In your miner config add <b>%percent2%xmr_wallet_address2</b> after your <b>xmr_wallet_address1</b> address and pool will split <b>percent2</b> percent of your hashrate to <b>xmr_wallet_address2</b>. For example if you want to donate <b>0.1%</b> of your hashrate to support Monero developers then just add <b>%0.1%44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A</b> after your Monero wallet address. This split happens on per worker basis, so one of your workers can has split enabled and other can work without split.'
+			},
+
+			{ q:	'Is this pool software open source?',
+			  a:	'Yes. It is powered by software in <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> and <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a> repositories.'
+			},
+
+			{ q:	'Are you accepting cryptocurrency donations? What are pool wallet view keys?',
+			  a:	'Yes. Why not =) Every bit helps especially with zero fee mining policy we use. If for some reason you feel grateful to a degree to donate some crypto then here are addresses you can use for that. These wallets are also used by the pool to recieve block rewards, so you can double check we not skimming any blocks by using wallet view keys listed below:'+
+				'<ul>'+
+					'<li><b>XMR</b>: 48VGGDaFWeedcSGkJ1Ww3eUnMxzGCgoMwV6ZS5enen9u1PjoWduKxszcy81zLCvoDEUmeBoGXu2adEqWV1Z6aGGHECnymR6<br>'+
+					'<b>View key</b>: 2f7c00584635ec0b51f0b40b92f1f4bdbc35c88ac5cfe8a4de86b40a56949f08</li>'+
+					'<li><b>AEON</b>: WmsEg3RuUKCcEvFBtXcqRnGYfiqGJLP1FGBYiNMgrcdUjZ8iMcUn2tdcz59T89inWr9Vae4APBNf7Bg2DReFP5jr23SQqaDMT<br>'+
+					'<b>View key</b>: edf3d3c64d6b9be56292bfa322a89ddc7dfa0e62c0339f6ef35fad5341243d06</li>'+
+					'<li><b>ETN</b>: etnkQMp3Hmsay2p7uxokuHRKANrMDNASwQjDUgFb5L2sDM3jqUkYQPKBkooQFHVWBzEaZVzfzrXoETX6RbMEvg4R4csxfRHLo1<br>'+
+					'<b>View key</b>: N/A (not mining for a long time)</li>'+
+					'<li><b>SUMO</b>: Sumoo1DGS7c9LEKZNipsiDEqRzaUB3ws7YHfUiiZpx9SQDhdYGEEbZjRET26ewuYEWAZ8uKrz6vpUZkEVY7mDCZyGnQhkLpxKmy<br>'+
+					'<b>View key</b>: 1e7fdff71c6904997ac8cba496e8f99130e0684678192d471d57e4537f48dd02</li>'+
+					'<li><b>GRFT</b>: GACadqdXj5eNLnyNxvQ56wcmsmVCFLkHQKgtaQXNEE5zjMDJkWcMVju2aYtxbTnZgBboWYmHovuiH1Ahm4g2N5a7LuMQrpT<br>'+
+					'<b>View key</b>: d0a73b92c7faa91cb5addab02b8490ccddf967234f1e4b91fcaf9b511d906c07</li>'+
+					'<li><b>MSR</b>: 5hnMXUKArLDRue5tWsNpbmGLsLQibt23MEsV3VGwY6MGStYwfTqHkff4BgvziprTitbcDYYpFXw2rEgXeipsABTtEmcmnCK<br>'+
+					'<b>View key</b>: d1a36b1507aa51f5d2e79f4b9c62dde26f95d4f41847345903a05ee3e84de50b</li>'+
+					'<li><b>LTHN</b>: iz53aMEaKJ25zB8xku3FQK5VVvmu2v6DENnbGHRmn659jfrGWBH1beqAzEVYaKhTyMZcxLJAdaCW3Kof1DwTiTbp1DSqLae3e<br>'+
+					'<b>View key</b>: 23ea2ca9ab13af03af7dc0ed09304c015ce804b798d5cca3ced67cfafcdddf0a</li>'+
+					'<li><b>WOW</b>: Wo3yjV8UkwvbJDCB1Jy7vvXv3aaQu3K8YMG6tbY3Jo2KApfyf5RByZiBXy95bzmoR3AvPgNq6rHzm98LoHTkzjiA2dY7sqQMJ<br>'+
+					'<b>View key</b>: ad58e5c8392fde2f48c37c7b0eb52d20ebf4e9ce14d425b564c8f48514a4700b</li>'+
+					'<li><b>XMV</b>: XvyVfpAYp3zSuvdtoHgnDzMUf7GAeiumeUgVC7RTq6SfgtzGEzy4dUgfEEfD5adk1kN4dfVZdT3zZdgSD2xmVBs627Vwt2C3Ey<br>'+
+					'<b>View key</b>: ad1c9295af1e52cd0d2ba3f4f798f79803d4ee01882b7972b23c1c55faa32f01</li>'+
+					'<li><b>RYO</b>: RYoLsi22qnoKYhnv1DwHBXcGe9QK6P9zmekwQnHdUAak7adFBK4i32wFTszivQ9wEPeugbXr2UD7tMd6ogf1dbHh76G5UszE7k1<br>'+
+					'<b>View key</b>: 8b26c787dc35b4e3176e1d42d699bc93af5293b9a68396edd68587a93445360d</li>'+
+					'<li><b>XLA</b>: Se3Qr5s83AxjCtYrkkqg6QXJagCVi8dELbHb5Cnemw4rMk3xZzEX3kQfWrbTZPpdAJSP3enA6ri3DcvdkERkGKE518vyPQTyi<br>'+
+					'<b>View key</b>: bf3b63673be7145138fc34d6d234c6ffabd5b1c589a9df1eb5d62734aa89e50d</li>'+
+					'<li><b>XHV</b>: hvxyEmtbqs5TEk9U2tCxyfGx2dyGD1g8EBspdr3GivhPchkvnMHtpCR2fGLc5oEY42UGHVBMBANPge5QJ7BDXSMu1Ga2KFspQR<br>'+
+					'<b>View key</b>: 4f9a33dacd1e69b6a60f360204577518dc1262951504383db06b1a314c34ac02</li>'+
+					'<li><b>TUBE</b>: bxcpZTr4C41NshmJM9Db7FBE5crarjaDXVUApRbsCxHHBf8Jkqjwjzz1zmWHhm9trWNhrY1m4RpcS7tmdG4ykdHG2kTgDcbKJ<br>'+
+					'<b>View key</b>: e387a4abdf38ed47530f6d7c2530426a6fa5d5c3efaee0d62b452b6e19868800</li>'+
+                                	'<li><b>LOKI</b>: L6XqN6JDedz5Ub8KxpMYRCUoQCuyEA8EegEmeQsdP5FCNuXJavcrxPvLhpqY6emphGTYVrmAUVECsE9drafvY2hXUTJz6rW<br>'+
+					'<b>View key</b>: d098d01706a1d9aa2a1b025b1171fb726611301ac027aa4a9637df42f2e8fe08</li>'+
+                                	'<li><b>TRTL</b>: TRTLv2x2bac17cngo1r2wt3CaxN8ckoWHe2TX7dc8zW8Fc9dpmxAvhVX4u4zPjpv9WeALm2koBLF36REVvsLmeufZZ1Yx6uWkYG<br>'+
+					'<b>View key</b>: 45917d1ce55822950bfe842cde8216911d4012ac8983be84ae9ff86b2d160600</li>'+
+                                	'<li><b>XTNC</b>: XtazhSxz1bbJLpT2JuiD2UWFUJYSFty5SVWuF6sy2w9v8pn69smkUxkTVCQc8NKCd6CBMNDGzgdPRYBKaHdbgZ5SNptVH1yPCTQ<br>'+
+					'<b>View key</b>: N/A (not mining for a long time)</li>'+
+                                	'<li><b>IRD</b>: ir3DHyB8Ub1aAHEewMeUxQ7b7tQdWa7VL8M5oXDPohS3Me4nhwvALXM4mym2kWg9VsceT75dm6XWiWF1K4zu8RVQ1HJD8Z3R9<br>'+
+					'<b>View key</b>: 51c009878bebf6c0bd74cc9c0462a72d0e87a52b1e97ffa9d3773be7688d930e</li>'+
+                                	'<li><b>ARQ</b>: ar4Ha6ZQCkKRhkKQLfexv7VZQM2MhUmMmU9hmzswCPK4T3o2rbPKZM1GxEoYg4AFQsh57PsEets7sbpU958FAvxo2RkkTQ1gE<br>'+
+					'<b>View key</b>: ed87009c609adc6e66a4ba2e41f6a2bda95be2e453c54d8c08859e317bfc5e06</li>'+
+                                	'<li><b>XWP</b>: fh4MCJrakhWGoS6Meqp6UxGE1GNfAjKaRdPjW36rTffDiqvEq2HWEKZhrbYRw7XJb3CXxkjL3tcYGTT39m5qgjvk1ap4bVu1R<br>'+
+					'<b>View key</b>: 5b33addab62f45d41408b58a310fcfddf60715308c5c5a1444729c5d228ebe02</li>'+
+                                	'<li><b>XEQ</b>: Tvzp9tTmdGP9X8hCEw1Qzn18divQajJYTjR5HuUzHPKyLK5fzRt2X73FKBDzcnHMDJKdgsPhUDVrKHVcDJQVmLBg33NbkdjQb<br>'+
+					'<b>View key</b>: d76f65dab320b9ef36aecf025b6b9e0acccc0e6dbaa21cd0222b09c71eaa640b</li>'+
+                                	'<li><b>XEQ</b>: ipN5cNhm7RXAGACP4ZXki4afT3iJ1A6Ka5U4cswE6fBPDcv8JpivurBj3vu1bXwPyb8KZEGsFUYMmToFG4N9V9G72X4WpAQ8L<br>'+
+					'<b>View key</b>: ffd55911bbc5efe654b60b7fcad99c0857e78ce3877d8947e8334899595d0600</li>'+
+                                	'<li><b>DERO</b>: dERokvcrnuWH1ai1QmZQc9cgxrLwE3rX3TbhdrnLmi3BVZmf197qd5FaFqmPMp5dZ3igXfVQwUUMgTSjpVKDtUeb6DT2xp64XJ<br>'+
+					'<b>View key</b>: d3011169f15fb7b83efe805ad2d55ee559d8b6aad29f0550d0451bafb2aac76ad4b1b06dd817d88e2826bf27033b40224e2a4b102bd08a1d337d50b69495cc06</li>'+
+					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
+					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
+					'<li><b>ETH</b>: 0xCF8BABC074C487Ae17F9Ce0394eab492E6A35658</li>'+
+					'<li><b>LTC</b>: MCkjQo99VzoeZQ1piDzLDb4uqNSDRZpx55</li>'+
+				'</ul>'
+			},
 		]
 	};
 
@@ -590,7 +794,7 @@ function ErrAlert(tar, err){
 	}else{
 		var msg = '',
 			iserr = 'C4',
-			err_msg = 'Try refreshing, check your connection; otherwise we\'ll be back up soon.';
+			err_msg = 'Try refreshing, check your connection; otherwise we&#039;ll be back up soon.';
 		
 		if(tar === 'NetStats'){
 			msg = 'Network API Connection Error';
@@ -939,7 +1143,7 @@ function Dash_load(typ){
 					Dash_reset();
 					m.innerHTML =
 						'<div class="MinerMsg C3'+mde+'"><div class="txtmed">Address Not Found</div><div class="LR80 txt shim10">' +
-						'If you\'ve submitted your first share, be patient, it may take a minute or two to update. ' +
+						'If you&#039;ve submitted your first share, be patient, it may take a minute or two to update. ' +
 						'If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u><br><br>' +
 						'You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>' +
 						'You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div><br><br>' +
@@ -965,7 +1169,7 @@ function Dash_load(typ){
 		m.innerHTML =
 			'<div class="MinerMsg C3'+mde+'"><div class="txtmed">Welcome to ' + $Q.pool.nme +'</div><div class="LR80 txt shim10">' +
 			'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q.cur.nme+' address above. ' +
-			'After you\'ve submitted a share, your stats will appear here.<br><br>' +
+			'After you&#039;ve submitted a share, your stats will appear here.<br><br>' +
 			'Standalone miner reference setup info:<br>' +
 				'Pool: gulf.moneroocean.stream<br>' +
 				'Port: 10128 or 20128 for SSL (128000 diff)<br><br>' +
@@ -1508,7 +1712,7 @@ function dta_Help(){
 			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Start here if you need a Monero address and wallet.</div>'+
 			'<div class="helpcontent hide">'+
-				'<p>The <a href="https://www.getmonero.org/downloads/" target="_blank" class="C1 hov">Official Monero Wallet</a> is recommended. Monero Outreach\'s <a href="https://www.monerooutreach.org/stories/monero_wallet_quickstart.php" class="C1 hov" target="_blank">Wallet Guide</a> has a list of other wallet options including paper wallets.</p>'+
+				'<p>The <a href="https://www.getmonero.org/downloads/" target="_blank" class="C1 hov">Official Monero Wallet</a> is recommended. Monero Outreach&#039;s <a href="https://www.monerooutreach.org/stories/monero_wallet_quickstart.php" class="C1 hov" target="_blank">Wallet Guide</a> has a list of other wallet options including paper wallets.</p>'+
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
@@ -1527,22 +1731,22 @@ function dta_Help(){
 			'<div class="helptitle txtbig">Step 3 - Configure Settings<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Select a pool server and port and configure you miner.</div>'+
 			'<div class="helpcontent hide">'+
-				'<p>Each mining software will have it\'s own config, but they will all ask for the same information:</p>'+
+				'<p>Each mining software will have it&#039;s own config, but they will all ask for the same information:</p>'+
 				'<p><b>Your Monero Address</b><br>Often this will be labeled username, but check the instructions.</p>'+
 				'<p><b>Pool Address</b><br>The miner will want a url and a port, like this: gulf.moneroocean.stream:10128</p>'+
 				'<p><table class="txtsmall C3'+mde+'"><tr>'+
 					'<td>'+
 						'<p>Port descriptions:</p>'+
-						'<ul><li>10032: Old CPU/GPU</li><li>10128: Modern CPU/GPU</li><li>11024: CPU/GPU farm</li><li>20128: SSL/TLS</li><li>10001: Very old CPU (1000 diff)</li></ul>'+
+						'<ul><li><b>10032</b>: Old CPU/GPU</li><li><b>10128</b>: Modern CPU/GPU</li><li><b>18192</b>: CPU/GPU farm</li><li><b>20128</b>: SSL/TLS</li><li><b>10001</b>: Very old CPU (1000 diff)</li></ul>'+
 					'</td>'+
 					'<td>'+
-						'<p>If you can\'t get through firewall, try these<br>(specify +128000 difficulty after your Monero Address):</p>'+
-						'<ul><li>80: Firewall bypass</li><li>443: Firewall bypass w/SSL/TLS</li></ul>'+
+						'<p>If you can&#039;t get through firewall, try these<br>(specify +128000 difficulty after your Monero Address):</p>'+
+						'<ul><li><b>80</b>: Firewall bypass</li><li><b>443</b>: Firewall bypass w/SSL/TLS</li></ul>'+
 					'</td>'+
 				'</tr></table></p>'+
 				'<p><b>Optional Fields</b><br>You can also set worker names or fixed difficulty through the configuration.</p>'+
-				'<p>Standard wallet address<br><i>(e.g. xmrig.exe -u 43T...sUW -p worker1)</i></p>'+
-				'<p>Fixed difficulty of 128000 for the worker<br><i>(e.g. xmrig.exe -u 43T...sUW+128000 -p worker1)</i></p>'+
+				'<p>Standard wallet address<br><i>(e.g. xmrig.exe -u 43T...sUW -p <b>worker1</b>)</i></p>'+
+				'<p>Fixed difficulty of 128000 for the worker<br><i>(e.g. xmrig.exe -u 43T...sUW<b>+128000</b> -p worker1)</i></p>'+
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
@@ -1550,10 +1754,9 @@ function dta_Help(){
 			'<div class="helpteaser">Launch the miner and learn more.</div>'+
 			'<div class="helpcontent hide">'+
 				'<p>This pool uses PPLNS to determine payouts. It helps to combat pool hopping and ensures a good payout for miners.</p>'+
-				'<p>' + Perc(0) + ' (yes, Zero!) Pool Fee</p>'+
-				'<p>' + $Q.pay.min_auto + ' XMR Minimum Payout</p>'+
-				'<p>' + $Q.cur.conf +' Block Confirmation Time</p>'+
-				'<br><p><i>Powered by:</i> <a href="https://github.com/MoneroOcean/nodejs-pool" target="_blank" class="C3l hov">nodejs-pool</a> &amp; <a href="https://github.com/MoneroOcean/moneroocean-gui" target="_blank" class="C3l hov">moneroocean-gui</a></p>' +
+				'<p><b>' + Perc(0) + '</b> (yes, Zero!) Pool Fee</p>'+
+				'<p><b>' + $Q.pay.min_auto + '</b> XMR Minimum Payout</p>'+
+				'<p><b>' + $Q.cur.conf + '</b> Block Confirmation Time</p>'+
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
