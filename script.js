@@ -901,7 +901,7 @@ function TimerUpdateData(){
 			api('news').then(function(){
 				if($D.news && $D.news.created){
 					if(getCookie('News') == $D.news.created){
-						h = 'hide';
+						h = 'hide clearfix';
 					}else{
 						c.innerHTML = '<div class="txtmed">'+escapeHtml($D.news.subject)+'<div id="NewsTime" class="txttny noselect">('+AgoTooltip($D.news.created, 'y')+')</div></div>'+
 							'<div id="NewsBody" class="txt">'+escapeHtml($D.news.body)+'</div>'+
@@ -1040,7 +1040,7 @@ function Navigate(tar){
 //Dash
 function Dash_init(){
 	var $S = ['SplitL', 'SplitR'],
-		ins = '<div id="News" class="hide clearfix"><div id="NewsCard" class="LR85 C0bk'+mde+' C3'+mde+' shimtop20"></div></div>'+
+		ins = '<div id="News" class="hide"><div id="NewsCard" class="LR85 C0bk'+mde+' C3'+mde+' shimtop20"></div></div>'+
 		'<div id="MinerPayments"></div>'+
 		'<div id="MinerGraph" class="clearfix"></div>'+
 		'<div id="MinerDash" class="LR85 txtbig C3'+mde+' hide"></div>'+
