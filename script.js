@@ -19,7 +19,7 @@ var	mde = 'l',
 		api:		'https://api.moneroocean.stream/',
 		fiat_name:	'usd',
 		fiat_symbol:	'$',
-		news:		false,												//enable news (motd) alerts on homepage
+		news:		true,												//enable news (motd) alerts on homepage
 		email:		true,												//enable email notifications
 		timer:		60,												//refresh timer in seconds
 		graph: {
@@ -903,8 +903,8 @@ function TimerUpdateData(){
 					if(getCookie('News') == $D.news.created){
 						h = 'hide';
 					}else{
-						c.innerHTML = '<div class="txtmed">'+$D.news.subject+'<div id="NewsTime" class="txttny noselect">('+AgoTooltip($D.news.created, 'y')+')</div></div>'+
-							'<div id="NewsBody" class="txt">'+$D.news.body.replace(/^(<br>)/,'')+'</div>'+
+						c.innerHTML = '<div class="txtmed">'+escapeHtml($D.news.subject)+'<div id="NewsTime" class="txttny noselect">('+AgoTooltip($D.news.created, 'y')+')</div></div>'+
+							'<div id="NewsBody" class="txt">'+escapeHtml($D.news.body)+'</div>'+
 							'<div id="NewsClose" class="Btn32 Btn32Corner C1fl">'+$I.x+'</div>';
 					}
 					n.className = h;
@@ -1148,8 +1148,8 @@ function Dash_load(typ){
 						'You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>' +
 						'You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div><br><br>' +
 						'Standalone miner reference setup info:<br>' +
-							'Pool: gulf.moneroocean.stream<br>' +
-							'Port: 10128 or 20128 for SSL (128000 diff)<br>' + 
+							'Pool: <b>gulf.moneroocean.stream</b><br>' +
+							'Port: <b>10128</b> or 20128 for SSL (128000 diff)<br>' + 
 							'User: ' + addr + '<br><br>' +
 							'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
 							'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
@@ -1171,9 +1171,9 @@ function Dash_load(typ){
 			'Visit the <u class="nav C1" data-tar="help">help section</u> to get setup, then enter your '+$Q.cur.nme+' address above. ' +
 			'After you&#039;ve submitted a share, your stats will appear here.<br><br>' +
 			'Standalone miner reference setup info:<br>' +
-				'Pool: gulf.moneroocean.stream<br>' +
-				'Port: 10128 or 20128 for SSL (128000 diff)<br><br>' +
-				'User: "Your XMR wallet address"<br><br>' +
+				'Pool: <b>gulf.moneroocean.stream</b><br>' +
+				'Port: <b>10128</b> or 20128 for SSL (128000 diff)<br><br>' +
+				'User: <b>Your XMR wallet address</b><br><br>' +
 				'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
 				'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
 			'</div></div>';
