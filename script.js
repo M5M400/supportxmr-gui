@@ -205,7 +205,7 @@ var	mde = 'l',
 			},
 
 			{ q:	'How can I verify my PPLNS reward for a particular XMR block?',
-			  a:	'For each XMR block for the last month pool stores CSV file with shares used to determine block rewards to all miners on the pool. You can access this file using link from XMR block reward value or from <b>https://block-share-dumps.moneroocean.stream/&quot;block hash&quot;.cvs.xz</b> location directly. Each line of this file corresponds to submitted share and has the following fields:'+
+			  a:	'For each XMR block for the last month pool stores CSV file with shares used to determine block rewards to all miners on the pool. You can access this file using link from XMR height value or from <b>https://block-share-dumps.moneroocean.stream/&quot;block hash&quot;.cvs.xz</b> location directly. Each line of this file corresponds to submitted share and has the following fields:'+
 				'<ul>'+
 					'<li><b>part_of_xmr_address</b> - last 16 characters of your XMR address used on the pool</li>'+
 					'<li><b>timestamp</b>: Linux timestamp in hex format</li>'+
