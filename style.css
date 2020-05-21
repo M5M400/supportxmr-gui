@@ -193,9 +193,11 @@ table.noborder{border-width:0!important}
 #PageTopR{float:right;width:240px}
 #PageBot{min-height:200px}
 .helpgroup{margin-top:20px;padding-bottom:10px;padding-left:25px}
-.helptitle{color:#208b8b;cursor:pointer;display:inline-block;fill:#208b8b;position:relative}
-.helptitle:hover{color:#196b6b;fill:#196b6b}
+.helpgroup2{margin-top:10px;padding-bottom:5px;padding-left:50px}
+.helptitle,.helptitle2{color:#208b8b;cursor:pointer;display:inline-block;fill:#208b8b;position:relative}
+.helptitle:hover,.helptitle2:hover{color:#196b6b;fill:#196b6b}
 .helptitle .btnback{border-radius:50%;box-sizing:border-box;height:26px;margin-left:-33px;padding:3px;position:absolute;top:-2px;width:26px;z-index:2}
+.helptitle2 .btnback{border-radius:50%;box-sizing:border-box;height:20px;margin-left:-26px;padding:3px;position:absolute;top:-2px;width:20px;z-index:2}
 .helpteaser,.helpcontent{margin-top:5px}
 .footer{bottom:0;left:0;position:relative;width:100%}
 #FootL,#FootR{box-sizing:border-box;display:inline-block;padding-top:4px}

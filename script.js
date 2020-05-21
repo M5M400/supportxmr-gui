@@ -1,130 +1,135 @@
 var	mde = 'l',
 	$Q = {
-		'pool':{
-			'nme':'MoneroOcean',										//also sets the cookie prefix
+		pool: {
+			nme: 'MoneroOcean',										//also sets the cookie prefix
 		},
-		'clr':{
-			'main':'208b8b',										//C1
-			'secondary':'818181',									//C2
-			'back-l':'e8e8e8',										//C0 - light
-			'back-d':'313131'	   									//C0 - dark
+		clr: {
+			main:		'208b8b',									//C1
+			secondary:	'818181',									//C2
+			'back-l':	'e8e8e8',									//C0 - light
+			'back-d':	'313131'	   								//C0 - dark
 		},
-		'cur':{
-			'nme':'Monero',						
-			'sym':'XMR',
-			'conf': 30,	// blocks needed to mature
-			'port': 18081,
-			'reg':/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
+		cur: {
+			nme:	'Monero',						
+			sym:	'XMR',
+			conf:	30,	// blocks needed to mature
+			port:	18081,
+			reg:	/^[4|8]{1}([A-Za-z0-9]{105}|[A-Za-z0-9]{94})$/	//address regex
 		},
-		'api':'https://api.moneroocean.stream/',
-		'fiat_name': 'usd',
-		'fiat_symbol': '$',
-		'news':false,												//enable news (motd) alerts on homepage
-		'email':true,												//enable email notifications
-		'timer':60,													//refresh timer in seconds
-		'graph':{
-			'hrs':72,												//max chart length in hours
-			'pplns':false,											//show pplns window on chart
+		api:		'https://api.moneroocean.stream/',
+		fiat_name:	'usd',
+		fiat_symbol:	'$',
+		news:		false,												//enable news (motd) alerts on homepage
+		email:		true,												//enable email notifications
+		timer:		60,												//refresh timer in seconds
+		graph: {
+			hrs:	72,												//max chart length in hours
+			pplns:	false,												//show pplns window on chart
 		},
-		'pay':{
-			'min_auto':0.003,										//minimum for automatic threshold
-			'def_auto':0.3,											//minimum for automatic threshold
-			'max_fee':0.0004,										//max fee (for min_auto)
-			'zero_fee_pay':4,										//theshold that makes fee to be zero
-			'dec_auto':4											//decimal places for threshold
+		pay: {
+			min_auto:	0.003,											//minimum for automatic threshold
+			def_auto:	0.3,											//minimum for automatic threshold
+			max_fee:	0.0004,											//max fee (for min_auto)
+			zero_fee_pay:	4,											//theshold that makes fee to be zero
+			dec_auto:	4											//decimal places for threshold
 		}
 	},
 	$$ = {
-		'calc':{
-			'1':'Per Day',
-			'7':'Per Week',
-			'30':'Per Month',
-			'365':'Per Year',
+		calc:	{
+			'1':	'Per Day',
+			'7':	'Per Week',
+			'30':	'Per Month',
+			'365':	'Per Year',
 		},
 		page_sizes: [15, 50, 100],
-		'hlp':{
-			'head':'Welcome to '+$Q.pool.nme,
-			'text':'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
+		hlp:	{
+			head:	'Welcome to ' + $Q.pool.nme,
+			text:	'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
 		},
-		'msg':{
-			'addr_invalid':{'head':'Invalid '+$Q.cur.nme+' Address', 'text':'Double check that your address is complete.'},
-			'addr_nodata':{'head':'No Data', 'text':''}
+		msg: {
+			addr_invalid:	{head: 'Invalid '+$Q.cur.nme+' Address', text: 'Double check that your address is complete.'},
+			addr_nodata:	{head: 'No Data', text: ''}
 		},
-		'nav':{
-			'home':'Home',
-			'coins':'Coins',
-			'blocks':'Blocks',
-			'payments':'Payments',
-			'help':'Help'
+		nav:{
+			home:		'Home',
+			coins:		'Coins',
+			blocks:		'Blocks',
+			payments:	'Payments',
+			help:		'Help'
 		},
-		'pay':{
-			'DashPending':{'lbl':'<span id="PendingPay"></span> '+$Q.cur.sym+' Pending', 'var':'due'},
-			'DashPaid':{'lbl':$Q.cur.sym+' Paid', 'var':'paid'}
+		pay:{
+			DashPending:	{lbl: '<span id="PendingPay"></span> '+$Q.cur.sym+' Pending', var: 'due'},
+			DashPaid:	{lbl: $Q.cur.sym+' Paid', var: 'paid'}
 		},
-		'wm':{
-			'on':  'Web mining: <span id="WebMinerHash">--</span>',
-			'off': 'Run Web Miner',
+		wm:{
+			on:  'Web mining: <span id="WebMinerHash">--</span>',
+			off: 'Run Web Miner',
 		},
-		'sts': function() { return {
-			'MinerWorkerCount':	'<div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
-			'MinerHashes':		'Your <select id="HashSelect"></select> Hashrate',
-			'MinerShares':		'Shares (Hashes: <span id="TotalHashes">--</span>)',
-			'MinerCalc': 		'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>',
+		sts: function() { return {
+			MinerWorkerCount:	'<div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
+			MinerHashes:		'Your <select id="HashSelect"></select> Hashrate',
+			MinerShares:		'Shares (Hashes: <span id="TotalHashes">--</span>)',
+			MinerCalc: 		'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>',
 		}},
-		'stsw': function() { return { // For worker
-			'MinerHashes': 		'Total Hashes',
-			'MinerShares': 		'Valid / Invalid Shares',
+		stsw: function() { return { // For worker
+			MinerHashes: 		'Total Hashes',
+			MinerShares: 		'Valid / Invalid Shares',
 		}},
-		'tbl':{
-			'coins':[
-				{'name':'name', 'lbl':'Name', 'cls':'min'},
-				{'name':'algo', 'lbl':'Algo', 'cls':'min'},
-				{'name':'profit', 'lbl':'Profit', 'tooltip':'Profit per hash in percent', 'cls':'min'},
-				{'name':'eff', 'lbl':'Effort', 'tooltip':'Current block effort in percent', 'cls':'min'},
-				{'name':'reward_perc', 'lbl':'Reward', 'tooltip':'Block reward in percent', 'cls':'min'},
-				{'name':'accounts', 'lbl':'Accounts', 'tooltip':'Account (Wallet) Count', 'cls':'min'},
-				{'name':'poolhashrate', 'lbl':'Hashrate', 'tooltip':'Pool hashrate', 'cls':'min'},
-				{'name':'worldhashrate', 'lbl':'World Hash', 'tooltip':'Coin world hashrate', 'cls':'min'},
-				{'name':'height', 'lbl':'Top Height', 'cls':'min'},
-				{'name':'pplns', 'lbl':'PPLNS', 'tooltip':'Share in last block PPLNS window in percent', 'cls':'min'},
-				{'name':'notes', 'lbl':'Notes', 'cls':'trunc'},
+		tbl: {
+			coins: [
+				{name: 'name', lbl: 'Name', cls: 'min'},
+				{name: 'algo', lbl: 'Algo', cls: 'min'},
+				{name: 'profit', lbl: 'Profit', 'tooltip':'Profit per hash in percent', cls: 'min'},
+				{name: 'eff', lbl: 'Effort', 'tooltip':'Current block effort in percent', cls: 'min'},
+				{name: 'reward_perc', lbl: 'Reward', 'tooltip':'Block reward in percent', cls: 'min'},
+				{name: 'accounts', lbl: 'Accounts', 'tooltip':'Account (Wallet) Count', cls: 'min'},
+				{name: 'poolhashrate', lbl: 'Hashrate', 'tooltip':'Pool hashrate', cls: 'min'},
+				{name: 'worldhashrate', lbl: 'World Hash', 'tooltip':'Coin world hashrate', cls: 'min'},
+				{name: 'height', lbl: 'Top Height', cls: 'min'},
+				{name: 'pplns', lbl: 'PPLNS', 'tooltip':'Share in last block PPLNS window in percent', cls: 'min'},
+				{name: 'notes', lbl: 'Notes', cls: 'trunc'},
 			],
-			'blocks':[
-				{'name':'num', 'lbl':'#', 'cls':'min'},
-				{'name':'tme', 'lbl':'Found', 'cls':'min'},
-				{'name':'coin', 'lbl':'Coin', 'cls':'min'},
-				{'name':'eff', 'lbl':'Effort', 'cls':'min'},
-				{'name':'reward', 'lbl':'Raw reward', 'tooltip':'Raw block reward in native coin units', 'cls':'min'},
-				{'name':'payment', 'lbl':'Payment ('+$Q.cur.sym+')', 'cls':'min'},
-				{'name':'bheight', 'lbl':'Height', 'cls':'min'},
-				{'name':'hash', 'lbl':'Transaction', 'typ':'block', 'cls':'trunc'},
+			blocks: [
+				{name: 'num', lbl: '#', cls: 'min'},
+				{name: 'tme', lbl: 'Found', cls: 'min'},
+				{name: 'coin', lbl: 'Coin', cls: 'min'},
+				{name: 'eff', lbl: 'Effort', cls: 'min'},
+				{name: 'reward', lbl: 'Raw reward', 'tooltip':'Raw block reward in native coin units', cls: 'min'},
+				{name: 'payment', lbl: 'Payment ('+$Q.cur.sym+')', cls: 'min'},
+				{name: 'bheight', lbl: 'Height', cls: 'min'},
+				{name: 'hash', lbl: 'Transaction', typ: 'block', cls: 'trunc'},
 			],
-			'poolpay':[
-				{'name':'tme', 'lbl':'Payment Sent', 'cls':'min'},
-				{'name':'payees', 'lbl':'Payees', 'cls':'min'},
-				{'name':'amnt', 'lbl':'Amount ('+$Q.cur.sym+')', 'cls':'min'},
-				{'name':'fee', 'lbl':'Fee ('+$Q.cur.sym+')', 'cls':'min'},
-				{'name':'hash', 'lbl':'Transaction', 'typ':'tx', 'cls':'trunc'},
+			poolpay: [
+				{name: 'tme', lbl: 'Payment Sent', cls: 'min'},
+				{name: 'payees', lbl: 'Payees', cls: 'min'},
+				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
+				{name: 'fee', lbl: 'Fee ('+$Q.cur.sym+')', cls: 'min'},
+				{name: 'hash', lbl: 'Transaction', typ: 'tx', cls: 'trunc'},
 			],
-			'pay':[
-				{'name':'tme', 'lbl':'Payment Sent', 'cls':'min'},
-				{'name':'amnt', 'lbl':'Amount ('+$Q.cur.sym+')', 'cls':'min'},
-				{'name':'hash', 'lbl':'Transaction', 'typ':'tx', 'cls':'trunc'},
+			pay: [
+				{name: 'tme', lbl: 'Payment Sent', cls: 'min'},
+				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
+				{name: 'hash', lbl: 'Transaction', typ: 'tx', cls: 'trunc'},
 			]
 		},
-		'trn':{
-			'avgeff':'Avg Effort',
-			'conf':'Confirmed',
-			'eff':'Effort',
-			'eml_on':'Email Alerts On',
-			'eml_off':'Email Alerts Off',
-			'min':'Minimum',
-			'que':'Payment Queued',
-			'rcnt':'Recent',
-			'set':'Update threshold',
-			'updt':'Threshold updated',
-			'vwpy':'Show Your Payments'
-		}
+		trn:{
+			avgeff:		'Avg Effort',
+			conf:		'Confirmed',
+			eff:		'Effort',
+			eml_on:		'Email Alerts On',
+			eml_off:	'Email Alerts Off',
+			min:		'Minimum',
+			que:		'Payment Queued',
+			rcnt:		'Recent',
+			set:		'Update threshold',
+			updt:		'Threshold updated',
+			vwpy:		'Show Your Payments'
+		},
+		faq: [
+			{q: 'Question 1', a: 'Answer 1'},
+			{q: 'Question 2', a: 'Answer 2'},
+			{q: 'Question 3', a: 'Answer 3'},
+		]
 	};
 
 var COINS = {
@@ -282,65 +287,65 @@ var addr = UrlVars().addr || '',
 	poolpay_page_size 	= 15,
 	blocks_port		= mport,
 	$WM = { 			//Web Miner
-		'enabled': false,
-		'addr': '',
-		'prev_hashes': 0,
-		'status_timer': false,
-		'update_sec': 2,
+		enabled:	false,
+		addr:		'',
+		prev_hashes:	0,
+		status_timer:	false,
+		update_sec: 	2,
 	},
 	$A = {},			//Account Memory
 	$C = {				//Selector Cache
-		'TogMode':'',
-		'Timer':'',
-		'NetStats':'',
-		'Addr':'',
-		'Stage':'',
-		'DashPayBtn':'',
-		'AddrField':'',
-		'TimerPie':'',
-		'TimerText':'',
-		'TimerRefresh':''
+		TogMode:	'',
+		Timer:		'',
+		NetStats:	'',
+		Addr:		'',
+		Stage:		'',
+		DashPayBtn:	'',
+		AddrField:	'',
+		TimerPie:	'',
+		TimerText:	'',
+		TimerRefresh:	''
 	},
 	$U = {				//Update Times
-		'netstats':0,
-		'poolstats':0,
-		'news':0
+		netstats:	0,
+		poolstats:	0,
+		news:		0
 	},
 	$P = {},			//Promise cache
 	$L ={				//Localization
-		'perc':'9 %',
-		'thou':',',
-		'dec':'.',
-		'tme':'G:i'
+		perc:	'9 %',
+		thou:	',',
+		dec:	'.',
+		tme:	'G:i'
 	},
 	$D = {				//Data Digests
-		'news':{},
-		'coins':[[]],
-		'blocks':[],
-		'poolpay':[],
-		'poolstats':{},
-		'pay':{},
-		'netstats':{},
-		'hashconv':{
-			'TH':1000000000000,
-			'GH':1000000000,
-			'MH':1000000,
-			'KH':1000,
-			'H':1
+		news:		{},
+		coins:		[[]],
+		blocks:		[],
+		poolpay:	[],
+		poolstats:	{},
+		pay:		{},
+		netstats:	{},
+		hashconv: {
+			TH:	1000000000000,
+			GH:	1000000000,
+			MH:	1000000,
+			KH:	1000,
+			H:	1
 		},
 		miner_hash_avg:0,	//Average miner graph number is stored here
 	},
 	$I = {				//Icons
-		'l':'<svg viewBox="0 0 99 99"><circle opacity=".6" cx="49.5" cy="49.5" r="31.5"/><path d="M87.6 57.1L99 49.5 87.7 42l7.5-11.3L82 27.9l2.6-13.4-13.4 2.7-2.6-13.4L57 11.4 49.5 0 42 11.3 30.6 3.8 27.9 17l-13.4-2.6 2.7 13.4-13.4 2.6L11.4 42 0 49.5 11.3 57 3.8 68.4 17 71.1l-2.6 13.4 13.4-2.7 2.6 13.4L42 87.6 49.5 99 57 87.7l11.3 7.5L71.1 82l13.4 2.6-2.7-13.4 13.4-2.6L87.6 57zM49.5 80a30.5 30.5 0 1 1 0-61 30.5 30.5 0 0 1 0 61z"/></svg>',
-		'd':'<svg viewBox="0 0 99 99"><path d="M25.2 19.6l5.3 10.6 11.7 1.7-8.5 8.3 2 11.6-10.5-5.5-10.4 5.5 2-11.6-8.5-8.3L20 30.2l5.2-10.6zm29.6-3.4l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.5 2.9 1-6-4.3-4.3 6-1 2.8-5.4zM64.8 0A46 46 0 0 1 0 64.4 50.9 50.9 0 1 0 64.6 0z"/></svg>',
-		'settings':'<svg viewBox="0 0 99 99"><path d="M19.7 50.74V10.92l-6.4 1.69v38.12a16.1 16.1 0 0 0 0 31.53v4.17l6.4 1.65v-5.82a16.09 16.09 0 0 0 0-31.52zm-3.2 25.34a9.58 9.58 0 1 1 0-19.16 9.58 9.58 0 0 1 0 19.16zm36.2-59.51S52.66 0 52.7 0h-6.4v16.57a16.09 16.09 0 0 0 0 31.53V99h6.4V48.1a16.09 16.09 0 0 0 0-31.53zm-3.2 25.35a9.58 9.58 0 1 1 0-19.17 9.58 9.58 0 0 1 0 19.17zm36.2-1.18V12.62l-6.4-1.7v29.81a16.09 16.09 0 0 0 0 31.53v15.82l6.4-1.68V72.26a16.09 16.09 0 0 0 0-31.52zm-3.2 25.34a9.58 9.58 0 1 1 0-19.16 9.58 9.58 0 0 1 0 19.16z"/></svg>',
-		'loadico':'<svg viewBox="0 0 99 99"><path d="M49.5 0A49.5 49.5 0 0199 49.5c0 5.8-1.6 15.8-4.7 19.6a50.2 50.2 0 01-50.2 8.6c19.5 3.4 34.1-12.3 34.1-28.2a28.7 28.7 0 10-57.4 0c0 24.3 33.8 47 70.7 26.1A49.5 49.5 0 1149.5 0z"/><path opacity=".08" fill="#000" d="M44.1 77.7c41.9 5.9 60.6-41.7 35-68C91 18.9 99 33.3 99 49.6c0 5.8-1.6 15.8-4.7 19.6a50.2 50.2 0 01-50.2 8.6z"/></svg>',
-		'arrow':'<svg viewBox="0 0 99 99"><path d="M27 78l28-29-28-28C17 10 33-8 45 4l35 37c5 5 5 12 0 17L45 95c-12 12-29-6-18-17z"/></svg>',
-		'check':'<svg viewBox="0 0 99 99"><path d="M97 21l-8-9c-3-3-7-3-9 0L38 55 19 36c-2-3-6-3-8 0l-9 9c-3 3-2 7 0 9l23 24 9 9c2 3 6 3 8 0l9-9 46-48c3-3 3-7 0-9z"/></svg>',
-		'sort':'<svg viewBox="0 0 99 99"><path d="M56 45L35 25 15 45C8 52-6 40 3 32L29 6c4-3 9-3 12 0l27 26c9 8-4 20-12 13zm-13 9l21 20 20-20c7-7 21 5 12 13L70 93c-4 3-9 3-12 0L31 67c-9-8 4-20 12-13z"/></svg>',
-		'refresh':'<svg viewBox="0 0 99 99"><path d="M0 55.7v31l9.2-8.5a49.5 49.5 0 0 0 89.4-22.5H86.1a37.1 37.1 0 0 1-67.7 14l15.3-14H0zM49.5 0C24.3 0 3.5 18.9.4 43.3h12.5a37.1 37.1 0 0 1 68.3-13.1L68.1 43.3H99v-31l-8.9 9A49.4 49.4 0 0 0 49.5 0z"/></svg>',
-		'x':'<svg viewBox="0 0 99 99"><path d="M99 77L71 50l28-28L77 0 50 28 22 0 0 22l28 28L0 77l22 22 28-28 27 28"/></svg>',
-		'delete':'<svg viewBox="0 0 99 99"><path d="M8 28L7 15h86l-2 13H8zM31 0l-1 10h39L68 0H31zM10 33l9 66h61l9-66H10zm18 56l-3-47h8l3 47h-8zm26 0h-9V42h9v47zm17 0h-8l3-47h8l-3 47z"/></svg>',
+		l:		'<svg viewBox="0 0 99 99"><circle opacity=".6" cx="49.5" cy="49.5" r="31.5"/><path d="M87.6 57.1L99 49.5 87.7 42l7.5-11.3L82 27.9l2.6-13.4-13.4 2.7-2.6-13.4L57 11.4 49.5 0 42 11.3 30.6 3.8 27.9 17l-13.4-2.6 2.7 13.4-13.4 2.6L11.4 42 0 49.5 11.3 57 3.8 68.4 17 71.1l-2.6 13.4 13.4-2.7 2.6 13.4L42 87.6 49.5 99 57 87.7l11.3 7.5L71.1 82l13.4 2.6-2.7-13.4 13.4-2.6L87.6 57zM49.5 80a30.5 30.5 0 1 1 0-61 30.5 30.5 0 0 1 0 61z"/></svg>',
+		d:		'<svg viewBox="0 0 99 99"><path d="M25.2 19.6l5.3 10.6 11.7 1.7-8.5 8.3 2 11.6-10.5-5.5-10.4 5.5 2-11.6-8.5-8.3L20 30.2l5.2-10.6zm29.6-3.4l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8-5.5 2.9 1-6-4.3-4.3 6-1 2.8-5.4zM64.8 0A46 46 0 0 1 0 64.4 50.9 50.9 0 1 0 64.6 0z"/></svg>',
+		settings:	'<svg viewBox="0 0 99 99"><path d="M19.7 50.74V10.92l-6.4 1.69v38.12a16.1 16.1 0 0 0 0 31.53v4.17l6.4 1.65v-5.82a16.09 16.09 0 0 0 0-31.52zm-3.2 25.34a9.58 9.58 0 1 1 0-19.16 9.58 9.58 0 0 1 0 19.16zm36.2-59.51S52.66 0 52.7 0h-6.4v16.57a16.09 16.09 0 0 0 0 31.53V99h6.4V48.1a16.09 16.09 0 0 0 0-31.53zm-3.2 25.35a9.58 9.58 0 1 1 0-19.17 9.58 9.58 0 0 1 0 19.17zm36.2-1.18V12.62l-6.4-1.7v29.81a16.09 16.09 0 0 0 0 31.53v15.82l6.4-1.68V72.26a16.09 16.09 0 0 0 0-31.52zm-3.2 25.34a9.58 9.58 0 1 1 0-19.16 9.58 9.58 0 0 1 0 19.16z"/></svg>',
+		loadico:	'<svg viewBox="0 0 99 99"><path d="M49.5 0A49.5 49.5 0 0199 49.5c0 5.8-1.6 15.8-4.7 19.6a50.2 50.2 0 01-50.2 8.6c19.5 3.4 34.1-12.3 34.1-28.2a28.7 28.7 0 10-57.4 0c0 24.3 33.8 47 70.7 26.1A49.5 49.5 0 1149.5 0z"/><path opacity=".08" fill="#000" d="M44.1 77.7c41.9 5.9 60.6-41.7 35-68C91 18.9 99 33.3 99 49.6c0 5.8-1.6 15.8-4.7 19.6a50.2 50.2 0 01-50.2 8.6z"/></svg>',
+		arrow:		'<svg viewBox="0 0 99 99"><path d="M27 78l28-29-28-28C17 10 33-8 45 4l35 37c5 5 5 12 0 17L45 95c-12 12-29-6-18-17z"/></svg>',
+		check:		'<svg viewBox="0 0 99 99"><path d="M97 21l-8-9c-3-3-7-3-9 0L38 55 19 36c-2-3-6-3-8 0l-9 9c-3 3-2 7 0 9l23 24 9 9c2 3 6 3 8 0l9-9 46-48c3-3 3-7 0-9z"/></svg>',
+		sort:		'<svg viewBox="0 0 99 99"><path d="M56 45L35 25 15 45C8 52-6 40 3 32L29 6c4-3 9-3 12 0l27 26c9 8-4 20-12 13zm-13 9l21 20 20-20c7-7 21 5 12 13L70 93c-4 3-9 3-12 0L31 67c-9-8 4-20 12-13z"/></svg>',
+		refresh:	'<svg viewBox="0 0 99 99"><path d="M0 55.7v31l9.2-8.5a49.5 49.5 0 0 0 89.4-22.5H86.1a37.1 37.1 0 0 1-67.7 14l15.3-14H0zM49.5 0C24.3 0 3.5 18.9.4 43.3h12.5a37.1 37.1 0 0 1 68.3-13.1L68.1 43.3H99v-31l-8.9 9A49.4 49.4 0 0 0 49.5 0z"/></svg>',
+		x:		'<svg viewBox="0 0 99 99"><path d="M99 77L71 50l28-28L77 0 50 28 22 0 0 22l28 28L0 77l22 22 28-28 27 28"/></svg>',
+		delete:		'<svg viewBox="0 0 99 99"><path d="M8 28L7 15h86l-2 13H8zM31 0l-1 10h39L68 0H31zM10 33l9 66h61l9-66H10zm18 56l-3-47h8l3 47h-8zm26 0h-9V42h9v47zm17 0h-8l3-47h8l-3 47z"/></svg>',
 	};
 	$I.load = '<div class="LoadCon C1fl o9 Loader">'+$I.loadico+'</div>';
 
@@ -390,7 +395,7 @@ document.body.addEventListener('click', function(e){
 		'#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#WebMinerBtn',
 		'#PaymentHistoryBtnClose', '#EmailSubscribeBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate',
 		'#MinerSetupShowBtn', '#MinerSetupHideBtn', '#WinCmdTextArea', '#LinCmdTextArea',
-		'.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle'
+		'.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle', '.helptitle2'
 	];
 	for(var i = 0; i < id.length; i++){
 		var el = e.target.closest(id[i]);
@@ -469,6 +474,15 @@ document.body.addEventListener('click', function(e){
 				b.className = b_cl;
 				el.parentNode.querySelector('.helpcontent').className = c_cl;
 				el.parentNode.querySelector('.helpteaser').className = t_cl;
+			}else if(id[i] === '.helptitle2'){
+				var b = el.querySelector('.btnback'), b_cl = 'btnback', c_cl = 'helpcontent';
+				if(b.classList.contains('rot90')){
+					c_cl += ' hide';
+				}else{
+					b_cl += ' rot90';
+				}
+				b.className = b_cl;
+				el.parentNode.querySelector('.helpcontent').className = c_cl;
 			}else{
 				return;
 			}
@@ -708,7 +722,7 @@ function Resize(){
 }
 function SwitchMode(){
 	var $CL = ['C0','C0fl','C0bk','C0st','C3','C3fl','FLD'],
-		$clr = {'l':{'f':'454545','b':'efefef'},'d':{'f':'b3b3b3','b':'1b1b1b'}},
+		$clr = {l: {f: '454545', b: 'efefef'}, d: {f: 'b3b3b3', b: '1b1b1b'}},
 		bt = (mde === 'd') ? 'l' : 'd',
 		i = $CL.length;
 		
@@ -964,9 +978,9 @@ function Dash_load(typ){
 function Dash_reset(){
 	Dash_btn('inactive');
 	var $R = {
-		'WorkerList':{'v':''},
-		'MinerGraph':{'v':''},
-		'MinerPayments':{'r':'Opened','v':''},
+		WorkerList:	{v: ''},
+		MinerGraph:	{v: ''},
+		MinerPayments:	{r: 'Opened', v: ''},
 	},
 	k = Object.keys($R);
 	for(var i = 0; i < k.length; i++){
@@ -1435,19 +1449,19 @@ function dta_Coins(){
 			var port_hashrate = $D.poolstats.portHash[port] ? $D.poolstats.portHash[port] : 0;
 			var hash_factor   = coin.factor ? coin.factor : 1;
 			var table_coin = {
-				'name':			coin.name,
-				'algo':			$D.poolstats.portCoinAlgo[port],
-				'profit':		Number.parseFloat($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toPrecision(3) + '%',
-				'shares':		$D.poolstats.currentEfforts[port],
-				'diff':			$D.netstats[port].difficulty,
-				'reward_perc':		Rnd($D.poolstats.minBlockRewards[port] / $D.poolstats.minBlockRewards[mport] * 100, 2, 'txt') + '%',
-				'accounts':		$D.poolstats.portMinerCount[port] ? $D.poolstats.portMinerCount[port] : 0,
-				'poolhashrate':		'<span title="' + Rnd(port_hashrate / $D.netstats[port].difficulty * 100 * coin.time, 2, 'txt') +
-							'% of coin world hashrate">' + HashConvStr(port_hashrate * hash_factor, coin.unit) + '</span>',
-				'worldhashrate':	HashConvStr($D.netstats[port].difficulty / coin.time * hash_factor, coin.unit),
-				'height':		'<a class="C1 hov" target="_blank" href="' + COINS[port].url + '">' + $D.netstats[port].height + '</a>',
-				'pplns':		Rnd(($D.poolstats.pplnsPortShares[port] ? $D.poolstats.pplnsPortShares[port] : 0) * 100, 2, 'txt') + '%',
-				'notes':		'<div class="C4" title="' + escapeHtml($D.poolstats.coinComment[port]) + '">' + escapeHtml($D.poolstats.coinComment[port]) + '</div>',
+				name: 		coin.name,
+				algo:		$D.poolstats.portCoinAlgo[port],
+				profit:		Number.parseFloat($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toPrecision(3) + '%',
+				shares:		$D.poolstats.currentEfforts[port],
+				diff:		$D.netstats[port].difficulty,
+				reward_perc:	Rnd($D.poolstats.minBlockRewards[port] / $D.poolstats.minBlockRewards[mport] * 100, 2, 'txt') + '%',
+				accounts:	$D.poolstats.portMinerCount[port] ? $D.poolstats.portMinerCount[port] : 0,
+				poolhashrate:	'<span title="' + Rnd(port_hashrate / $D.netstats[port].difficulty * 100 * coin.time, 2, 'txt') +
+						'% of coin world hashrate">' + HashConvStr(port_hashrate * hash_factor, coin.unit) + '</span>',
+				worldhashrate:	HashConvStr($D.netstats[port].difficulty / coin.time * hash_factor, coin.unit),
+				height:		'<a class="C1 hov" target="_blank" href="' + COINS[port].url + '">' + $D.netstats[port].height + '</a>',
+				pplns:		Rnd(($D.poolstats.pplnsPortShares[port] ? $D.poolstats.pplnsPortShares[port] : 0) * 100, 2, 'txt') + '%',
+				notes:		'<div class="C4" title="' + escapeHtml($D.poolstats.coinComment[port]) + '">' + escapeHtml($D.poolstats.coinComment[port]) + '</div>',
 			};
 			if (!active_ports[port]) ['name', 'algo', 'profit', 'reward_perc', 'accounts', 'poolhashrate', 'worldhashrate', 'pplns'].forEach(function(key) {
 				table_coin[key] = '<span class="C4">' + table_coin[key] + '</span>';
@@ -1489,7 +1503,7 @@ function dta_Payments(pge){
 }
 function dta_Help(){
 	document.getElementById('PageTopL').innerHTML = $$.hlp.head;
-	var ins = '<p>'+$$.hlp.text+'</p>'+
+	var ins = '<p>' + $$.hlp.text + '</p>'+
 		'<div class="helpgroup">'+
 			'<div class="helptitle txtbig">Step 1 - Install Wallet & Create Address<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Start here if you need a Monero address and wallet.</div>'+
@@ -1522,7 +1536,7 @@ function dta_Help(){
 						'<ul><li>10032: Old CPU/GPU</li><li>10128: Modern CPU/GPU</li><li>11024: CPU/GPU farm</li><li>20128: SSL/TLS</li><li>10001: Very old CPU (1000 diff)</li></ul>'+
 					'</td>'+
 					'<td>'+
-						'<p>If you can\'t get through firewall, try these (specify +128000 difficulty after your Monero Address):</p>'+
+						'<p>If you can\'t get through firewall, try these<br>(specify +128000 difficulty after your Monero Address):</p>'+
 						'<ul><li>80: Firewall bypass</li><li>443: Firewall bypass w/SSL/TLS</li></ul>'+
 					'</td>'+
 				'</tr></table></p>'+
@@ -1545,8 +1559,15 @@ function dta_Help(){
 		'<div class="helpgroup">'+
 			'<div class="helptitle txtbig">FAQ<div class="btnback">'+$I.arrow+'</div></div>'+
 			'<div class="helpteaser">Check if you have your question answered here.</div>'+
-			'<div class="helpcontent hide">'+
-			'</div>'+
+			'<div class="helpcontent hide">';
+
+	$$.faq.forEach(function(faq) {
+		ins +=		'<div class="helpgroup2">'+
+					'<div class="helptitle2 txtmed">' + faq.q + '<div class="btnback">'+$I.arrow+'</div></div>'+
+					'<div class="helpcontent hide">' + faq.a + '</div>'+
+				'</div>';
+	});
+	ins +=		'</div>'+
 		'</div>';
 		
 	document.getElementById('PageBot').innerHTML = ins;
@@ -1646,11 +1667,11 @@ var api = function(m, key, xid){
 					}else if(m === 'account'){
 						if(d && d.totalHashes && d.totalHashes > 0){
 							if (!$A[addr] || !$A[addr].wrkrs) $A[addr] = {
-								'stats':{},
-								'wrkrs':{},
-								'wrkrs_updt':0,
-								'email':0,
-								'threshold':''
+								stats:		{},
+								wrkrs:		{},
+								wrkrs_updt:	0,
+								email:		0,
+								threshold:	''
 							};
 							$A[addr].due    = Rnd((d.amtDue / COINS[mport].divisor), 8);
 							$A[addr].paid   = Rnd((d.amtPaid / COINS[mport].divisor), 8);
@@ -1841,7 +1862,7 @@ function Tbl(tar, typ, pge, lim){
 					}
 					break;
 				}
-				case 'bheight': val = d.port ? d.height : '<a href="https://block-share-dumps.moneroocean.stream/' + b.hash + '.cvs.xz">' + d.height + '</a>'; break;
+				case 'bheight': val = d.port ? d.height : '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.height + '</a>'; break;
 				case 'hash':	val = hashToLink(d[n], d.port ? d.port : mport, t.typ); break;
 				default:	val = d[n];
 			}
@@ -2103,7 +2124,7 @@ function GraphLib_Grid(m, num, max, min, h, w, cls){
 }
 function GraphLib_ToolTip(el, sts){
 	var svg = el.closest('svg.chart'),
-		$R = {'Tip_Val':{'x':0, 'y':999, 'i':''}, 'Tip_Tme':{'x':0, 'y':999, 'i':''}, 'Tip_ValBx':{'x':0, 'y':999, 'w':''}, 'Tip_TmeBx':{'x':0, 'y':999}};
+		$R = {Tip_Val: {x: 0, y: 999, i: ''}, Tip_Tme: {x: 0, y: 999, i: ''}, Tip_ValBx:{x: 0, y: 999, w: ''}, Tip_TmeBx:{x: 0, y: 999}};
 		t_x = parseFloat(el.getAttribute('cx')),
 		t_y = parseFloat(el.getAttribute('cy')) + 2,
 		tme = parseInt(el.getAttribute('data-tme')),
@@ -2142,7 +2163,7 @@ function GraphLib_ToolTip(el, sts){
 	}
 }
 function GraphLib_ToolTipSetup(){
-	return '<rect x="0" y="-999" width="9" height="15" rx="3" class="Tip_ValBx C1st C0fl'+mde+'" />'+
+	return		'<rect x="0" y="-999" width="9" height="15" rx="3" class="Tip_ValBx C1st C0fl'+mde+'" />'+
 			'<text x="0" y="-999" text-anchor="middle" class="Tip_Val C2fl txttny"></text>'+
 			'<rect x="0" y="-999" width="9" height="15" rx="3" class="Tip_TmeBx C1st C0fl'+mde+'" />'+
 			'<text x="0" y="-999" text-anchor="middle" class="Tip_Tme C2fl txttny"></text>';
