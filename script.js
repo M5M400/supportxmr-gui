@@ -1040,7 +1040,7 @@ function Navigate(tar){
 //Dash
 function Dash_init(){
 	var $S = ['SplitL', 'SplitR'],
-		ins = '<div id="News" class="hide"><div id="NewsCard" class="LR85 C0bk'+mde+' C3'+mde+' shimtop20 clearfix"></div></div>'+
+		ins = '<div id="News" class="hide clearfix"><div id="NewsCard" class="LR85 C0bk'+mde+' C3'+mde+' shimtop20"></div></div>'+
 		'<div id="MinerPayments"></div>'+
 		'<div id="MinerGraph" class="clearfix"></div>'+
 		'<div id="MinerDash" class="LR85 txtbig C3'+mde+' hide"></div>'+
