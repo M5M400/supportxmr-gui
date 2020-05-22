@@ -97,19 +97,19 @@ var	mde = 'l',
 				{name: 'reward', lbl: 'Raw reward', 'tooltip':'Raw block reward in native coin units', cls: 'min'},
 				{name: 'payment', lbl: 'Payment ('+$Q.cur.sym+')', cls: 'min'},
 				{name: 'bheight', lbl: 'Height', cls: 'min'},
-				{name: 'hash', lbl: 'Transaction', typ: 'block', cls: 'trunc'},
+				{name: 'hash', lbl: 'Hash', typ: 'block', cls: 'trunc'},
 			],
 			poolpay: [
 				{name: 'tme', lbl: 'Payment Sent', cls: 'min'},
 				{name: 'payees', lbl: 'Payees', cls: 'min'},
 				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
 				{name: 'fee', lbl: 'Fee ('+$Q.cur.sym+')', cls: 'min'},
-				{name: 'hash', lbl: 'Transaction', typ: 'tx', cls: 'trunc'},
+				{name: 'hash', lbl: 'Tx Hash', typ: 'tx', cls: 'trunc'},
 			],
 			pay: [
 				{name: 'tme', lbl: 'Payment Sent', cls: 'min'},
 				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
-				{name: 'hash', lbl: 'Transaction', typ: 'tx', cls: 'trunc'},
+				{name: 'hash', lbl: 'Tx Hash', typ: 'tx', cls: 'trunc'},
 			]
 		},
 		trn:{
