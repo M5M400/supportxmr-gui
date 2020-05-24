@@ -86,7 +86,7 @@ input:-moz-focusring,select:-moz-focusring{color:transparent;text-shadow:0 0 0 #
 .FLDd:-webkit-autofill,.FLDd:-webkit-autofill:hover,.FLDd:-webkit-autofill:focus,.FLDd:-webkit-autofill:active{-webkit-box-shadow:0 0 0 30px #101010 inset!important}
 .select-point{height:10px;position:absolute;right:0;top:11px;width:10px}
 #AddrRecent select,#HeadMenu select{-moz-appearance:none;-webkit-appearance:none;appearance:none;border:none;outline:none}
-.btnback,#DashPayBtn,#Timer,#TogMode{-moz-box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);-webkit-box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);background-color:rgba(19,19,19,.03);box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06)}
+.btnback,#DashPayBtn,#Timer,#TogMode{-moz-box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);-webkit-box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);background-color:rgba(19,19,19,.03);box-shadow:inset 0 -2px 5px 0 rgba(0,0,0,.06);overflow:hidden}
 .nopoint{cursor:default!important}
 .BtnElem,.noselect{-moz-user-select:none;-ms-user-select:none;-webkit-user-select:none;user-select:none}
 .BtnElem,.FrmElem,.BtnDisc{border:0;box-sizing:border-box;display:inline-block;padding:5px 3px;position:relative;text-align:center}
