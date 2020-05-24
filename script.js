@@ -1649,6 +1649,7 @@ function dta_Coins(){
 		var active_ports = {};
 		$D.poolstats.activePorts.forEach(function(port) { active_ports[port] = 1; });
 		Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
+			if (!(port in $D.netstats)) return;
 			var coin = COINS[port];
 			var port_hashrate = $D.poolstats.portHash[port] ? $D.poolstats.portHash[port] : 0;
 			var hash_factor   = coin.factor ? coin.factor : 1;
