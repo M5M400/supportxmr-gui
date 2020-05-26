@@ -1108,15 +1108,11 @@ function Dash_load(typ){
 				if($A[addr] && $A[addr].hashes){
 					g.classList.remove('hide');
 					for(var k in $$.pay){
-						var val = $A[addr][$$.pay[k].var], dec = 8;
+						var val = $A[addr][$$.pay[k].var], dec = 6;
 						if(val > 99999){
 							dec = 4;
 						}else if(val > 9999){
 							dec = 5;
-						}else if(val > 999){
-							dec = 6;
-						}else if(val > 99){
-							dec = 7;
 						}
 						document.getElementById(k).innerHTML = '<span title="' + $$.pay[k].tooltip + '">' + Rnd(val, dec, 'txt') + '</span>';
 					}
