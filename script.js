@@ -1877,8 +1877,8 @@ var api = function(m, key, xid){
 								email:		0,
 								threshold:	''
 							};
-							$A[addr].due    = Rnd((d.amtDue / COINS[mport].divisor), 6);
-							$A[addr].paid   = Rnd((d.amtPaid / COINS[mport].divisor), 6);
+							$A[addr].due    = Rnd(d.amtDue / COINS[mport].divisor, 6, 'txt');
+							$A[addr].paid   = Rnd(d.amtPaid / COINS[mport].divisor, 6, 'txt');
 							$A[addr].hashes = d.totalHashes;
 							$A[addr].hash   = d.hash;
 							$A[addr].hash2  = d.hash2;
