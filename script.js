@@ -129,7 +129,7 @@ var	mde = 'l',
 
 			// Advanced worker configuration
 
-			{ q:	'What are avaiable pool addresses?',
+			{ q:	'What are available pool addresses?',
 			  a:	'We recommend using <b>gulf.moneroocean.stream</b> as primary mining address because it will direct you to the closest alive pool server with the lowest latency. Other pool node servers you can use as backup:'+
 				'<ul>'+
 					'<li><b>us-or.moneroocean.stream</b>: USA West coast</li>'+
@@ -142,7 +142,7 @@ var	mde = 'l',
 				'</ul>'
 			},
 
-			{ q:	'What are avaiable pool ports?',
+			{ q:	'What are available pool ports?',
 			  a:	'Pool support many ports that are only different by their starting difficulty. Please select them based on your miner speed:'+
 				'<ul>'+
 					'<li><b>80</b> (SSL <b>443</b>): 100 diff (1-5 h/s)</li>'+
