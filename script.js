@@ -217,7 +217,7 @@ var	mde = 'l',
 				'</ul>'+
 				'You can also use calc_mo_cvs.js script to parse this file like this on Linux:<br>'+
 					'<b>wget https://raw.githubusercontent.com/MoneroOcean/nodejs-pool/master/block_share_dumps/calc_mo_cvs.js<br>'+
-					'wget -O - https://block-share-dumps.moneroocean.stream/4900622681b754d56d5c93e1e4d010f6fc2097e2f2c1a0809e30b09b13f12472.cvs.xz | unxz -c | node calc_mo_cvs.js 44qJYxdbuqSKarYnDSXB6KLbsH4yR65vpJe3ELLDii9i4ZgKpgQXZYR4AMJxBJbfbKZGWUxZU42QyZSsP4AyZZMbJBCrWr1<br>'+
+					'wget -O - https://block-share-dumps.moneroocean.stream/4900622681b754d56d5c93e1e4d010f6fc2097e2f2c1a0809e30b09b13f12472.cvs.xz | unxz -c | node calc_mo_cvs.js 89TxfrUmqJJcb1V124WsUzA78Xa3UYHt7Bg8RGMhXVeZYPN8cE5CZEk58Y1m23ZMLHN7wYeJ9da5n5MXharEjrm41hSnWHL<br>'+
 					'<br>'+
 					'PPLNS window size:             3.76 hours<br>'+
 					'PPLNS window size:             215549020500 xmr hashes<br>'+
