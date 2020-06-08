@@ -1954,6 +1954,7 @@ function api_GraphFormat(d, cnt, start){
 		r_cnt = 0;
 	var prev_tme  = now;
 	var prev_tme2 = now;
+	d.sort(function (a, b) { return a.ts < b.ts ? 1 : -1; });
 	for (var i = 0; i < cnt; i++) {
 		var tme = Rnd(d[i].ts / 1000);
 		if (tme < start) break;
@@ -1968,7 +1969,7 @@ function api_GraphFormat(d, cnt, start){
 			r_avg2 += hsh2;
 			++ r_cnt;
 		} else {
-			r[r_key++] = {'tme':tme, 'hsh': r_cnt ? r_avg / r_cnt : hsh, 'hsh2': r_cnt ? r_avg2 / r_cnt : hsh2};
+			r[r_key++] = {'tme':prev_tme2, 'hsh': r_cnt ? r_avg / r_cnt : hsh, 'hsh2': r_cnt ? r_avg2 / r_cnt : hsh2};
 			r_avg  = 0;
 			r_avg2 = 0;
 			r_cnt = 0;
@@ -2292,7 +2293,7 @@ function Graph_Worker(xid){
 				yL = y;
 			}
 		}
-		ins += '<path fill="url(#F)" stroke-width="1.25" class="C2st" d="'+GraphLib_Bezier(points)+'M-3,'+yL+' -3,'+height3+' '+width3+','+height3+' '+width3+','+yR+'" />';		
+		ins += '<path fill="url(#F)" stroke-width="1.25" class="C2st" d="'+GraphLib_Bezier(points)+'M-3,'+yL+' -3,'+height3+' '+width3+','+height3+' '+width3+','+yR+'" />';
 	}
 	WorkerChart.innerHTML = ins+'</svg>';
 }
@@ -2399,7 +2400,7 @@ function GraphLib_Bezier(p){
 			h += 'C'+Rnd(r[i][0].x, 1)+','+Rnd(r[i][0].y, 1)+' '+Rnd(r[i][1].x, 1)+','+Rnd(r[i][1].y, 1)+' '+Rnd(r[i][2].x, 1)+','+Rnd(r[i][2].y, 1)+' ';
 		}	
 	}
-    return h;
+	return h;
 }
 //Helpers
 function Localize(){
