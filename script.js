@@ -1952,30 +1952,28 @@ function api_GraphFormat(d, cnt, start){
 		r_avg = 0,
 		r_avg2 = 0,
 		r_cnt = 0;
-	var prev_tme  = now;
-	var prev_tme2 = now;
+	var prev_tme = now;
 	d.sort(function (a, b) { return a.ts < b.ts ? 1 : -1; });
 	for (var i = 0; i < cnt; i++) {
 		var tme = Rnd(d[i].ts / 1000);
 		if (tme < start) break;
-		if (i < 200 && prev_tme - tme > interval) {
-			r[r_key++] = {'tme':prev_tme-1, 'hsh':0, 'hsh2':0};
-			r[r_key++] = {'tme':tme+1, 'hsh':0, 'hsh2':0};
-		}
 		var hsh  = (d[i] && d[i].hs && d[i].hs > 0) ? parseInt(d[i].hs) : 0;
 		var hsh2 = (d[i] && d[i].hs2 && d[i].hs2 > 0) ? parseInt(d[i].hs2) : 0;
-		if (prev_tme2 - tme < interval) {
+		if (prev_tme - tme < interval) {
 			r_avg  += hsh;
 			r_avg2 += hsh2;
 			++ r_cnt;
 		} else {
-			r[r_key++] = {'tme':prev_tme2, 'hsh': r_cnt ? r_avg / r_cnt : hsh, 'hsh2': r_cnt ? r_avg2 / r_cnt : hsh2};
+			r[r_key++] = {'tme':prev_tme, 'hsh': r_cnt ? r_avg / r_cnt : hsh, 'hsh2': r_cnt ? r_avg2 / r_cnt : hsh2};
+			if (i < 200 && prev_tme - tme > 2*interval) {
+				r[r_key++] = {'tme':prev_tme-1, 'hsh':0, 'hsh2':0};
+				r[r_key++] = {'tme':tme+1, 'hsh':0, 'hsh2':0};
+			}
 			r_avg  = 0;
 			r_avg2 = 0;
 			r_cnt = 0;
-			prev_tme2 = tme;
+			prev_tme = tme;
 		}
-		prev_tme = tme;
 	}
         for (var i = 0; i < r_key; i++) {
 		if (r[i].hsh == 0) continue;
@@ -2387,17 +2385,19 @@ function GraphLib_Bezier(p){
 		h = 'M'+p[0].x+', '+p[0].y+' ';
 		for (var i = 0; i < p.length - 1; i++) {
 			var a = [], b = [];
-			a.push({x:p[Math.max(i - 1, 0)].x, y:p[Math.max(i - 1, 0)].y});
-			a.push({x:p[i].x, y:p[i].y});
-			a.push({x:p[i + 1].x, y: p[i + 1].y});
-			a.push({x:p[Math.min(i + 2, p.length - 1)].x, y:p[Math.min(i + 2, p.length - 1)].y});
-			b.push({x:((-a[0].x + 6 * a[1].x + a[2].x) / 6), y:((-a[0].y + 6 * a[1].y + a[2].y) / 6)});
-			b.push({x:((a[1].x + 6 * a[2].x - a[3].x) / 6), y:((a[1].y + 6 * a[2].y - a[3].y) / 6)});
-			b.push({x:a[2].x, y:a[2].y});
-			r.push(b);
+			//a.push({x:p[Math.max(i - 1, 0)].x, y:p[Math.max(i - 1, 0)].y});
+			//a.push({x:p[i].x, y:p[i].y});
+			//a.push({x:p[i + 1].x, y: p[i + 1].y});
+			//a.push({x:p[Math.min(i + 2, p.length - 1)].x, y:p[Math.min(i + 2, p.length - 1)].y});
+			//b.push({x:((-a[0].x + 6 * a[1].x + a[2].x) / 6), y:((-a[0].y + 6 * a[1].y + a[2].y) / 6)});
+			//b.push({x:((a[1].x + 6 * a[2].x - a[3].x) / 6), y:((a[1].y + 6 * a[2].y - a[3].y) / 6)});
+			//b.push({x:a[2].x, y:a[2].y});
+			//r.push(b);
+			r.push({x:p[i + 1].x, y: p[i + 1].y});
 		}
 		for(var i = 0; i < r.length; i++){
-			h += 'C'+Rnd(r[i][0].x, 1)+','+Rnd(r[i][0].y, 1)+' '+Rnd(r[i][1].x, 1)+','+Rnd(r[i][1].y, 1)+' '+Rnd(r[i][2].x, 1)+','+Rnd(r[i][2].y, 1)+' ';
+			//h += 'C'+Rnd(r[i][0].x, 1)+','+Rnd(r[i][0].y, 1)+' '+Rnd(r[i][1].x, 1)+','+Rnd(r[i][1].y, 1)+' '+Rnd(r[i][2].x, 1)+','+Rnd(r[i][2].y, 1)+' ';
+			h += 'L'+Rnd(r[i].x, 1)+','+Rnd(r[i].y, 1)+' ';
 		}	
 	}
 	return h;
