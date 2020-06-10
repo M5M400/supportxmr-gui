@@ -2543,7 +2543,7 @@ function HashConvStr(h, unit){
 	return h.num + ' ' + (unit ? h.unit.replace(/H\//, unit + '/') : h.unit);
 }
 function InvalidBlock(){
-	return '<span class="C4" title="This is orphan block so there will be no payment for it. It can happen sometimes naturally.">Invalid</span>';
+	return '<span class="C4" title="This is orphan block so there will be no payment for it. It can happen sometimes naturally.">Orphaned</span>';
 }
 function SynchTime(t){
 	if(t > now) now = t + 3;
