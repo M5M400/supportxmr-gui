@@ -323,10 +323,12 @@ var	mde = 'l',
 					'<b>View key</b>: 5b33addab62f45d41408b58a310fcfddf60715308c5c5a1444729c5d228ebe02</li>'+
                                 	'<li><b>XEQ</b>: Tvzp9tTmdGP9X8hCEw1Qzn18divQajJYTjR5HuUzHPKyLK5fzRt2X73FKBDzcnHMDJKdgsPhUDVrKHVcDJQVmLBg33NbkdjQb<br>'+
 					'<b>View key</b>: d76f65dab320b9ef36aecf025b6b9e0acccc0e6dbaa21cd0222b09c71eaa640b</li>'+
-                                	'<li><b>XEQ</b>: ipN5cNhm7RXAGACP4ZXki4afT3iJ1A6Ka5U4cswE6fBPDcv8JpivurBj3vu1bXwPyb8KZEGsFUYMmToFG4N9V9G72X4WpAQ8L<br>'+
+                                	'<li><b>XTA</b>: ipN5cNhm7RXAGACP4ZXki4afT3iJ1A6Ka5U4cswE6fBPDcv8JpivurBj3vu1bXwPyb8KZEGsFUYMmToFG4N9V9G72X4WpAQ8L<br>'+
 					'<b>View key</b>: ffd55911bbc5efe654b60b7fcad99c0857e78ce3877d8947e8334899595d0600</li>'+
                                 	'<li><b>DERO</b>: dERokvcrnuWH1ai1QmZQc9cgxrLwE3rX3TbhdrnLmi3BVZmf197qd5FaFqmPMp5dZ3igXfVQwUUMgTSjpVKDtUeb6DT2xp64XJ<br>'+
 					'<b>View key</b>: d3011169f15fb7b83efe805ad2d55ee559d8b6aad29f0550d0451bafb2aac76ad4b1b06dd817d88e2826bf27033b40224e2a4b102bd08a1d337d50b69495cc06</li>'+
+                                	'<li><b>CCX</b>: ccx7dmnBBoRPuVcpKJSAVZKdSDo9rc7HVijFbhG34jsXL3qiqfRwu7A5ecem44s2rngDd8y8N4QnYK6WR3mXAcAZ5iXun9BQBx<br>'+
+					'<b>View key</b>: f7f9a43be2780137a2b7e3b2f9cefcc54087fa0bf33f2a5008e0225f93093b0b</li>'+
 					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
 					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
 					'<li><b>ETH</b>: 0xCF8BABC074C487Ae17F9Ce0394eab492E6A35658</li>'+
@@ -392,6 +394,13 @@ var COINS = {
 		time: 60,
 		unit: "G",
 		factor: 16,
+	},
+	9231: {
+		name: "XEQ",
+		algo_class: "cn/gpu",
+		divisor: 10000,
+		url: "https://explorer.equilibria.network",
+		time: 120,
 	},
 	19950: {
 		name: "XWP",
@@ -467,6 +476,13 @@ var COINS = {
 		name: "ARQ",
 		divisor: 1000000000,
 		url: "https://explorer.arqma.com",
+		time: 120,
+	},
+	16000: {
+		name: "CCX",
+		algo_class: "cn/ccx",
+		divisor: 1000000,
+		url: "https://explorer.conceal.network",
 		time: 120,
 	},
 };
