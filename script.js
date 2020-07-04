@@ -397,7 +397,6 @@ var COINS = {
 	},
 	9231: {
 		name: "XEQ",
-		algo_class: "cn/gpu",
 		divisor: 10000,
 		url: "https://explorer.equilibria.network",
 		time: 120,
@@ -480,7 +479,6 @@ var COINS = {
 	},
 	16000: {
 		name: "CCX",
-		algo_class: "cn/ccx",
 		divisor: 1000000,
 		url: "https://explorer.conceal.network",
 		time: 120,
@@ -1661,7 +1659,7 @@ function dta_Coins(){
 		var active_ports = {};
 		$D.poolstats.activePorts.forEach(function(port) { active_ports[port] = 1; });
 		Object.keys(COINS).sort(function (a, b) { return (COINS[a].name < COINS[b].name) ? -1 : 1 }).forEach(function(port) {
-			if (!(port in $D.netstats)) return;
+			if (!(port in $D.netstats) || !(port in $D.poolstats.coinComment)) return;
 			var coin = COINS[port];
 			var port_hashrate = $D.poolstats.portHash[port] ? $D.poolstats.portHash[port] : 0;
 			var hash_factor   = coin.factor ? coin.factor : 1;
