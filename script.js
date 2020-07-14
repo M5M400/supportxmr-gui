@@ -1162,7 +1162,7 @@ function Dash_load(typ){
 							'Port: <b>10128</b> or 20128 for SSL (128000 diff)<br>' + 
 							'User: ' + addr + '<br><br>' +
 							'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
-							'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
+							'and <a href="https://github.com/MoneroOcean/xmrig-proxy/releases" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
 						'</div></div>';
 					l.classList.add('hide');
 					WebMinerSetBtn();
@@ -1185,7 +1185,7 @@ function Dash_load(typ){
 				'Port: <b>10128</b> or 20128 for SSL (128000 diff)<br><br>' +
 				'User: <b>Your XMR wallet address</b><br><br>' +
 				'For top profit algo switching mining use <a href="https://github.com/MoneroOcean/xmrig/releases" class="C1 hov" target="_blank">our version of XMRig miner</a> ' +
-				'and <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
+				'and <a href="https://github.com/MoneroOcean/xmrig-proxy/releases" class="C1 hov" target="_blank">algo switching mining proxy</a> if your have many miners.<br>' +
 			'</div></div>';
 	}
 }
@@ -1735,7 +1735,7 @@ function dta_Help(){
 					'&nbsp;<a href="https://github.com/xmrig/xmrig/releases" class="C1 hov" target="_blank">XMRig</a>: for mining on CPU and GPU (Nvidia, AMD)<br>' +
 					'&nbsp;<a href="https://github.com/fireice-uk/xmr-stak/releases" class="C1 hov" target="_blank">XMR-Stak/RX</a>: for mining on CPU<br>' +
 					'&nbsp;<a href="https://github.com/MoneroOcean/meta-miner" class="C1 hov" target="_blank">mm.js</a>: for algo switching miner wrapper (advanced)<br><br>' +
-				'<p>Use <a href="https://github.com/MoneroOcean/xmr-node-proxy" class="C1 hov" target="_blank">algo switching mining proxy</a> if you have many miners.</p>' +
+				'<p>Use <a href="https://github.com/MoneroOcean/xmrig-proxy/releases" class="C1 hov" target="_blank">algo switching mining proxy</a> if you have many miners.</p>' +
 			'</div>'+
 		'</div>'+
 		'<div class="helpgroup">'+
