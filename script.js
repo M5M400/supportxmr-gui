@@ -438,6 +438,8 @@ var COINS = {
 		divisor: 100000000,
 		url: "https://explorer.ipbc.io",
 		time: 15,
+		unit: "G",
+		factor: 40,
 	},
 	20189: {
 		name: "XLA",
