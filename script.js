@@ -433,11 +433,11 @@ var COINS = {
 		url: "https://explorer.italo.network",
 		time: 120,
 	},
-	24182: {
+	25182: {
 		name: "TUBE",
 		divisor: 100000000,
 		url: "https://explorer.ipbc.io",
-		time: 120,
+		time: 15,
 	},
 	20189: {
 		name: "XLA",
