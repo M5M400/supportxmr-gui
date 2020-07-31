@@ -435,7 +435,7 @@ var COINS = {
 	},
 	25182: {
 		name: "TUBE",
-		divisor: 100000000,
+		divisor: 1000000000,
 		url: "https://explorer.ipbc.io",
 		time: 15,
 		unit: "G",
