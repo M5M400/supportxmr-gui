@@ -303,8 +303,8 @@ var	mde = 'l',
 					'<b>View key</b>: ad1c9295af1e52cd0d2ba3f4f798f79803d4ee01882b7972b23c1c55faa32f01</li>'+
 					'<li><b>RYO</b>: RYoLsi22qnoKYhnv1DwHBXcGe9QK6P9zmekwQnHdUAak7adFBK4i32wFTszivQ9wEPeugbXr2UD7tMd6ogf1dbHh76G5UszE7k1<br>'+
 					'<b>View key</b>: 8b26c787dc35b4e3176e1d42d699bc93af5293b9a68396edd68587a93445360d</li>'+
-					'<li><b>XLA</b>: Se3Qr5s83AxjCtYrkkqg6QXJagCVi8dELbHb5Cnemw4rMk3xZzEX3kQfWrbTZPpdAJSP3enA6ri3DcvdkERkGKE518vyPQTyi<br>'+
-					'<b>View key</b>: bf3b63673be7145138fc34d6d234c6ffabd5b1c589a9df1eb5d62734aa89e50d</li>'+
+					'<li><b>XLA</b>: SvkpUizij25ZGRHGb1c8ZTAHp3VyNFU3NQuQR1PtMyCqdpoZpaYAGMfG99z5guuoktY13nrhEerqYNKXvoxD7cUM1xA6Z5rRY<br>'+
+					'<b>View key</b>: d4104367a7ccf2583576611b30c118b116d7ba713fd6fc0e81e470da3dd6fb0c</li>'+
 					'<li><b>XHV</b>: hvxyEmtbqs5TEk9U2tCxyfGx2dyGD1g8EBspdr3GivhPchkvnMHtpCR2fGLc5oEY42UGHVBMBANPge5QJ7BDXSMu1Ga2KFspQR<br>'+
 					'<b>View key</b>: 4f9a33dacd1e69b6a60f360204577518dc1262951504383db06b1a314c34ac02</li>'+
 					'<li><b>TUBE</b>: TubedBNkgkTbd2CBmLQSwW58baJNghD9xdmctiRXjrW3dE8xpUcoXimY4J5UMrnUBrUDmfQrbxRYRX9s5tQe7pWYNF2QiAdH1Fh<br>'+
@@ -441,11 +441,11 @@ var COINS = {
 		unit: "G",
 		factor: 40,
 	},
-	20189: {
+	11812: {
 		name: "XLA",
 		divisor: 100,
 		url: "https://explorer.scalaproject.io",
-		time: 300,
+		time: 120,
 	},
 	22023: {
 		name: "LOKI",
