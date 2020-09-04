@@ -432,6 +432,8 @@ var COINS = {
 		divisor: 1000000000000,
 		url: "https://explorer.italo.network",
 		time: 15,
+		unit: "G",
+		factor: 48,
 	},
 	25182: {
 		name: "TUBE",
