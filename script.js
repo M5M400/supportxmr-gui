@@ -431,7 +431,7 @@ var COINS = {
 		name: "XTA",
 		divisor: 1000000000000,
 		url: "https://explorer.italo.network",
-		time: 120,
+		time: 15,
 	},
 	25182: {
 		name: "TUBE",
