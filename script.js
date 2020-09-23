@@ -438,7 +438,7 @@ var COINS = {
 	25182: {
 		name: "TUBE",
 		divisor: 1000000000,
-		url: "https://explorer.ipbc.io",
+		url: "https://explorer.bittube.cash",
 		time: 15,
 		unit: "G",
 		factor: 40,
