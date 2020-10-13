@@ -449,12 +449,6 @@ var COINS = {
 		url: "https://explorer.scalaproject.io",
 		time: 120,
 	},
-	22023: {
-		name: "LOKI",
-		divisor: 1000000000,
-		url: "https://lokiblocks.com",
-		time: 120,
-	},
 	33124: {
 		name: "XTNC",
 		divisor: 1000000000,
