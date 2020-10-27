@@ -22,6 +22,7 @@ var	mde = 'l',
 		news:		true,												//enable news (motd) alerts on homepage
 		email:		true,												//enable email notifications
 		timer:		60,												//refresh timer in seconds
+		pending_days:	30,												//time in days pending will reach 0
 		graph: {
 			hrs:	72,												//max chart length in hours
 			pplns:	false,												//show pplns window on chart
@@ -2257,8 +2258,11 @@ function Graph_Miner(){
 		ins += '</svg>';
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
+		const pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / $Q.pending_days*24*60*60, 0);
 		api('poolstats').then(function(){
-			document.getElementById('PendingPay').innerHTML = Rnd($D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate, 6, 'txt');
+			document.getElementById('PendingPay').innerHTML = Rnd(
+				$D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor
+			, 6, 'txt');
 		});
 		GraphLib_ToolTipListener();
 	}else{
