@@ -2258,12 +2258,12 @@ function Graph_Miner(){
 		ins += '</svg>';
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
-		var pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / $Q.pending_days*24*60*60, 0);
-		api('poolstats').then(function(){
+		api('account').then(function(){api('poolstats').then(function(){
+			var pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / ($Q.pending_days*24*60*60), 0);
 			document.getElementById('PendingPay').innerHTML = Rnd(
 				$D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor,
                         6, 'txt');
-		});
+		}); });
 		GraphLib_ToolTipListener();
 	}else{
 		ErrAlert('MinerGraph', 'NoData');
