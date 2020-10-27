@@ -2261,8 +2261,8 @@ function Graph_Miner(){
 		const pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / $Q.pending_days*24*60*60, 0);
 		api('poolstats').then(function(){
 			document.getElementById('PendingPay').innerHTML = Rnd(
-				$D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor
-			, 6, 'txt');
+				$D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor,
+                        6, 'txt');
 		});
 		GraphLib_ToolTipListener();
 	}else{
