@@ -2258,7 +2258,7 @@ function Graph_Miner(){
 		ins += '</svg>';
 		document.getElementById('MinerGraph').innerHTML = ins;
 		Dash_calc();
-		const pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / $Q.pending_days*24*60*60, 0);
+		var pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / $Q.pending_days*24*60*60, 0);
 		api('poolstats').then(function(){
 			document.getElementById('PendingPay').innerHTML = Rnd(
 				$D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor,
