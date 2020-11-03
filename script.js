@@ -330,6 +330,7 @@ var	mde = 'l',
 					'<b>View key</b>: d3011169f15fb7b83efe805ad2d55ee559d8b6aad29f0550d0451bafb2aac76ad4b1b06dd817d88e2826bf27033b40224e2a4b102bd08a1d337d50b69495cc06</li>'+
                                 	'<li><b>CCX</b>: ccx7dmnBBoRPuVcpKJSAVZKdSDo9rc7HVijFbhG34jsXL3qiqfRwu7A5ecem44s2rngDd8y8N4QnYK6WR3mXAcAZ5iXun9BQBx<br>'+
 					'<b>View key</b>: f7f9a43be2780137a2b7e3b2f9cefcc54087fa0bf33f2a5008e0225f93093b0b</li>'+
+					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
 					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
 					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
 					'<li><b>ETH</b>: 0xCF8BABC074C487Ae17F9Ce0394eab492E6A35658</li>'+
@@ -409,6 +410,14 @@ var COINS = {
 		time: 15,
 		unit: "G",
 		factor: 32,
+	},
+	8766: {
+		name: "RVN",
+		divisor: 1000000000000,
+		url: "https://testnet.ravencoin.network",
+		time: 60,
+		unit: "H",
+		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
 	},
 	11181: {
 		name: "AEON",
