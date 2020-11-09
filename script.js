@@ -135,12 +135,21 @@ var	mde = 'l',
 				'<ul>'+
 					'<li><b>us-or.moneroocean.stream</b>: USA West coast</li>'+
 					'<li><b>us-va.moneroocean.stream</b>: USA East coast</li>'+
+					'<li><b>us-oh.moneroocean.stream</b>: USA East coast</li>'+
 					'<li><b>de.moneroocean.stream</b>: Germany</li>'+
 					'<li><b>fi.moneroocean.stream</b>: Finland</li>'+
 					'<li><b>fr.moneroocean.stream</b>: France</li>'+
 					'<li><b>jp.moneroocean.stream</b>: Japan</li>'+
 					'<li><b>sg.moneroocean.stream</b>: Singapore</li>'+
 				'</ul>'
+			},
+
+			{ q:	'Why xmrig miner shows so high ping to MoneroOcean pool nodes?',
+			  a:	'xmrig miner includes time needed to verify your share into ping number it reports. '+
+                                'Pool uses external share validator for non-critical shares (the ones that cannot be used to find a block), '+
+                                'so that is why ping reported by xmrig is high. Critical shares are validated locally, '+
+                                'so that guarantees that there will be no external share validator delay for them and no orphaned blocks because of this. '+
+                                'So for our pool usual ping utility provides more accurate results.'
 			},
 
 			{ q:	'What are available pool ports?',
