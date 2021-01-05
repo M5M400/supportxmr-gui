@@ -446,14 +446,6 @@ var COINS = {
 		url: "https://explorer.dero.io",
 		time: 27,
 	},
-	13102: {
-		name: "XTA",
-		divisor: 1000000000000,
-		url: "https://explorer.italo.network",
-		time: 15,
-		unit: "G",
-		factor: 48,
-	},
 	25182: {
 		name: "TUBE",
 		divisor: 1000000000,
