@@ -342,7 +342,7 @@ var	mde = 'l',
 					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
 					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
 					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
-					'<li><b>ETH</b>: 0xCF8BABC074C487Ae17F9Ce0394eab492E6A35658</li>'+
+					'<li><b>ETH</b>: 0xbc78d75867b04f996ef1050d8090b8ccb91f09af</li>'+
 					'<li><b>LTC</b>: MCkjQo99VzoeZQ1piDzLDb4uqNSDRZpx55</li>'+
 				'</ul>'
 			},
@@ -425,6 +425,14 @@ var COINS = {
 		divisor: 100000000,
 		url: "https://ravencoin.network",
 		time: 60,
+		unit: "H",
+		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
+	},
+	8545: {
+		name: "ETH",
+		divisor: 1000000000000000000,
+		url: "https://etherscan.io/",
+		time: 15,
 		unit: "H",
 		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
 	},
