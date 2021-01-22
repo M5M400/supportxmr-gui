@@ -434,7 +434,7 @@ var COINS = {
 		url: "https://etherscan.io/",
 		time: 13,
 		unit: "H",
-		factor: 1 / 13,
+		factor: 13,
 	},
 	11181: {
 		name: "AEON",
