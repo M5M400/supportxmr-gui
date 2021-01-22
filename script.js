@@ -432,9 +432,9 @@ var COINS = {
 		name: "ETH",
 		divisor: 1000000000000000000,
 		url: "https://etherscan.io/",
-		time: 15,
+		time: 13,
 		unit: "H",
-		factor: 0xFFFFFFFFFFFFFFFF / 0xFFFF0000,
+		factor: 1 / 13,
 	},
 	11181: {
 		name: "AEON",
