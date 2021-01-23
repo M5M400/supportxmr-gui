@@ -2554,6 +2554,8 @@ function hashToLink(hash, port, type) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/block.html?hash=' + hash + '">' + hash + '</a>';
         } else if (port == 11812) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '?' + type + "_info=" + hash + '">' + hash + '</a>';
+	} else if (port == 8545) {
+		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '/0x' + hash + '">' + hash + '</a>';
 	} else {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '/' + hash + '">' + hash + '</a>';
 	}
