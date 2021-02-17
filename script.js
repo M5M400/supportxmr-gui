@@ -431,7 +431,7 @@ var COINS = {
 	8545: {
 		name: "ETH",
 		divisor: 1000000000000000000,
-		url: "https://etherscan.io/",
+		url: "https://etherscan.io",
 		time: 13,
 		unit: "H",
 		factor: 1,
