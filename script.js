@@ -45,7 +45,7 @@ var	mde = 'l',
 		page_sizes: [15, 50, 100],
 		hlp:	{
 			head:	'Welcome to ' + $Q.pool.nme,
-			text:	'Getting started is easy and this pool has a large and friendly community that are happy to help you. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
+			text:	'Getting started is easy and this pool has a large and friendly community that are happy to help you. You can check <a href="https://moneroocean.blogspot.com/" class="C1 hov">our mining guides</a>. The pool operator can be reached in the <a href="https://discordapp.com/invite/jXaR2kA" class="C1 hov">Discord</a>, <a href="https://twitter.com/MoneroOcean" class="C1 hov">Twitter</a> or at <a href="mailto:support@moneroocean.stream" class="C1 hov">support@moneroocean.stream</a>. Please be patient and someone will get back to you. Most of the time help can be found quicker in the chat. The pool has a quite stable and knowlegable community - you can join the chat and seek help and a friendly chat there :)'
 		},
 		msg: {
 			addr_invalid:	{head: 'Invalid '+$Q.cur.nme+' Address', text: 'Double check that your address is complete.'},
