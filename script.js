@@ -2092,7 +2092,7 @@ function Tbl(tar, typ, pge, lim){
 					}
 					break;
 				}
-				case 'bheight': val = d.valid && d.unlocked && (is_main_port ? d.value : d.pay_value) ? '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.height + '</a>' : d.height; break;
+				case 'bheight': val = d.valid && d.unlocked && (d.port ? d.pay_value : d.value) ? '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.height + '</a>' : d.height; break;
 				case 'hash':	val = hashToLink(d[n], d.port ? d.port : mport, t.typ); break;
 				default:	val = d[n];
 			}
