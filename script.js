@@ -2552,6 +2552,8 @@ function hashToLink(hash, port, type) {
 	var url = port in COINS ? COINS[port].url : "";
 	if (port == 11898) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/block.html?hash=' + hash + '">' + hash + '</a>';
+	} else if (port == 13007) {
+		return '<a class="C1 hov" target="_blank" href="' + url + '/?hash=' + hash + '">' + hash + '</a>';
         } else if (port == 11812) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '?' + type + "_info=" + hash + '">' + hash + '</a>';
 	} else if (port == 8545) {
