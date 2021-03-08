@@ -656,10 +656,10 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '#AutoPayBtn'){
 				AutoPay();
 			}else if(id[i] === '#PaymentHistoryBtn'){
-				MinerPayments('back');
+				if (document.getElementById('MinerPayments').classList.contains('OpenedBig')) MinerPayments('back');
                                 MinerPaymentHistory(1);
 			}else if(id[i] === '#BlockPaymentHistoryBtn'){
-                                MinerPayments('back');
+                                if (document.getElementById('MinerPayments').classList.contains('OpenedBig')) MinerPayments('back');
 				MinerBlockPaymentHistory(1);
 			}else if(id[i] === '#PaymentHistoryBtnClose'){
 				MinerPayments('back');
