@@ -569,6 +569,7 @@ var addr = UrlVars().addr || '',
 		poolpay:	[],
 		poolstats:	{},
 		pay:		{},
+		blockpay:	{},
 		netstats:	{},
 		hashconv: {
 			TH:	1000000000000,
