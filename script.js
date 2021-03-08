@@ -626,6 +626,19 @@ document.body.addEventListener('change', function(e){
 		}
 	}
 }, false);
+
+function PaymentHistoryButtonHTML() {
+	return	'<div class="LR50">'+
+			'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy+'</div>'+
+		'</div>';
+}
+
+function BlockPaymentHistoryButtonHTML() {
+	return	'<div class="LR50">'+
+			'<div id="BlockPaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy2+'</div>'+
+		'</div>';
+}
+
 document.body.addEventListener('click', function(e){
 	var id = [
 		'#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#BlockPaymentHistoryBtn', '#WebMinerBtn',
@@ -656,10 +669,12 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '#AutoPayBtn'){
 				AutoPay();
 			}else if(id[i] === '#PaymentHistoryBtn'){
-				if (document.getElementById('MinerPayments').classList.contains('OpenedBig')) MinerPayments('back');
+				document.getElementById('PaymentHistory').innerHTML      = PaymentHistoryButtonHTML();
+				document.getElementById('BlockPaymentHistory').innerHTML = BlockPaymentHistoryButtonHTML();
                                 MinerPaymentHistory(1);
 			}else if(id[i] === '#BlockPaymentHistoryBtn'){
-                                if (document.getElementById('MinerPayments').classList.contains('OpenedBig')) MinerPayments('back');
+				document.getElementById('PaymentHistory').innerHTML      = PaymentHistoryButtonHTML();
+				document.getElementById('BlockPaymentHistory').innerHTML = BlockPaymentHistoryButtonHTML();
 				MinerBlockPaymentHistory(1);
 			}else if(id[i] === '#PaymentHistoryBtnClose'){
 				MinerPayments('back');
@@ -1438,6 +1453,7 @@ function Workers_detail(xid){
 		}).catch(function(err){console.log(err)});
 	}
 }
+
 //Miner Payments
 function MinerPayments(typ){
 	typ = typ || '';
@@ -1497,15 +1513,9 @@ function MinerPayments(typ){
 				'<div class="hbar shim10"></div>'+
 				'</div>';
 		}
-		ins +=	'<div id="PaymentHistory" class="center"><div class="LR50">'+
-				'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy+'</div>'+
-			'</div></div>';
-
+		ins +=	'<div id="PaymentHistory" class="center">' + PaymentHistoryButtonHTML() + '</div>';
                 ins +=  '<div class="shim10"></div>';
-            
-		ins +=	'<div id="BlockPaymentHistory" class="center"><div class="LR50">'+
-				'<div id="BlockPaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy2+'</div>'+
-			'</div></div>';
+		ins +=	'<div id="BlockPaymentHistory" class="center">' + BlockPaymentHistoryButtonHTML() + '</div>';
 		
 		document.getElementById('MinerPaymentsStage').innerHTML = ins;
 		document.getElementById('AutoPayFld').value = Rnd($A[addr].threshold, $Q.pay.dec_auto, 'txt');
