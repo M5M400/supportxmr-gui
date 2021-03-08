@@ -93,7 +93,7 @@ var	mde = 'l',
 			blocks: [
 				{name: 'num', lbl: '#', cls: 'min'},
 				{name: 'tme', lbl: 'Found', cls: 'min'},
-				{name: 'coin', lbl: 'Coin', cls: 'min'},
+				{name: 'coin', lbl: 'Coin name', cls: 'min'},
 				{name: 'eff', lbl: 'Effort', cls: 'min'},
 				{name: 'reward', lbl: 'Raw reward', 'tooltip':'Raw block reward in native coin units', cls: 'min'},
 				{name: 'payment', lbl: 'Payment ('+$Q.cur.sym+')', cls: 'min'},
@@ -111,6 +111,14 @@ var	mde = 'l',
 				{name: 'tme', lbl: 'Payment Sent', cls: 'min'},
 				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
 				{name: 'hash', lbl: 'Tx Hash', typ: 'tx', cls: 'trunc'},
+			],
+			block_pay: [
+				{name: 'tme', lbl: 'Block pay time', cls: 'min'},
+				{name: 'tme_found', lbl: 'Block found time', cls: 'min'},
+				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
+				{name: 'percent', lbl: 'Block share (percent)', cls: 'min'},
+				{name: 'coin', lbl: 'Coin name', cls: 'min'},
+				{name: 'hash_pay', lbl: 'Block Hash', cls: 'trunc'},
 			]
 		},
 		trn:{
@@ -712,9 +720,10 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '.PagBtn'){
 				var p = parseInt(el.getAttribute('data-page'));
 				switch (el.getAttribute('data-func')) {
-					case 'blocks':  dta_Blocks(p);  break;
-					case 'poolpay': dta_Payments(p); break;
-					case 'pay':     MinerPaymentHistory(p); break;
+					case 'blocks':     dta_Blocks(p);  break;
+					case 'poolpay':    dta_Payments(p); break;
+					case 'pay':        MinerPaymentHistory(p); break;
+					case 'block_pay':  MinerBlockPaymentHistory(p); break;
 				}
 			}else if(id[i] === '.Worker'){
 				Workers_detail(el.getAttribute('data-key'));
@@ -1696,8 +1705,8 @@ function MinerBlockPaymentHistory(pge){
 		'<div id="MinerBlockPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
 		'<input type="hidden" id="MinerBlockPaymentsPage" value="'+pge+'">';
 		
-	api('pay', pge, 10).then(function(){
-		Tbl('MinerBlockPaymentsTable', 'pay', pge, 10);
+	api('block_pay', pge, 10).then(function(){
+		Tbl('MinerBlockPaymentsTable', 'block_pay', pge, 10);
 	}).catch(function(err){console.log(err)});
 }
 
@@ -1867,6 +1876,8 @@ var api = function(m, key, xid){
 		url = 'miner/'+addr+'/stats';
 	}else if(m === 'pay'){
 		url = 'miner/'+addr+'/payments?page='+(key - 1)+'&limit='+xid;
+	}else if(m === 'block_pay'){
+		url = 'miner/'+addr+'/block_payments?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'workers' && (isEmpty($A[addr].wrkrs) || now > ($A[addr].wrkrs_updt + 120))){
 		url = 'miner/'+addr+'/chart/hashrate/allWorkers';
 	}else if(m === 'workerdetail'){
@@ -1903,18 +1914,26 @@ var api = function(m, key, xid){
 					//Process Data
 					if(m === 'news'){
 						$D[m] = d;
-					}else if(['blocks','pay','poolpay'].indexOf(m) >= 0){
+					}else if(['blocks','pay','block_pay','poolpay'].indexOf(m) >= 0){
 						$D[m][key] = [];
 						for(i = 0; i < dcnt; i++){
 							var v = d[i];
 							switch (m) {
-								case 'blocks':	$D[m][key][i] = v; break;
-								case 'pay':	$D[m][key][i] = {
+								case 'blocks':	  $D[m][key][i] = v; break;
+								case 'pay':	  $D[m][key][i] = {
 									'ts':		v.ts * 1000,
 									'hash': 	v.txnHash,
 									'amnt':		Rnd((v.amount / COINS[mport].divisor), 8)
 								}; break;
-								case 'poolpay':	$D[m][key][i] = {
+								case 'block_pay': $D[m][key][i] = {
+									'ts':		v.ts * 1000,
+									'ts_found':	v.ts_found * 1000,
+									'port': 	v.port,
+									'hash': 	v.hash,
+									'amnt':		Rnd(v.value, 8),
+									'percent':	Rnd(v.value_percent, 8)
+								}; break;
+								case 'poolpay':	  $D[m][key][i] = {
 									'ts':		v.ts,
 									'hash':		v.hash,
 									'payees':	v.payees,
@@ -2086,9 +2105,10 @@ function Tbl(tar, typ, pge, lim){
 			if (skip_col_names.indexOf(n) >= 0) return;
 			var val;
 			switch (n) {
-				case 'num':	val = blocks_count - ((pge-1)*lim + rows); break
-				case 'tme':	val = AgoTooltip(d.ts / 1000, 'y'); break;
-				case 'coin':	val = COINS[d.port].name; break;
+				case 'num':	  val = blocks_count - ((pge-1)*lim + rows); break
+				case 'tme':	  val = AgoTooltip(d.ts / 1000, 'y'); break;
+				case 'tme_found': val = AgoTooltip(d.ts_found / 1000, 'y'); break;
+				case 'coin':	  val = COINS[d.port].name; break;
 				case 'eff': 	{
 					var eff = Rnd(d.shares / d.diff * 100);
 					val = '<span class="'+(eff > 100 ? 'C4' : 'C5')+'" title="'+d.shares+' / '+d.diff+'">'+Perc(eff)+'</span>';
@@ -2126,9 +2146,10 @@ function Tbl(tar, typ, pge, lim){
 					}
 					break;
 				}
-				case 'bheight': val = d.valid && d.unlocked && (d.port ? d.pay_value : d.value) ? '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.height + '</a>' : d.height; break;
-				case 'hash':	val = hashToLink(d[n], d.port ? d.port : mport, d.port === 8545 && d.value < 2 * COINS[d.port].divisor ? "uncle" : t.typ); break;
-				default:	val = d[n];
+				case 'bheight':  val = d.valid && d.unlocked && (d.port ? d.pay_value : d.value) ? '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.height + '</a>' : d.height; break;
+				case 'hash':	 val = hashToLink(d[n], d.port ? d.port : mport, d.port === 8545 && d.value < 2 * COINS[d.port].divisor ? "uncle" : t.typ); break;
+				case 'hash_pay': val = '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.hash + '</a>'; break;
+				default: 	 val = d[n];
 			}
 			ins += '<td class="'+t.cls+'">'+val+'</td>';
 		});
