@@ -1499,6 +1499,8 @@ function MinerPayments(typ){
 				'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy+'</div>'+
 			'</div></div>';
 
+                ins +=  '<div class="shim10"></div>';
+            
 		ins +=	'<div id="BlockPaymentHistory" class="center"><div class="LR50">'+
 				'<div id="BlockPaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy2+'</div>'+
 			'</div></div>';
