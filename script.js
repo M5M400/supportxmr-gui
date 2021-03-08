@@ -1680,7 +1680,7 @@ function AutoPayCheck(){
 function MinerPaymentHistory(pge){
 	pge = (pge > 1) ? pge : 1;
 	document.getElementById('MinerPayments').className = 'OpenedBig';
-	document.getElementById('PaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="LR50 BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Payment History</div>'+
+	document.getElementById('PaymentHistory').innerHTML = '<div class="LR85"><div class="LR50"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Payment History</div></div>'+
 		'<div id="MinerPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
 		'<input type="hidden" id="MinerPaymentsPage" value="'+pge+'">';
 		
@@ -1692,7 +1692,7 @@ function MinerPaymentHistory(pge){
 function MinerBlockPaymentHistory(pge){
 	pge = (pge > 1) ? pge : 1;
 	document.getElementById('MinerPayments').className = 'OpenedBig';
-	document.getElementById('BlockPaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="LR50 BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Block Payment History</div>'+
+	document.getElementById('BlockPaymentHistory').innerHTML = '<div class="LR85"><div class="LR50"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Block Payment History</div></div>'+
 		'<div id="MinerBlockPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
 		'<input type="hidden" id="MinerBlockPaymentsPage" value="'+pge+'">';
 		
