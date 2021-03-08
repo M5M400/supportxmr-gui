@@ -656,8 +656,10 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '#AutoPayBtn'){
 				AutoPay();
 			}else if(id[i] === '#PaymentHistoryBtn'){
-				MinerPaymentHistory(1);
+				MinerPayments('back');
+                                MinerPaymentHistory(1);
 			}else if(id[i] === '#BlockPaymentHistoryBtn'){
+                                MinerPayments('back');
 				MinerBlockPaymentHistory(1);
 			}else if(id[i] === '#PaymentHistoryBtnClose'){
 				MinerPayments('back');
@@ -1680,7 +1682,7 @@ function MinerPaymentHistory(pge){
 function MinerBlockPaymentHistory(pge){
 	pge = (pge > 1) ? pge : 1;
 	document.getElementById('MinerPayments').className = 'OpenedBig';
-	document.getElementById('BlockPaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Payment History</div>'+
+	document.getElementById('BlockPaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Block Payment History</div>'+
 		'<div id="MinerBlockPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
 		'<input type="hidden" id="MinerBlockPaymentsPage" value="'+pge+'">';
 		
