@@ -207,7 +207,7 @@ table.noborder{border-width:0!important}
 #MinerGraph,#MinerPayments{-moz-box-shadow:inset 0 25px 16px -22px rgba(0,0,0,.06);-webkit-box-shadow:inset 0 25px 16px -22px rgba(0,0,0,.06);box-shadow:inset 0 25px 16px -22px rgba(0,0,0,.06)}
 #MinerGraph .chart,.Worker,#MinerPayments{background:rgba(0,0,0,.03);background:linear-gradient(90deg,rgba(0,0,0,.04) 0,rgba(0,0,0,.02) 20%,rgba(0,0,0,.01) 80%,rgba(0,0,0,.03) 100%)}
 #TimerPie,.Worker{height:100%;position:relative}
-#AutoPayBtn,#PaymentHistoryBtn,#PaymentHistoryBtnClose,#EmailSubscribeBtn{height:32px;width:95%}
+#AutoPayBtn,#PaymentHistoryBtn,#BlockPaymentHistoryBtn,#PaymentHistoryBtnClose,#EmailSubscribeBtn{height:32px;width:95%}
 #MinerPaymentsTable,#WorkerList{min-height:100px}
 @-webkit-keyframes glowing {
 50%{-webkit-box-shadow:0 0 20px #196b6b;background-color:#196b6b}

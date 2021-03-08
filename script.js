@@ -627,7 +627,7 @@ document.body.addEventListener('change', function(e){
 }, false);
 document.body.addEventListener('click', function(e){
 	var id = [
-		'#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#WebMinerBtn',
+		'#TogMode','#Timer', '#DashPayBtn', '#NetGraphClose', '#NewsClose', '#AutoPayBtn', '#PaymentHistoryBtn', '#BlockPaymentHistoryBtn', '#WebMinerBtn',
 		'#PaymentHistoryBtnClose', '#EmailSubscribeBtn', '#AddrDelete', '#WorkerPopClose', '#WorkerSortName', '#WorkerSortRate',
 		'#MinerSetupShowBtn', '#MinerSetupHideBtn', '#WinCmdTextArea', '#LinCmdTextArea',
 		'.nav', '.PagBtn', '.Worker', '.blockgroup', '.helptitle', '.helptitle2'
@@ -656,6 +656,8 @@ document.body.addEventListener('click', function(e){
 				AutoPay();
 			}else if(id[i] === '#PaymentHistoryBtn'){
 				MinerPaymentHistory(1);
+			}else if(id[i] === '#BlockPaymentHistoryBtn'){
+				MinerBlockPaymentHistory(1);
 			}else if(id[i] === '#PaymentHistoryBtnClose'){
 				MinerPayments('back');
 			}else if(id[i] === '#EmailSubscribeBtn'){
@@ -1495,6 +1497,10 @@ function MinerPayments(typ){
 		ins +=	'<div id="PaymentHistory" class="center"><div class="LR50">'+
 				'<div id="PaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy+'</div>'+
 			'</div></div>';
+
+		ins +=	'<div id="BlockPaymentHistory" class="center"><div class="LR50">'+
+				'<div id="BlockPaymentHistoryBtn" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">'+$$.trn.vwpy+'</div>'+
+			'</div></div>';
 		
 		document.getElementById('MinerPaymentsStage').innerHTML = ins;
 		document.getElementById('AutoPayFld').value = Rnd($A[addr].threshold, $Q.pay.dec_auto, 'txt');
@@ -1667,6 +1673,19 @@ function MinerPaymentHistory(pge){
 		Tbl('MinerPaymentsTable', 'pay', pge, 10);
 	}).catch(function(err){console.log(err)});
 }
+
+function MinerBlockPaymentHistory(pge){
+	pge = (pge > 1) ? pge : 1;
+	document.getElementById('MinerPayments').className = 'OpenedBig';
+	document.getElementById('BlockPaymentHistory').innerHTML = '<div class="LR85"><div id="PaymentHistoryBtnClose" class="BtnElem C0'+mde+' txtmed C1bk C2bk_hov">Close Payment History</div>'+
+		'<div id="MinerBlockPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
+		'<input type="hidden" id="MinerBlockPaymentsPage" value="'+pge+'">';
+		
+	api('pay', pge, 10).then(function(){
+		Tbl('MinerBlockPaymentsTable', 'pay', pge, 10);
+	}).catch(function(err){console.log(err)});
+}
+
 
 //Other Pages
 
