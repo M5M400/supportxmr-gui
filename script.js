@@ -112,7 +112,7 @@ var	mde = 'l',
 				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
 				{name: 'hash', lbl: 'Tx Hash', typ: 'tx', cls: 'trunc'},
 			],
-			block_pay: [
+			blockpay: [
 				{name: 'tme', lbl: 'Block pay time', cls: 'min'},
 				{name: 'tme_found', lbl: 'Block found time', cls: 'min'},
 				{name: 'amnt', lbl: 'Amount ('+$Q.cur.sym+')', cls: 'min'},
@@ -720,10 +720,10 @@ document.body.addEventListener('click', function(e){
 			}else if(id[i] === '.PagBtn'){
 				var p = parseInt(el.getAttribute('data-page'));
 				switch (el.getAttribute('data-func')) {
-					case 'blocks':     dta_Blocks(p);  break;
-					case 'poolpay':    dta_Payments(p); break;
-					case 'pay':        MinerPaymentHistory(p); break;
-					case 'block_pay':  MinerBlockPaymentHistory(p); break;
+					case 'blocks':    dta_Blocks(p);  break;
+					case 'poolpay':   dta_Payments(p); break;
+					case 'pay':       MinerPaymentHistory(p); break;
+					case 'blockpay':  MinerBlockPaymentHistory(p); break;
 				}
 			}else if(id[i] === '.Worker'){
 				Workers_detail(el.getAttribute('data-key'));
@@ -1705,8 +1705,8 @@ function MinerBlockPaymentHistory(pge){
 		'<div id="MinerBlockPaymentsTable" class="C3'+mde+'">'+$I.load+'</div></div>'+
 		'<input type="hidden" id="MinerBlockPaymentsPage" value="'+pge+'">';
 		
-	api('block_pay', pge, 10).then(function(){
-		Tbl('MinerBlockPaymentsTable', 'block_pay', pge, 10);
+	api('blockpay', pge, 10).then(function(){
+		Tbl('MinerBlockPaymentsTable', 'blockpay', pge, 10);
 	}).catch(function(err){console.log(err)});
 }
 
@@ -1876,7 +1876,7 @@ var api = function(m, key, xid){
 		url = 'miner/'+addr+'/stats';
 	}else if(m === 'pay'){
 		url = 'miner/'+addr+'/payments?page='+(key - 1)+'&limit='+xid;
-	}else if(m === 'block_pay'){
+	}else if(m === 'blockpay'){
 		url = 'miner/'+addr+'/block_payments?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'workers' && (isEmpty($A[addr].wrkrs) || now > ($A[addr].wrkrs_updt + 120))){
 		url = 'miner/'+addr+'/chart/hashrate/allWorkers';
@@ -1914,18 +1914,18 @@ var api = function(m, key, xid){
 					//Process Data
 					if(m === 'news'){
 						$D[m] = d;
-					}else if(['blocks','pay','block_pay','poolpay'].indexOf(m) >= 0){
+					}else if(['blocks','pay','blockpay','poolpay'].indexOf(m) >= 0){
 						$D[m][key] = [];
 						for(i = 0; i < dcnt; i++){
 							var v = d[i];
 							switch (m) {
-								case 'blocks':	  $D[m][key][i] = v; break;
-								case 'pay':	  $D[m][key][i] = {
+								case 'blocks':	 $D[m][key][i] = v; break;
+								case 'pay':	 $D[m][key][i] = {
 									'ts':		v.ts * 1000,
 									'hash': 	v.txnHash,
 									'amnt':		Rnd((v.amount / COINS[mport].divisor), 8)
 								}; break;
-								case 'block_pay': $D[m][key][i] = {
+								case 'blockpay': $D[m][key][i] = {
 									'ts':		v.ts * 1000,
 									'ts_found':	v.ts_found * 1000,
 									'port': 	v.port,
@@ -1933,7 +1933,7 @@ var api = function(m, key, xid){
 									'amnt':		Rnd(v.value, 8),
 									'percent':	Rnd(v.value_percent, 8)
 								}; break;
-								case 'poolpay':	  $D[m][key][i] = {
+								case 'poolpay':	 $D[m][key][i] = {
 									'ts':		v.ts,
 									'hash':		v.hash,
 									'payees':	v.payees,
