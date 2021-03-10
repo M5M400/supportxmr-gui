@@ -59,7 +59,7 @@ var	mde = 'l',
 			help:		'Help'
 		},
 		pay:{
-			DashPending:	{lbl: '<span id="PendingPay"></span> ' + $Q.cur.sym + ' Pending', var: 'due', tooltip: 'Total due pool owes you'},
+			DashPending:	{lbl: '<span title="Approximate value of your share of not yet matured block rewards"><span id="PendingPay"></span> ' + $Q.cur.sym + ' Pending</span>', var: 'due', tooltip: 'Total due pool owes you'},
 			DashPaid:	{lbl: $Q.cur.sym + ' Paid', var: 'paid', tooltip: 'Amount pool already paid to you'}
 		},
 		wm:{
