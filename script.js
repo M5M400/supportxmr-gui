@@ -59,7 +59,7 @@ var	mde = 'l',
 			help:		'Help'
 		},
 		pay:{
-			DashPending:	{lbl: '<span title="Crude approximate value of your share of not yet matured block rewards. DO NOT use this as any kind of proof of your \"missing\" rewards. Check block payment history instead."><span id="PendingPay"></span> ' + $Q.cur.sym + ' Pending</span>', var: 'due', tooltip: 'Total due pool owes you'},
+			DashPending:	{lbl: '<span title="Crude approximate value of your share of not yet matured block rewards. DO NOT use this as any kind of proof."><span id="PendingPay"></span> ' + $Q.cur.sym + ' Pending</span>', var: 'due', tooltip: 'Total due pool owes you'},
 			DashPaid:	{lbl: $Q.cur.sym + ' Paid', var: 'paid', tooltip: 'Amount pool already paid to you'}
 		},
 		wm:{
