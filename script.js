@@ -59,7 +59,7 @@ var	mde = 'l',
 			help:		'Help'
 		},
 		pay:{
-			DashPending:	{lbl: '<span title="Crude approximate value of your share of not yet matured block rewards. DO NOT use this as any kind of proof."><span id="PendingPay"></span> ' + $Q.cur.sym + ' Pending</span>', var: 'due', tooltip: 'Total due pool owes you'},
+			DashDue:	{lbl: $Q.cur.sym + ' Total Due', var: 'due', tooltip: 'Total due pool owes you'},
 			DashPaid:	{lbl: $Q.cur.sym + ' Paid', var: 'paid', tooltip: 'Amount pool already paid to you'}
 		},
 		wm:{
@@ -784,7 +784,7 @@ function init(){
 	document.querySelector('#HeadMenu .select-point').innerHTML = $I.arrow;
 	document.getElementById('AddrDelete').innerHTML = $I.delete;
 	document.querySelector('#AddrRecent .select-point').innerHTML = $I.arrow;
-	document.getElementById('DashPendingLbl').innerHTML = $$.pay.DashPending.lbl;
+	//document.getElementById('DashDueLbl').innerHTML = $$.pay.DashDue.lbl;
 	document.getElementById('DashPaidLbl').innerHTML = $$.pay.DashPaid.lbl;
 	Dash_btn('loading');
 	TimerLoading('on');
@@ -2334,9 +2334,11 @@ function Graph_Miner(){
 		Dash_calc();
 		api('account').then(function(){api('poolstats').then(function(){
 			var pending_factor = Math.max(($Q.pending_days*24*60*60 - (now - $A[addr].last)) / ($Q.pending_days*24*60*60), 0);
-			document.getElementById('PendingPay').innerHTML = Rnd(
-				$D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor,
-                        6, 'txt');
+                  	document.getElementById('DashDueLbl').innerHTML =
+                        	'<span title="' +
+					Rnd($D.poolstats.pending * $D.miner_hash_avg / $D.poolstats.hashRate * pending_factor, 6, 'txt') +
+					" " + $Q.cur.sym + ' pending: VERY approximate value of your share of not yet matured block rewards.' +
+				'">' + $$.pay.DashDue.lbl + '</span>';
 		}); });
 		GraphLib_ToolTipListener();
 	}else{
