@@ -785,7 +785,7 @@ function init(){
 	document.getElementById('AddrDelete').innerHTML = $I.delete;
 	document.querySelector('#AddrRecent .select-point').innerHTML = $I.arrow;
 	//document.getElementById('DashDueLbl').innerHTML = $$.pay.DashDue.lbl;
-	document.getElementById('DashPaidLbl').innerHTML = $$.pay.DashPaid.lbl;
+	//document.getElementById('DashPaidLbl').innerHTML = $$.pay.DashPaid.lbl;
 	Dash_btn('loading');
 	TimerLoading('on');
 
