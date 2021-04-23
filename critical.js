@@ -8,6 +8,7 @@ critical.generate({
     inline: true,
     base: 'build',
     src: './index-raw.html',
+    dest: './index.html',
     target: './index.html',
     minify: false,
     width: 1024,
