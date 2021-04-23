@@ -155,7 +155,7 @@ header{height:44px}
 #AddrRecent select{padding:1px 11px 1px 3px;width:100%}
 #AddrRecent .select-point{height:8px;right:0;top:5px;width:8px}
 #AddrFieldCell{height:34px;position:relative}
-#DashPending,#DashPaid{min-width:97px}
+#DashDue,#DashPaid{min-width:97px}
 #DashPayBtn{border-radius:50%;box-sizing:border-box;display:inline-block;height:45px;padding:8px;position:relative;width:45px}
 #DashPayBtn .Loader,#DashPayBtn .Closer,#TimerText div{box-sizing:border-box;padding:3px}
 #Stage{-moz-transition:opacity .4s ease-in;-ms-transition:opacity .4s ease-in;-o-transition:opacity .4s ease-in;-webkit-transition:opacity .4s ease-in;min-height:calc(100% - 312px);opacity:0;position:relative;transition:opacity .4s ease-in}
@@ -244,7 +244,7 @@ textarea{resize:none}
 .continy{width:50px}
 .WorkerWrap{width:33.33%}
 #MinerGraph .mchart{height:175px}
-#DashPending,#DashPaid{width:80px}
+#DashDue,#DashPaid{width:80px}
 #GPop{width:50%}
 #GPop.pright{left:45%}
 .LR50{left:20%;width:60%}
