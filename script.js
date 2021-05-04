@@ -1714,6 +1714,14 @@ function MinerBlockPaymentHistory(pge){
 
 //Other Pages
 
+function precise(x) {
+  if ( Number.parseFloat(x) < 100 ) {
+    return Number.parseFloat(x).toPrecision(4)
+  } else {
+    return Number.parseFloat(x).toFixed()
+  }
+}
+
 function dta_Coins(){
 	api('poolstats').then(function(){ api('netstats').then(function(){
 		$D.coins[0] = [];
@@ -1727,7 +1735,7 @@ function dta_Coins(){
 			var table_coin = {
 				name: 		coin.name,
 				algo:		$D.poolstats.portCoinAlgo[port],
-				profit:		Number.parseFloat($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toPrecision() + '%',
+				profit:		precise($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toString() + '%',
 				shares:		$D.poolstats.currentEfforts[port],
 				diff:		$D.netstats[port].difficulty,
 				reward_perc:	Rnd($D.poolstats.minBlockRewards[port] / $D.poolstats.minBlockRewards[mport] * 100, 2, 'txt') + '%',
