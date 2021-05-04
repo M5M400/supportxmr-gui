@@ -1727,7 +1727,7 @@ function dta_Coins(){
 			var table_coin = {
 				name: 		coin.name,
 				algo:		$D.poolstats.portCoinAlgo[port],
-				profit:		Number.parseFloat($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toPrecision(3) + '%',
+				profit:		Number.parseFloat($D.poolstats.coinProfit[port] / $D.poolstats.coinProfit[mport] * 100).toPrecision() + '%',
 				shares:		$D.poolstats.currentEfforts[port],
 				diff:		$D.netstats[port].difficulty,
 				reward_perc:	Rnd($D.poolstats.minBlockRewards[port] / $D.poolstats.minBlockRewards[mport] * 100, 2, 'txt') + '%',
