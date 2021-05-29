@@ -348,6 +348,8 @@ var	mde = 'l',
 					'<b>View key</b>: d3011169f15fb7b83efe805ad2d55ee559d8b6aad29f0550d0451bafb2aac76ad4b1b06dd817d88e2826bf27033b40224e2a4b102bd08a1d337d50b69495cc06</li>'+
                                 	'<li><b>CCX</b>: ccx7dmnBBoRPuVcpKJSAVZKdSDo9rc7HVijFbhG34jsXL3qiqfRwu7A5ecem44s2rngDd8y8N4QnYK6WR3mXAcAZ5iXun9BQBx<br>'+
 					'<b>View key</b>: f7f9a43be2780137a2b7e3b2f9cefcc54087fa0bf33f2a5008e0225f93093b0b</li>'+
+                                	'<li><b>BLOC</b>: abLoc5iUG4a6oAb2dqygxkS5M2uHWx16zHb9fUWMzpSEDwm6T7PSq2MLdHonWZ16CGfnJKRomq75aZyviTo6ZjHeYQMzNAEkjMg<br>'+
+					'<b>View key</b>: 84d70052d80c4dda33f1ad34c7a6e5ee3e23defa17c6f8afbc039e9c0bfe5b0f</li>'+
 					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
 					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
 					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
@@ -365,12 +367,12 @@ var COINS = {
 		url: "https://xmrchain.net",
 		time: 120,
 	},
-	18181: {
-		name: "XMC",
-		divisor: 1000000000000,
-		url: "http://explorer.monero-classic.org",
-		time: 120,
-	},
+	//18181: {
+	//	name: "XMC",
+	//	divisor: 1000000000000,
+	//	url: "http://explorer.monero-classic.org",
+	//	time: 120,
+	//},
 	19734: {
 		name: "SUMO",
 		divisor: 1000000000,
@@ -445,12 +447,12 @@ var COINS = {
 		unit: "H",
 		factor: 1,
 	},
-	11181: {
-		name: "AEON",
-		divisor: 1000000000000,
-		url: "https://aeonblockexplorer.com",
-		time: 240,
-	},
+	//11181: {
+	//	name: "AEON",
+	//	divisor: 1000000000000,
+	//	url: "https://aeonblockexplorer.com",
+	//	time: 240,
+	//},
 	17750: {
 		name: "XHV",
 		divisor: 1000000000000,
@@ -490,6 +492,12 @@ var COINS = {
 		divisor: 100,
 		url: "https://explorer.turtlecoin.lol",
 		time: 30,
+	},
+	2086: {
+		name: "BLOC",
+		divisor: 10000,
+		url: "https://explorer.turtlecoin.lol",
+		time: 120,
 	},
 	13007: {
 		name: "IRD",
