@@ -496,7 +496,7 @@ var COINS = {
 	2086: {
 		name: "BLOC",
 		divisor: 10000,
-		url: "https://explorer.turtlecoin.lol",
+		url: "https://bloc-explorer.com",
 		time: 120,
 	},
 	13007: {
