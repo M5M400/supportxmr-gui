@@ -442,7 +442,7 @@ var COINS = {
 	},
 	9053: {
 		name: "ERG",
-		divisor: ,
+		divisor: 1000000000,
 		url: "https://explorer.ergoplatform.com/en",
 		time: 120,
 		unit: "H",
