@@ -404,12 +404,6 @@ var COINS = {
 		url: "https://lethean.io/explorer",
 		time: 120,
 	},
-	34568: {
-		name: "WOW",
-		divisor: 100000000000,
-		url: "http://explore.wownero.com",
-		time: 300,
-	},
 	19281: {
 		name: "XMV",
 		divisor: 100000000000,
