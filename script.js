@@ -351,6 +351,7 @@ var	mde = 'l',
                                 	'<li><b>BLOC</b>: abLoc5iUG4a6oAb2dqygxkS5M2uHWx16zHb9fUWMzpSEDwm6T7PSq2MLdHonWZ16CGfnJKRomq75aZyviTo6ZjHeYQMzNAEkjMg<br>'+
 					'<b>View key</b>: 84d70052d80c4dda33f1ad34c7a6e5ee3e23defa17c6f8afbc039e9c0bfe5b0f</li>'+
 					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
+					'<li><b>RTM</b>: RUCyaEZxQu3Eure73XPQ57si813RYAMQKC</li>'+
 					'<li><b>ERG</b>: 9fe533kUzAE57YfPP6o3nzsYMKN2W2uCxvg8KG8Vn5DDeJGetRw</li>'+
 					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
 					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
@@ -433,6 +434,12 @@ var COINS = {
 		time: 60,
 		unit: "H",
 		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
+	},
+	9998: {
+		name: "RTM",
+		divisor: 100000000,
+		url: "https://explorer.raptoreum.com",
+		time: 120,
 	},
 	9053: {
 		name: "ERG",
