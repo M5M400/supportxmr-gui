@@ -344,8 +344,8 @@ var	mde = 'l',
 					'<b>View key</b>: d76f65dab320b9ef36aecf025b6b9e0acccc0e6dbaa21cd0222b09c71eaa640b</li>'+
                                 	'<li><b>XTA</b>: ipN5cNhm7RXAGACP4ZXki4afT3iJ1A6Ka5U4cswE6fBPDcv8JpivurBj3vu1bXwPyb8KZEGsFUYMmToFG4N9V9G72X4WpAQ8L<br>'+
 					'<b>View key</b>: ffd55911bbc5efe654b60b7fcad99c0857e78ce3877d8947e8334899595d0600</li>'+
-                                	'<li><b>DERO</b>: dERokvcrnuWH1ai1QmZQc9cgxrLwE3rX3TbhdrnLmi3BVZmf197qd5FaFqmPMp5dZ3igXfVQwUUMgTSjpVKDtUeb6DT2xp64XJ<br>'+
-					'<b>View key</b>: d3011169f15fb7b83efe805ad2d55ee559d8b6aad29f0550d0451bafb2aac76ad4b1b06dd817d88e2826bf27033b40224e2a4b102bd08a1d337d50b69495cc06</li>'+
+                                	'<li><b>DERO</b>: dero1qygrgnz9gea2rqgwhdtpfpa3mvagt5uyq0g92nurwrpk6wnn7hdnzqgudsv6t<br>'+
+					'<b>View key</b>: 10344c45467aa1810ebb561487b1db3a85d38403d0554f8370c36d3a73f5db3101</li>'+
                                 	'<li><b>CCX</b>: ccx7dmnBBoRPuVcpKJSAVZKdSDo9rc7HVijFbhG34jsXL3qiqfRwu7A5ecem44s2rngDd8y8N4QnYK6WR3mXAcAZ5iXun9BQBx<br>'+
 					'<b>View key</b>: f7f9a43be2780137a2b7e3b2f9cefcc54087fa0bf33f2a5008e0225f93093b0b</li>'+
                                 	'<li><b>BLOC</b>: abLoc5iUG4a6oAb2dqygxkS5M2uHWx16zHb9fUWMzpSEDwm6T7PSq2MLdHonWZ16CGfnJKRomq75aZyviTo6ZjHeYQMzNAEkjMg<br>'+
@@ -471,9 +471,9 @@ var COINS = {
 	},
 	20206: {
 		name: "DERO",
-		divisor: 1000000000000,
-		url: "https://explorer.dero.io",
-		time: 27,
+		divisor: 100000,
+		url: "https://explorer2.dero.io",
+		time: 18,
 	},
 	25182: {
 		name: "TUBE",
