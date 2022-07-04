@@ -472,7 +472,7 @@ var COINS = {
 	20206: {
 		name: "DERO",
 		divisor: 100000,
-		url: "https://explorer2.dero.io",
+		url: "https://explorer.dero.io",
 		time: 18,
 	},
 	25182: {
@@ -1896,7 +1896,7 @@ var api = function(m, key, xid){
 	}else if(m === 'netstats' && now > ($U[m] + 180)){
 		url = 'network/stats';
 	}else if(m === 'poolpay'){
-		url = 'pool/payments?page='+((key - 1) * xid)+'&limit='+xid;
+		url = 'pool/payments?page='+(key - 1)+'&limit='+xid;
 	}else if(m === 'poolstats' && now > ($U[m] + 180)){
 		url = 'pool/stats';
 	}else if(m === 'account'){
