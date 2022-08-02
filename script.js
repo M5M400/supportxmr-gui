@@ -353,10 +353,11 @@ var	mde = 'l',
 					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
 					'<li><b>RTM</b>: RUCyaEZxQu3Eure73XPQ57si813RYAMQKC</li>'+
 					'<li><b>ERG</b>: 9fe533kUzAE57YfPP6o3nzsYMKN2W2uCxvg8KG8Vn5DDeJGetRw</li>'+
-					'<li><b>BTC</b>: 3BzvMuLStA388kYZ9nudfm8L22937dSPS3</li>'+
-					'<li><b>BCH</b>: qrhww48p5s6zw9twhc7cujgwp7vym2k4vutem6f92p</li>'+
-					'<li><b>ETH</b>: 0xbc78d75867b04f996ef1050d8090b8ccb91f09af</li>'+
-					'<li><b>LTC</b>: MCkjQo99VzoeZQ1piDzLDb4uqNSDRZpx55</li>'+
+					'<li><b>BTC</b>: 3HRbMgcvbqHVW7P34MNGvF2Gh3DE26iHdw</li>'+
+					'<li><b>BCH</b>: 18sKoDSjLCFW9kZrXuza1qzEERnKi7bx8S</li>'+
+					'<li><b>ETH</b>: 0xfE23a61548FCCE159a541FAe9e16cEB92Da650ed</li>'+
+					'<li><b>ETC</b>: 0x4480Ad73a113BEFf05B2079E38D90c9757Ecb063</li>'+
+					'<li><b>LTC</b>: MGj8PU1PpTNDDqRHmuEqfDpH3gxp6cJrUU</li>'+
 				'</ul>'
 			},
 		]
@@ -457,6 +458,15 @@ var COINS = {
 		unit: "H",
 		factor: 1,
 	},
+	8645: {
+		name: "ETC",
+		divisor: 1000000000000000000,
+		url: "etcblockexplorer.com",
+		time: 13,
+		unit: "H",
+		factor: 1,
+	},
+
 	//11181: {
 	//	name: "AEON",
 	//	divisor: 1000000000000,
@@ -2174,7 +2184,7 @@ function Tbl(tar, typ, pge, lim){
 					break;
 				}
 				case 'bheight':  val = d.valid && d.unlocked && (d.port ? d.pay_value : d.value) ? '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.height + '</a>' : d.height; break;
-				case 'hash':	 val = hashToLink(d[n], d.port ? d.port : mport, d.port === 8545 && d.value < 2 * COINS[d.port].divisor ? "uncle" : t.typ); break;
+				case 'hash':	 val = hashToLink(d[n], d.port ? d.port : mport, (d.port === 8545 || d.port === 8645) && d.value < 2 * COINS[d.port].divisor ? "uncle" : t.typ); break;
 				case 'hash_pay': val = '<a href="https://block-share-dumps.moneroocean.stream/' + d.hash + '.cvs.xz">' + d.hash + '</a>'; break;
 				default: 	 val = d[n];
 			}
@@ -2640,7 +2650,7 @@ function hashToLink(hash, port, type) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/?hash=' + hash + '">' + hash + '</a>';
         } else if (port == 11812) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '?' + type + "_info=" + hash + '">' + hash + '</a>';
-	} else if (port == 8545) {
+	} else if (port == 8545 || port == 8645) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/' + type + '/0x' + hash + '">' + hash + '</a>';
 	} else if (port == 9053) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/blocks/' + hash + '">' + hash + '</a>';
