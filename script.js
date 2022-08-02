@@ -461,7 +461,7 @@ var COINS = {
 	8645: {
 		name: "ETC",
 		divisor: 1000000000000000000,
-		url: "etcblockexplorer.com",
+		url: "https://etcblockexplorer.com",
 		time: 13,
 		unit: "H",
 		factor: 1,
