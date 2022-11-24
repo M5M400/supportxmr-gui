@@ -450,14 +450,14 @@ var COINS = {
 		unit: "H",
 		factor: 1,
 	},
-	8545: {
-		name: "ETH",
-		divisor: 1000000000000000000,
-		url: "https://etherscan.io",
-		time: 13,
-		unit: "H",
-		factor: 1,
-	},
+	//8545: {
+	//	name: "ETH",
+	//	divisor: 1000000000000000000,
+	//	url: "https://etherscan.io",
+	//	time: 13,
+	//	unit: "H",
+	//	factor: 1,
+	//},
 	8645: {
 		name: "ETC",
 		divisor: 1000000000000000000,
@@ -479,12 +479,12 @@ var COINS = {
 		url: "https://explorer.havenprotocol.org",
 		time: 120,
 	},
-	20206: {
-		name: "DERO",
-		divisor: 100000,
-		url: "https://explorer.dero.io",
-		time: 18,
-	},
+	//20206: {
+	//	name: "DERO",
+	//	divisor: 100000,
+	//	url: "https://explorer.dero.io",
+	//	time: 18,
+	//},
 	25182: {
 		name: "TUBE",
 		divisor: 1000000000,
