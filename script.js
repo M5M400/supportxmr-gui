@@ -2644,7 +2644,7 @@ function Rnd(n, dec, m){
 function hashToLink(hash, port, type) {
 	if (hash == undefined) return 'none';
 	var url = port in COINS ? COINS[port].url : "";
-	if (port == 11898) {
+	if (port == 11898 || port == 38081) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/block.html?hash=' + hash + '">' + hash + '</a>';
 	} else if (port == 13007) {
 		return '<a class="C1 hov" target="_blank" href="' + url + '/?hash=' + hash + '">' + hash + '</a>';
