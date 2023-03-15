@@ -507,12 +507,6 @@ var COINS = {
 		unit: "G",
 		factor: 32,
 	},
-	11898: {
-		name: "TRTL",
-		divisor: 100,
-		url: "https://explorer.turtlecoin.lol",
-		time: 30,
-	},
 	2086: {
 		name: "BLOC",
 		divisor: 10000,
