@@ -304,6 +304,8 @@ var	mde = 'l',
 				'<ul>'+
 					'<li><b>XMR</b>: 48VGGDaFWeedcSGkJ1Ww3eUnMxzGCgoMwV6ZS5enen9u1PjoWduKxszcy81zLCvoDEUmeBoGXu2adEqWV1Z6aGGHECnymR6<br>'+
 					'<b>View key</b>: 2f7c00584635ec0b51f0b40b92f1f4bdbc35c88ac5cfe8a4de86b40a56949f08</li>'+
+					'<li><b>ZEPH</b>: ZEPHYR2nic7ULkkmgZNX8a9i2tMbkxuCqjgWZYuee3awX7RhtmhoT98CwGEGrruWZVSKtA7Z7JC8m7oeYHtBD9cBEZzdEh9BSdq4q<br>'+
+					'<b>View key</b>: 5cd8b069bceefc6d22d50247c3260978e69abaf2c5d9cc5d1351c022343f5200</li>'+
 					'<li><b>AEON</b>: WmsEg3RuUKCcEvFBtXcqRnGYfiqGJLP1FGBYiNMgrcdUjZ8iMcUn2tdcz59T89inWr9Vae4APBNf7Bg2DReFP5jr23SQqaDMT<br>'+
 					'<b>View key</b>: edf3d3c64d6b9be56292bfa322a89ddc7dfa0e62c0339f6ef35fad5341243d06</li>'+
 					'<li><b>ETN</b>: etnkQMp3Hmsay2p7uxokuHRKANrMDNASwQjDUgFb5L2sDM3jqUkYQPKBkooQFHVWBzEaZVzfzrXoETX6RbMEvg4R4csxfRHLo1<br>'+
@@ -529,6 +531,12 @@ var COINS = {
 		name: "CCX",
 		divisor: 1000000,
 		url: "https://explorer.conceal.network",
+		time: 120,
+	},
+	17767: {
+		name: "ZEPH",
+		divisor: 1000000000000,
+		url: "https://explorer.zephyrprotocol.com",
 		time: 120,
 	},
 };
