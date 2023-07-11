@@ -67,7 +67,7 @@ var	mde = 'l',
 			off: 'Run Web Miner',
 		},
 		sts: function() { return {
-			MinerWorkerCount:	'<div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
+			MinerWorkerCount:	'<div id="WebMinerBtn" class="hide BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
 			MinerHashes:		'Your <select id="HashSelect"></select> Hashrate',
 			MinerShares:		'Shares (Hashes: <span id="TotalHashes">--</span>)',
 			MinerCalc: 		'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>',
@@ -1232,7 +1232,7 @@ function Dash_load(typ){
 						'<div class="MinerMsg C3'+mde+'"><div class="txtmed">Address Not Found</div><div class="LR80 txt shim10">' +
 						'If you&#039;ve submitted your first share, be patient, it may take a minute or two to update. ' +
 						'If your shares are being rejected, visit the <u class="nav C1" data-tar="help">help section.</u><br><br>' +
-						'You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br>' +
+						'<span class=hide>You can also try to run web miner in this browser using <div id="WebMinerBtn" class="BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div> button but it will not give you full performance of standalone miner.<br><br></span>' +
 						'You can also see generic CPU miner setup script that is good enough in most cases by pressing the button below.<div class="shim10"></div><div id="MinerSetupScripts" class="LR85"></div><br><br>' +
 						'Standalone miner reference setup info:<br>' +
 							'Pool: <b>gulf.moneroocean.stream</b><br>' +
