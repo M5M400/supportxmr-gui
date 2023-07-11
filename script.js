@@ -67,7 +67,7 @@ var	mde = 'l',
 			off: 'Run Web Miner',
 		},
 		sts: function() { return {
-			MinerWorkerCount:	'<div id="WebMinerBtn" class="hide BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
+			MinerWorkerCount:	'Web miner removed<div id="WebMinerBtn" class="hide BtnElem C0'+mde+' txttny C1bk C2bk_hov"></div>',
 			MinerHashes:		'Your <select id="HashSelect"></select> Hashrate',
 			MinerShares:		'Shares (Hashes: <span id="TotalHashes">--</span>)',
 			MinerCalc: 		'<input type="text" id="MinerCalcHsh" size="3" /><select id="MinerCalcUnit"></select><select id="MinerCalcFld"></select>',
