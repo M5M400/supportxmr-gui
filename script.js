@@ -354,6 +354,7 @@ var	mde = 'l',
 					'<b>View key</b>: 84d70052d80c4dda33f1ad34c7a6e5ee3e23defa17c6f8afbc039e9c0bfe5b0f</li>'+
 					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
 					'<li><b>RTM</b>: RUCyaEZxQu3Eure73XPQ57si813RYAMQKC</li>'+
+					'<li><b>BTRM</b>: Bfhtr2g56tg73TNZBRCu6fJUD39Kur6SGG</li>'+
 					'<li><b>ERG</b>: 9fe533kUzAE57YfPP6o3nzsYMKN2W2uCxvg8KG8Vn5DDeJGetRw</li>'+
 					'<li><b>BTC</b>: 3HRbMgcvbqHVW7P34MNGvF2Gh3DE26iHdw</li>'+
 					'<li><b>BCH</b>: 18sKoDSjLCFW9kZrXuza1qzEERnKi7bx8S</li>'+
@@ -442,6 +443,12 @@ var COINS = {
 		name: "RTM",
 		divisor: 100000000,
 		url: "https://explorer.raptoreum.com",
+		time: 120,
+	},
+	10225: {
+		name: "BTRM",
+		divisor: 100000000,
+		url: "https://explorer.bitoreum.org",
 		time: 120,
 	},
 	9053: {
