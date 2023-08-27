@@ -353,6 +353,7 @@ var	mde = 'l',
                                 	'<li><b>BLOC</b>: abLoc5iUG4a6oAb2dqygxkS5M2uHWx16zHb9fUWMzpSEDwm6T7PSq2MLdHonWZ16CGfnJKRomq75aZyviTo6ZjHeYQMzNAEkjMg<br>'+
 					'<b>View key</b>: 84d70052d80c4dda33f1ad34c7a6e5ee3e23defa17c6f8afbc039e9c0bfe5b0f</li>'+
 					'<li><b>RVN</b>: RLVJv9rQNHzXS3Zn4JH8hfAHmm1LfECMxy</li>'+
+					'<li><b>XNA</b>: Nb931jkFtFN7QWpu4FqSThaoKajYjS5iFZ</li>'+
 					'<li><b>RTM</b>: RUCyaEZxQu3Eure73XPQ57si813RYAMQKC</li>'+
 					'<li><b>BTRM</b>: Bfhtr2g56tg73TNZBRCu6fJUD39Kur6SGG</li>'+
 					'<li><b>ERG</b>: 9fe533kUzAE57YfPP6o3nzsYMKN2W2uCxvg8KG8Vn5DDeJGetRw</li>'+
@@ -435,6 +436,14 @@ var COINS = {
 		name: "RVN",
 		divisor: 100000000,
 		url: "https://ravencoin.network",
+		time: 60,
+		unit: "H",
+		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
+	},
+	19001: {
+		name: "XNA",
+		divisor: 100000000,
+		url: "https://explorer.neurai.org",
 		time: 60,
 		unit: "H",
 		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
