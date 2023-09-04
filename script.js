@@ -392,12 +392,12 @@ var COINS = {
 		url: "https://explorer.ryo-currency.com",
 		time: 240,
 	},
-	18981: {
-		name: "GRFT",
-		divisor: 10000000000,
-		url: "https://blockexplorer.graft.network",
-		time: 120,
-	},
+	//18981: {
+	//	name: "GRFT",
+	//	divisor: 10000000000,
+	//	url: "https://blockexplorer.graft.network",
+	//	time: 120,
+	//},
 	38081: {
 		name: "MSR",
 		divisor: 1000000000000,
