@@ -190,7 +190,7 @@ var	mde = 'l',
 			// Pool UI 
 
 			{ q:	'When payments happen?',
-			  a:	'Payments happen automatically in couple of hours when your total due reaches your payment threshold. By default payment threshold is <b>0.3</b> XMR but your can lower it in home page miner options.'
+			  a:	'Payments happen automatically in couple of hours when your total due reaches your payment threshold. By default payment threshold is <b>0.3</b> XMR but you can lower it in home page miner options.'
 			},
 
 			{ q:	'What does raw hashrate means?',
