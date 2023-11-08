@@ -436,7 +436,7 @@ var COINS = {
 	8766: {
 		name: "RVN",
 		divisor: 100000000,
-		url: "https://ravencoin.network",
+		url: "https://explorer.ravencoin.org",
 		time: 60,
 		unit: "H",
 		factor: 0xFFFFFFFFFFFFFFFF / 0xFF000000,
