@@ -14,6 +14,7 @@ import { bindHomeDeferred, bindHomeUptime, syncWalletTrackButtonLabels } from ".
 import { attr, on, byId, qs, qsa } from "../dom.js";
 
 export function bindViewEvents() {
+  on(qs("#ai"), "input", (event) => event.currentTarget.setCustomValidity(""));
   on(qs("#af"), "submit", (event) => {
     event.preventDefault();
     const address = qs("#ai").value.trim();

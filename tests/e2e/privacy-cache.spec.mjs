@@ -125,6 +125,34 @@ test("wallet address is not sent to miner APIs before explicit wallet navigation
   api.assertNoConsoleErrors();
 });
 
+test("wallet tracking recovers after correcting an invalid address", async ({ page }) => {
+  const api = await mockApi(page);
+  await page.addInitScript(() => localStorage.setItem("mo.consent.v1", JSON.stringify({ value: true, time: Date.now() })));
+  await openApp(page, "#/");
+  const input = page.locator("#ai");
+  const submit = page.locator("[data-wallet-submit]");
+
+  await input.fill("not-a-wallet");
+  await submit.click();
+  await expect(input).toHaveJSProperty("validationMessage", "Enter a complete XMR address");
+  expect(minerCallCount(api)).toBe(0);
+
+  await input.fill(VALID_WALLET);
+  const validityAfterEdit = await input.evaluate((element) => ({
+    customError: element.validity.customError,
+    message: element.validationMessage
+  }));
+  await waitForStableMicrotasks(page);
+  expect(minerCallCount(api)).toBe(0);
+  await submit.click();
+
+  await expectHashPath(page, `#/wallet/${VALID_WALLET}/overview`);
+  expect(validityAfterEdit).toEqual({ customError: false, message: "" });
+  await expect.poll(() => api.calls.get(`miner/${VALID_WALLET}/stats`) || 0).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("mo.wallets.v1") || "[]").map((wallet) => wallet.address))).toEqual([VALID_WALLET]);
+  api.assertNoConsoleErrors();
+});
+
 test("cached same-view navigation avoids loader flashes and duplicate graph fetches", async ({ page }) => {
   const api = await mockApi(page);
   await openApp(page, "#/");
